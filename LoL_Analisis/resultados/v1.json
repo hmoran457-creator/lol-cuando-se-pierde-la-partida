@@ -1,0 +1,26 @@
+{
+ "arquetipo": "A2",
+ "derrotas_en_el_arquetipo": 55,
+ "distancia_a_la_mediana_v": 0.0147,
+ "duracion_min": 34.13,
+ "ventaja_max_pct": 5.9,
+ "ventaja_max_oro": 3500,
+ "minuto_ventaja_max": 16,
+ "d2": 34,
+ "v_final_pct": -1.7,
+ "objetivos_propios": 11,
+ "objetivos_rival": 14,
+ "minutos_arriba": 31,
+ "minutos_abajo": [
+  7,
+  34,
+  35
+ ],
+ "minuto_antes_del_remate": 32,
+ "v_antes_del_remate_pct": 2.1,
+ "objetivos_rival_remate": 6,
+ "objetivos_propios_remate": 0,
+ "monstruos_rival_despues_de_d2": [
+  "Dragón"
+ ]
+}

@@ -1,0 +1,75 @@
+{
+ "partidas": 7,
+ "partidas_5v5": 6,
+ "participantes": 68,
+ "cuadros": 2054,
+ "eventos": 6877,
+ "identificadores_unicos": {
+  "puuid": 68,
+  "summonerId": 68,
+  "riotId": 81,
+  "matchId": 7,
+  "gameId": 7
+ },
+ "barrido_salida": {
+  "puuid": 0,
+  "summonerId": 0,
+  "riotId": 0,
+  "matchId": 0,
+  "gameId": 0
+ },
+ "barrido_crudo": {
+  "puuid": 68,
+  "summonerId": 68,
+  "riotId": 81,
+  "matchId": 7,
+  "gameId": 7
+ },
+ "fugas": 0,
+ "k_participante": [
+  {
+   "Nivel": "Crudo sin nombres",
+   "Cuasi-identificadores": "campeon, rol, parche, cola, dia, nivel",
+   "filas": 60,
+   "clases": 60,
+   "k_min": 1,
+   "unicas": 60,
+   "pct_unicas": 100.0
+  },
+  {
+   "Nivel": "Generalizado (mes, bandas)",
+   "Cuasi-identificadores": "campeon, rol, parche, cola, mes, bandaNivel",
+   "filas": 60,
+   "clases": 60,
+   "k_min": 1,
+   "unicas": 60,
+   "pct_unicas": 100.0
+  },
+  {
+   "Nivel": "Sin campeón",
+   "Cuasi-identificadores": "rol, parche, cola, mes, bandaNivel",
+   "filas": 60,
+   "clases": 49,
+   "k_min": 1,
+   "unicas": 38,
+   "pct_unicas": 63.3
+  },
+  {
+   "Nivel": "Solo campeón",
+   "Cuasi-identificadores": "campeon",
+   "filas": 60,
+   "clases": 52,
+   "k_min": 1,
+   "unicas": 45,
+   "pct_unicas": 75.0
+  }
+ ],
+ "k_composicion": {
+  "filas": 6,
+  "clases": 6,
+  "k_min": 1,
+  "unicas": 6,
+  "pct_unicas": 100.0
+ },
+ "llave": "efímera"
+}

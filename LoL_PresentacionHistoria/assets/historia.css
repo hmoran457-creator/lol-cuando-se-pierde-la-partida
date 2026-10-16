@@ -1,0 +1,423 @@
+/* =========================================================================
+   Presentacion narrada. deck.css es una copia sin cambios del mazo original;
+   todo lo nuevo vive aqui, con ids h-*.
+
+   Reglas del movimiento
+   1. Cada animacion pone en secuencia algo que la lamina cuenta: la linea avanza
+      en el orden del tiempo, las barras crecen desde su base, el rebobinado va
+      hacia atras porque la idea es «antes de lo que parece».
+   2. Todo va atado a la revelacion por pasos ([data-step] + .mostrado) o a la
+      entrada de la lamina; el presentador marca el ritmo.
+   3. Al regresar a una lamina ya vista (.visto) nada se repite: aparece hecha.
+      La tecla R la repite a proposito.
+   4. Nunca se usa `opacity` para el aspecto en reposo de algo con data-step: la
+      regla del paso la pisa (.mostrado {opacity:1}). Para eso, fill-opacity.
+   5. prefers-reduced-motion apaga todo al final de este archivo.
+   ========================================================================= */
+
+.slide[id^="h-"] h2 { max-width: 30ch; }
+.slide[id^="h-"] h2 .sub { max-width: 80ch; }
+#h-juego h2 { max-width: none; }
+
+/* --- capas del escenario: fondo vivo, laminas, barrido dorado */
+#fondo { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+#grano { position: absolute; inset: 0; z-index: 45; pointer-events: none; background-repeat: repeat; }
+.slide { z-index: 1; }
+.slide.active { z-index: 2; }
+body.cine #help, body.video #help { display: none; }
+body.video, body.video * { cursor: none !important; }
+body.fundido #stage { opacity: 0; transition: opacity 1400ms ease-in; }
+body.video #viewport { background: #000; }
+
+/* ===================================================== transicion entre laminas
+   Un corte diagonal: la lamina nueva entra detras de un filo dorado y la vieja se
+   va por el mismo filo. 760ms: largo para verse, corto para no esperar.        */
+.slide.enter      { animation: entra 760ms cubic-bezier(.7,0,.2,1) both; }
+.slide.enter-back { animation: entra-atras 760ms cubic-bezier(.7,0,.2,1) both; }
+.slide.sale       { display: flex; z-index: 1; pointer-events: none; animation: sale 760ms cubic-bezier(.7,0,.2,1) both; }
+.slide.sale-back  { display: flex; z-index: 1; pointer-events: none; animation: sale-atras 760ms cubic-bezier(.7,0,.2,1) both; }
+@keyframes entra {
+  from { clip-path: polygon(0 0, 0% 0, -15% 100%, 0 100%); }
+  to   { clip-path: polygon(0 0, 115% 0, 100% 100%, 0 100%); }
+}
+@keyframes sale {
+  from { clip-path: polygon(0% 0, 100% 0, 100% 100%, -15% 100%); filter: brightness(1); }
+  to   { clip-path: polygon(115% 0, 100% 0, 100% 100%, 100% 100%); filter: brightness(.45); }
+}
+@keyframes entra-atras {
+  from { clip-path: polygon(115% 0, 100% 0, 100% 100%, 100% 100%); }
+  to   { clip-path: polygon(0% 0, 100% 0, 100% 100%, -15% 100%); }
+}
+@keyframes sale-atras {
+  from { clip-path: polygon(0 0, 115% 0, 100% 100%, 0 100%); filter: brightness(1); }
+  to   { clip-path: polygon(0 0, 0% 0, -15% 100%, 0 100%); filter: brightness(.45); }
+}
+#barrido {
+  position: absolute; top: -20px; bottom: -20px; left: 0; width: 4px; z-index: 30; pointer-events: none;
+  opacity: 0; background: linear-gradient(transparent, var(--gold-lit) 15%, #FFF3D6 50%, var(--gold-lit) 85%, transparent);
+  box-shadow: 0 0 26px 8px rgba(232,200,122,.42), 0 0 90px 30px rgba(188,139,44,.16);
+}
+/* el filo va por la diagonal del recorte: arriba 240px adelante de abajo (15°) */
+#barrido.va     { animation: barre 760ms cubic-bezier(.7,0,.2,1) both; }
+#barrido.vuelve { animation: barre-atras 760ms cubic-bezier(.7,0,.2,1) both; }
+@keyframes barre {
+  0%   { opacity: 1; transform: translateX(-120px) skewX(-15deg); }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(1720px) skewX(-15deg); }
+}
+@keyframes barre-atras {
+  0%   { opacity: 1; transform: translateX(1720px) skewX(-15deg); }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-120px) skewX(-15deg); }
+}
+#progress { box-shadow: 0 0 12px rgba(232,200,122,.7); transition: width .76s cubic-bezier(.7,0,.2,1), opacity .35s var(--ease); }
+
+/* ===================================================== titulares palabra por palabra */
+.w { display: inline-block; }
+.animado .slide[id^="h-"].active:not(.visto) h2,
+.animado #h-portada.active:not(.visto) h1,
+.animado #h-gracias.active:not(.visto) h1,
+.animado #h-respuesta.active:not(.visto) .body > .cierre-grande { animation: none; }
+.slide.active:not(.visto) :is(h1, h2, .cierre-grande) .w {
+  animation: palabra 760ms cubic-bezier(.2,.75,.2,1) calc(200ms + var(--wi) * 55ms) backwards;
+}
+.slide.active:not(.visto) .grande[data-step].mostrado .w {
+  animation: palabra 640ms cubic-bezier(.2,.75,.2,1) calc(var(--wi) * 38ms) backwards;
+}
+@keyframes palabra {
+  from { opacity: 0; transform: translateY(.55em) rotate(4deg); filter: blur(10px); }
+  60%  { filter: blur(0); }
+}
+.animado .slide[id^="h-"].active:not(.visto) h2 .sub { animation: llega 700ms var(--ease) 700ms backwards; }
+.animado .slide[id^="h-"].active:not(.visto) .kicker { animation: kicker 700ms var(--ease) 60ms backwards; }
+@keyframes kicker { from { clip-path: inset(0 100% 0 0); opacity: .2; } to { clip-path: inset(0 0 0 0); } }
+
+/* --- textos grandes de narracion */
+.grande { font-size: 44px; font-weight: 800; line-height: 1.15; color: var(--parchment);
+          letter-spacing: -.02em; max-width: 26ch; font-variation-settings: "wdth" 108; }
+.grande em { font-style: normal; color: var(--gold-lit); }
+.narra { display: flex; flex-direction: column; gap: 22px; }
+.narra > div { font-size: 23px; line-height: 1.45; color: var(--ink); max-width: 36ch; }
+.narra > div b { color: var(--parchment); }
+.narra .num { display: inline-block; width: 34px; color: var(--gold-lit); font-weight: 800; }
+.azul { color: var(--blue); } .rojo { color: var(--red); } .oro { color: var(--gold-lit); }
+.pie-nota { font-size: 15px; color: var(--muted); }
+/* En un proyector de 1024×768 el escenario se reduce al 64 %: un pie de 12 px quedaba en
+   7.7 px. Con 15 px queda en ~9.6 px. */
+.slide[id^="h-"] .footer { font-size: 15px; }
+.dos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); align-items: center; flex: 1; min-height: 0; }
+.dos.izq-ancha { grid-template-columns: 1.25fr 1fr; }
+.dos.der-ancha { grid-template-columns: 1fr 1.35fr; }
+.lienzo { position: relative; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.lienzo svg { width: 100%; height: auto; overflow: visible; }
+#h-juego .lienzo svg { width: auto; height: 560px; max-width: 100%; }
+
+/* los parrafos narrados entran desde la izquierda, enfocandose */
+.slide[data-steps] .narra > [data-step] {
+  transform: translateX(-28px); filter: blur(6px);
+  transition: opacity 600ms var(--ease), transform 760ms cubic-bezier(.2,.75,.2,1), filter 600ms var(--ease);
+}
+.slide[data-steps] .narra > [data-step].mostrado { transform: none; filter: none; }
+/* y lo importante se subraya con marcador, despues de que se lee la frase */
+.narra b {
+  background-image: linear-gradient(rgba(188,139,44,.30), rgba(188,139,44,.30));
+  background-repeat: no-repeat; background-position: 0 92%; background-size: 0% .38em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  transition: background-size 900ms var(--ease) 520ms;
+}
+.narra .mostrado b, .narra > :not([data-step]) b { background-size: 100% .38em; }
+
+/* ===================================================== piezas SVG por pasos */
+.slide[data-steps] svg [data-step] { transform: none; }
+.slide.visto [data-step], .slide.visto [data-step] *, .slide.visto .obj-r, .slide.visto .tenue,
+.slide.visto .fase, .slide.visto .jugador, .slide.visto .cabezal, .slide.visto .aparece,
+.slide.visto .marca-d2, .slide.visto .eco-areas, .slide.visto .hito { transition: none !important; }
+
+/* linea que se dibuja sola, en el orden del tiempo */
+.slide[data-steps] path.trazo[data-step] {
+  opacity: 1; stroke-dasharray: var(--len); stroke-dashoffset: var(--len);
+  transition: stroke-dashoffset var(--dur, 1600ms) cubic-bezier(.45,0,.25,1) var(--delay, 0ms);
+}
+.slide[data-steps] path.trazo[data-step].mostrado { stroke-dashoffset: 0; }
+/* una linea que aun no se mide no se dibuja: sin su largo, se veria completa */
+path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
+
+/* barras que crecen desde su base */
+.slide[data-steps] .crece[data-step] {
+  opacity: 1; transform: scaleX(0); transform-box: fill-box; transform-origin: 0 50%;
+  transition: transform 1000ms cubic-bezier(.2,.8,.2,1) var(--delay, 0ms);
+}
+.slide[data-steps] .sube[data-step] {
+  opacity: 1; transform: scaleY(0); transform-box: fill-box; transform-origin: 50% 100%;
+  transition: transform 760ms cubic-bezier(.3,1.35,.5,1) var(--delay, 0ms);
+}
+.slide[data-steps] .crece[data-step].mostrado,
+.slide[data-steps] .sube[data-step].mostrado { transform: none; }
+
+/* objetivos que aparecen uno por uno, con rebote */
+.slide[data-steps] .pop[data-step] {
+  opacity: 0; transform: scale(.2); transform-box: fill-box; transform-origin: center;
+  transition: opacity 260ms var(--ease) var(--delay, 0ms), transform 520ms cubic-bezier(.3,1.7,.5,1) var(--delay, 0ms);
+}
+.slide[data-steps] .pop[data-step].mostrado { opacity: 1; transform: none; }
+
+/* la onda que deja cada objetivo al aparecer (solo una vez; en reposo es invisible) */
+.onda-obj { fill: none; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; }
+.onda-obj.azul { stroke: var(--blue); } .onda-obj.rojo { stroke: var(--red); }
+.slide[data-steps] .onda-obj[data-step], .slide[data-steps] .onda-obj[data-step].mostrado { opacity: 0; }
+.slide.active:not(.visto) .onda-obj[data-step].mostrado { animation: onda-uno 900ms ease-out var(--delay, 0ms) both; }
+@keyframes onda-uno { 0% { opacity: .95; transform: scale(.4); } 100% { opacity: 0; transform: scale(3.2); } }
+
+/* --- graficas */
+.eje { stroke: var(--line); stroke-width: 1; }
+.cero { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.etq { fill: var(--muted); font-size: 15px; font-family: "Archivo", sans-serif; }
+.etq.grande-num { font-size: 30px; font-weight: 800; fill: var(--parchment); }
+.etq.grande-num.dentro { fill: #06101C; }
+.etq.oro { fill: var(--gold-lit); font-weight: 700; }
+/* El rojo de relleno (#DE4361) da 4.25:1 como texto chico sobre el fondo: para letras se
+   usa el rojo claro de los sellos (7.7:1). Los rellenos siguen con --red. */
+.etq.azul { fill: var(--blue); font-weight: 700; } .etq.rojo { fill: #F28FA2; font-weight: 700; }
+.etq.reloj { fill: var(--gold-lit); font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.linea { fill: none; stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.linea.azul { stroke: var(--blue); } .linea.rojo { stroke: var(--red); }
+.linea.clara { stroke: var(--parchment); } .linea.gris { stroke: var(--neutral); stroke-width: 2.5; }
+.area-azul { fill: var(--blue); fill-opacity: .22; } .area-roja { fill: var(--red); fill-opacity: .26; }
+.franja { fill: var(--gold); fill-opacity: .13; }
+.marca { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 4; }
+.barra.azul { fill: var(--blue); } .barra.rojo { fill: var(--red); }
+.barra.gris { fill: #5E7590; } .barra.oro { fill: var(--gold); }   /* gris ≥ 3:1 sobre el fondo */
+.pista-barra { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 3 5; }
+.icono.azul { fill: var(--blue); } .icono.rojo { fill: var(--red); }
+.icono { stroke: var(--deep); stroke-width: 2; }
+.llave { fill: none; stroke: var(--gold-lit); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.llave.roja { stroke: var(--red); }
+.circulo, .recuadro { fill: none; stroke: var(--gold-lit); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.recuadro { stroke-dasharray: none; }
+.senal { fill: none; stroke: var(--gold-lit); stroke-width: 3; transform-box: fill-box; transform-origin: center; }
+.slide.active:not(.visto) .senal.mostrado { animation: senal 1.3s ease-in-out 900ms 3; }
+/* late sin crecer: si creciera, taparia la etiqueta «Minuto 30» */
+@keyframes senal { 50% { stroke-width: 5; stroke-opacity: .35; } }
+.fase { transition: opacity 700ms var(--ease); }
+.fase.tenue { opacity: .28; }
+
+/* el cabezal que recorre la partida */
+.cabezal { opacity: 0; transition: opacity 350ms var(--ease); }
+.cabezal.ve { opacity: 1; }
+.cabezal-linea { stroke: var(--gold-lit); stroke-width: 2; stroke-opacity: .75; }
+.cabezal-punto { fill: var(--parchment); stroke: var(--blue); stroke-width: 4;
+                 filter: drop-shadow(0 0 8px rgba(14,158,180,.9)); transition: stroke 200ms; }
+.cabezal-punto.abajo { stroke: var(--red); filter: drop-shadow(0 0 8px rgba(222,67,97,.95)); }
+.cabezal-txt { fill: var(--parchment); font-size: 17px; font-weight: 700;
+               paint-order: stroke; stroke: var(--deep); stroke-width: 5px; stroke-linejoin: round; }
+.aparece, .marca-d2 { opacity: 0; transition: opacity 600ms var(--ease); }
+.aparece.ve, .marca-d2.ve { opacity: 1; }
+.obj-r { opacity: 0; transform: scale(.2); transform-box: fill-box; transform-origin: center;
+         transition: opacity 220ms var(--ease), transform 420ms cubic-bezier(.3,1.7,.5,1); }
+.obj-r.ve { opacity: 1; transform: none; }
+.slide[data-steps] .franja.barre[data-step] {
+  opacity: 1; transform: scaleX(0); transform-box: fill-box; transform-origin: 0 50%;
+  transition: transform 1300ms cubic-bezier(.45,0,.2,1);
+}
+.slide[data-steps] .franja.barre[data-step].mostrado { transform: none; }
+
+/* la punta de la curva de remontadas */
+.punta { fill: var(--parchment); stroke: var(--blue); stroke-width: 4; opacity: 0;
+         filter: drop-shadow(0 0 8px rgba(14,158,180,.9)); }
+.punta.ve { opacity: 1; }
+.punta-txt { fill: var(--parchment); font-size: 16px; font-weight: 700; opacity: 0;
+             paint-order: stroke; stroke: var(--deep); stroke-width: 5px; stroke-linejoin: round; }
+.punta-txt.ve { opacity: 1; }
+.hito { fill: var(--gold-lit); stroke: var(--deep); stroke-width: 3; opacity: 0; transform: scale(.2);
+        transform-box: fill-box; transform-origin: center;
+        transition: opacity 300ms var(--ease), transform 500ms cubic-bezier(.3,1.7,.5,1); }
+.hito.ve { opacity: 1; transform: none; }
+
+/* --- eco: la partida del caso, enorme y tenue, detras de portada y cierre */
+.eco { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.eco svg { width: 100%; height: 100%; }
+.eco-linea { fill: none; stroke: var(--gold-lit); stroke-opacity: .22; stroke-width: 3; stroke-linejoin: round;
+             vector-effect: non-scaling-stroke; }
+.eco-cero { stroke: var(--line); stroke-dasharray: 6 8; vector-effect: non-scaling-stroke; }
+.eco-areas { opacity: 0; transition: opacity 1600ms var(--ease); }
+.eco-areas.ve { opacity: .45; }
+#h-portada > div:not(.eco):not(.footer), #h-gracias > div:not(.eco):not(.footer) { position: relative; z-index: 1; }
+#h-portada .footer, #h-gracias .footer { z-index: 1; }
+
+/* --- el mapa */
+.mapa-fondo { fill: #0F2A1E; stroke: #1B3B2C; stroke-width: 2; }
+.mapa-rio { stroke: #1D4A66; stroke-width: 46; stroke-linecap: round; opacity: .55; }
+.mapa-carril { stroke: #3A5E4C; stroke-width: 16; fill: none; stroke-linecap: round; opacity: .9; }
+.base-azul { fill: var(--blue); } .base-roja { fill: var(--red); }
+.torre-azul { fill: var(--blue); stroke: var(--deep); stroke-width: 2; }
+.torre-roja { fill: var(--red); stroke: var(--deep); stroke-width: 2; }
+.monstruo { fill: var(--gold); stroke: var(--deep); stroke-width: 2; filter: drop-shadow(0 0 10px rgba(232,200,122,.7)); }
+.jugador { stroke: var(--deep); stroke-width: 2.5; opacity: 0; transition: opacity 300ms var(--ease); }
+.jugador.ve { opacity: 1; }
+.jugador-azul { fill: #8FE3F0; } .jugador-rojo { fill: #F7A6B6; }
+.onda { fill: none; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: onda 2.2s ease-out infinite; }
+.onda.azul { stroke: var(--blue); } .onda.roja { stroke: var(--red); } .onda.oro { stroke: var(--gold-lit); }
+@keyframes onda { from { transform: scale(1); opacity: .85; } to { transform: scale(2.7); opacity: 0; } }
+
+/* --- figuras «de cada 20»: se iluminan una por una y las que remontan brincan */
+.persona { fill: #5E7590; transition: fill 300ms var(--ease) calc(var(--i) * 70ms + 200ms);
+           transform-box: fill-box; transform-origin: 50% 100%; }
+.mostrado .persona.gana { fill: var(--gold-lit); }
+.slide.active:not(.visto) .mostrado .persona.gana { animation: brinco 560ms cubic-bezier(.3,1.6,.5,1) calc(var(--i) * 70ms + 200ms) backwards; }
+@keyframes brinco { 0% { transform: none; } 40% { transform: translateY(-16px) scale(1.08); } 100% { transform: none; } }
+.slide.visto .persona { transition: none; }
+.figuras-tit { font-size: 22px; color: var(--parchment); font-weight: 700; }
+.figuras-res { font-size: 18px; color: var(--muted); margin-top: 6px; }
+.figuras-res b { color: var(--gold-lit); font-size: 26px; }
+
+/* --- tira de «fotos por minuto»: se reparten como cartas y luego se llenan */
+.tira { display: grid; grid-template-columns: repeat(18, 1fr); gap: 6px; perspective: 1100px; position: relative; }
+.foto { aspect-ratio: 3 / 4; border-radius: 4px; background: var(--rift); border: 1px solid var(--line);
+        display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+        padding: 4px 0; position: relative; overflow: hidden; }
+.foto .m { font-size: 13px; color: var(--muted); position: absolute; top: 4px; }
+.foto .b { width: 60%; border-radius: 2px; transform-origin: 50% 100%; }
+.foto .b.azul { background: var(--blue); } .foto .b.rojo { background: var(--red); }
+.slide[data-steps] .tira[data-step] { transform: none; }
+.slide[data-steps] .tira[data-step] .foto { opacity: 0; transform: rotateX(-85deg) translateY(-12px); transform-origin: 50% 0;
+  transition: opacity 320ms var(--ease) calc(var(--i) * 48ms), transform 700ms cubic-bezier(.2,.8,.2,1) calc(var(--i) * 48ms); }
+.slide[data-steps] .tira[data-step] .foto .b { transform: scaleY(0);
+  transition: transform 520ms cubic-bezier(.3,1.4,.5,1) calc(var(--i) * 48ms + 420ms); }
+.slide[data-steps] .tira[data-step].mostrado .foto,
+.slide[data-steps] .tira[data-step].mostrado .foto .b { opacity: 1; transform: none; }
+.tira::after { content: ""; position: absolute; inset: -4px 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(100deg, transparent 0 42%, rgba(240,230,210,.16) 50%, transparent 58% 100%);
+  background-size: 300% 100%; background-position: 100% 0; }
+.slide.active:not(.visto) .tira.mostrado::after { animation: escaner 1500ms ease-in-out 2300ms both; }
+@keyframes escaner { 0% { opacity: 1; background-position: 100% 0; } 100% { opacity: 1; background-position: 0 0; } }
+
+/* --- tarjetas con imagen (quien soy): giran al entrar y la imagen respira */
+.tarjetas { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); perspective: 1600px; }
+.tarjeta { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 10;
+           border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+.tarjeta img { width: 100%; height: 100%; object-fit: cover; object-position: 72% 30%; display: block; }
+.slide:is(.active, .sale, .sale-back) .tarjeta img { animation: respira 16s ease-in-out infinite alternate; }
+@keyframes respira { from { transform: scale(1.02); } to { transform: scale(1.13) translate(-1.5%, -1.5%); } }
+.tarjeta .nombre { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 18px 14px;
+                   background: linear-gradient(transparent, rgba(6,16,28,.92));
+                   font-size: 22px; font-weight: 800; color: var(--parchment); }
+.tarjeta .nombre small { display: block; font-size: 15px; font-weight: 400; color: var(--muted); }
+.slide[data-steps] .tarjetas[data-step] { transform: none; }
+.slide[data-steps] .tarjetas[data-step] .tarjeta { opacity: 0; transform: rotateY(-38deg) translateY(36px) scale(.93);
+  transition: opacity 700ms var(--ease) calc(var(--k) * 220ms), transform 1100ms cubic-bezier(.2,.8,.2,1) calc(var(--k) * 220ms); }
+.slide[data-steps] .tarjetas[data-step].mostrado .tarjeta { opacity: 1; transform: none; }
+.tarjeta::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 0 40%, rgba(255,246,224,.24) 50%, transparent 60% 100%);
+  background-size: 260% 100%; background-position: 120% 0; }
+.slide.active:not(.visto) .tarjetas.mostrado .tarjeta::after { animation: brillo 1300ms ease-in-out calc(1000ms + var(--k) * 220ms) both; }
+@keyframes brillo { to { background-position: -40% 0; } }
+
+/* --- numeros grandes (fichas) */
+.fichas .stat .v { font-variant-numeric: tabular-nums; }
+
+/* --- las tres pistas: numeros en circulo que saltan */
+#h-pregunta .narra .num { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--gold);
+  display: inline-grid; place-items: center; margin-right: 14px; vertical-align: middle; font-size: 22px;
+  box-shadow: 0 0 22px rgba(188,139,44,.35); }
+#h-pregunta.active:not(.visto) [data-step].mostrado .num { animation: salta 700ms cubic-bezier(.3,1.7,.5,1) backwards; }
+@keyframes salta { from { transform: scale(0) rotate(-120deg); } }
+
+/* --- tarjetas de veredicto: giran como cartas y les cae un sello */
+.veredictos { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); perspective: 1500px; }
+.veredicto-c { border-radius: 8px; border: 1px solid var(--line); background: rgba(23,51,77,.55);
+               padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 12px;
+               box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+.slide[data-steps] .veredicto-c[data-step] { transform: rotateY(-82deg) translateX(-40px); transform-origin: 0 50%;
+  transition: opacity 500ms var(--ease), transform 1000ms cubic-bezier(.2,.85,.2,1); }
+.slide[data-steps] .veredicto-c[data-step].mostrado { transform: none; }
+.veredicto-c .q { font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.veredicto-c .p { font-size: 21px; color: var(--muted); line-height: 1.35; }
+.veredicto-c .r { font-size: 24px; font-weight: 800; color: var(--parchment); line-height: 1.25; }
+.veredicto-c .sello { align-self: flex-start; font-size: 14px; font-weight: 800; padding: 5px 10px;
+                      border-radius: 4px; text-transform: uppercase; letter-spacing: .06em; border: 2px solid currentColor; }
+.slide.active:not(.visto) .veredicto-c.mostrado .sello { animation: sello 560ms cubic-bezier(.3,1.5,.5,1) 900ms backwards; }
+.slide.active:not(.visto) .veredicto-c.mostrado { animation: golpe 360ms ease-out 1330ms; }
+@keyframes sello { from { opacity: 0; transform: scale(2.8) rotate(-16deg); } }
+@keyframes golpe { 30% { transform: translateY(5px) scale(.99); } 60% { transform: translateY(-2px); } }
+/* las tarjetas del veredicto llenan la lamina: es la conclusion, no una nota */
+#h-veredicto .veredicto-c { padding: 32px 30px 30px; gap: 20px; min-height: 380px; }
+#h-veredicto .veredicto-c .q { font-size: 17px; }
+#h-veredicto .veredicto-c .p { font-size: 24px; }
+#h-veredicto .veredicto-c .r { font-size: 31px; flex: 1; }
+#h-veredicto .veredicto-c .sello { font-size: 16px; padding: 7px 12px; }
+.sello.si { background: rgba(14,158,180,.18); color: #6FD3E2; }
+.sello.medio { background: rgba(188,139,44,.18); color: var(--gold-lit); }
+.sello.no { background: rgba(222,67,97,.18); color: #F28FA2; }
+
+/* --- las formas de perder */
+.formas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 18px; }
+#h-pruebas .tira { margin-top: 10px; }
+.forma-c { border: 1px solid var(--line); border-radius: 8px; background: rgba(18,41,63,.6);
+           padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+.forma-c.resto { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(188,139,44,.35), 0 0 46px rgba(188,139,44,.16); }
+.slide.active:not(.visto) .forma-c.resto.mostrado { animation: resplandor 2.2s ease-in-out 900ms 2; }
+@keyframes resplandor { 50% { box-shadow: 0 0 0 2px rgba(232,200,122,.8), 0 0 80px rgba(232,200,122,.38); } }
+.slide[data-steps] .forma-c[data-step] { transform: translateY(40px) scale(.96);
+  transition: opacity 600ms var(--ease) calc(var(--k, 0) * 160ms), transform 900ms cubic-bezier(.2,.8,.2,1) calc(var(--k, 0) * 160ms); }
+.slide[data-steps] .forma-c[data-step].mostrado { transform: none; }
+.forma-c .figuras-res { margin-top: 0; }
+.slide[data-steps] .tarde[data-step] { transition: opacity 700ms var(--ease) 1300ms; }
+
+/* --- glosario en linea: la primera vez que aparece una palabra del juego */
+.glosa { border-bottom: 2px dotted var(--gold); }
+
+/* ===================================================== DERROTA */
+#h-derrota { background: #070C13; overflow: hidden; }
+#h-derrota .fondo-derrota { position: absolute; inset: 0; z-index: 0;
+  background: url("img/Caitlyn_splash.jpg") 62% 28% / cover no-repeat;
+  filter: grayscale(1) brightness(.30) contrast(1.15); transform-origin: 60% 40%; }
+#h-derrota:is(.active, .sale, .sale-back) .fondo-derrota { animation: zoom-lento 18s ease-out both; }
+@keyframes zoom-lento { from { transform: scale(1.18); } to { transform: scale(1.0); } }
+#h-derrota .velo { position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 46%, rgba(7,12,19,.35), rgba(7,12,19,.94) 78%); }
+#h-derrota .destello { position: absolute; inset: 0; z-index: 0; opacity: 0;
+  background: radial-gradient(ellipse 60% 45% at 50% 42%, rgba(222,67,97,.55), rgba(222,67,97,0) 70%); }
+#h-derrota.active:not(.visto) .destello { animation: destello 1800ms ease-out 640ms both; }
+@keyframes destello { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+#h-derrota .derrota-caja { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 28px; }
+#h-derrota.active:not(.visto) .derrota-caja { animation: sacude 560ms cubic-bezier(.36,.07,.19,.97) 620ms both; }
+@keyframes sacude {
+  10%, 90% { transform: translate(-2px, 1px); } 20%, 80% { transform: translate(4px, -2px); }
+  30%, 50%, 70% { transform: translate(-7px, 3px); } 40%, 60% { transform: translate(7px, -3px); }
+}
+.defeat-word .l { display: inline-block; }
+#h-derrota.active:not(.visto) .defeat-word { animation: impacto 2600ms ease-out 620ms backwards; }
+#h-derrota.active:not(.visto) .defeat-word .l {
+  animation: letra 640ms cubic-bezier(.6,0,.4,1.3) calc(var(--li) * 60ms) backwards;
+}
+@keyframes letra { from { opacity: 0; transform: translateY(-90px) scale(2.2); filter: blur(16px); } 70% { opacity: 1; } }
+@keyframes impacto {
+  0%   { color: #FF6B86; text-shadow: 0 0 40px rgba(222,67,97,.95), 0 0 120px rgba(222,67,97,.7); }
+  100% { color: #93A0AE; text-shadow: 0 0 0 rgba(222,67,97,0); }
+}
+/* «lo que el juego te dice» se escribe como en una terminal */
+.slide[data-steps] #h-derrota .defeat-sub[data-step], #h-derrota.slide[data-steps] .defeat-sub[data-step] {
+  transform: none; clip-path: inset(0 100% 0 0);
+  transition: opacity 200ms linear, clip-path 1700ms steps(46, end);
+}
+#h-derrota.slide[data-steps] .defeat-sub[data-step].mostrado { clip-path: inset(0 0 0 0); }
+#h-derrota .defeat-sub { color: #8D9BAA; }
+#h-derrota .grande em { text-shadow: 0 0 30px rgba(232,200,122,.45); }
+
+/* --- cierre */
+.cierre-grande { font-size: 74px; font-weight: 900; line-height: 1.02; color: var(--parchment);
+                 letter-spacing: -.03em; font-variation-settings: "wdth" 115; max-width: 18ch; }
+.cierre-grande em { font-style: normal; color: var(--gold-lit); }
+#h-gracias .closer .hinge { animation-delay: 1400ms; }
+
+/* ===================================================== movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .slide.enter, .slide.enter-back, .slide.sale, .slide.sale-back, #barrido.va, #barrido.vuelve { animation: none !important; }
+  .slide.sale, .slide.sale-back { display: none; }
+  .slide.active :is(h1, h2, .cierre-grande, .grande) .w, .defeat-word, .defeat-word .l, .derrota-caja, .destello,
+  .fondo-derrota, .tarjeta img, .tarjeta::after, .tira::after, .onda, .onda-obj, .senal, .persona, .sello,
+  .veredicto-c, .forma-c, #h-pregunta .num, .kicker, h2 .sub { animation: none !important; }
+  .slide [data-step], .slide [data-step] *, .narra b, .obj-r, .fase, .jugador, .cabezal, .aparece, .marca-d2,
+  .eco-areas, .hito, .punta, .punta-txt { transition: none !important; }
+}

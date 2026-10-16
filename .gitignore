@@ -1,0 +1,28 @@
+# JSON crudo de Riot: trae puuid y Riot ID de los diez jugadores de cada partida.
+# Nunca va al repositorio (ver LoL_Anonimizacion/reporte_anonimizacion.pdf, sección 6).
+LoL_Datos/crudo/
+LoL_EDA/datos/get*.json
+LoL_Presentacion/data/riot_examples/
+
+# Tablas por participante: campeón y rol de cada desconocido, únicas fila por fila.
+# Solo se publica lo que queda en las subcarpetas publico/ (nivel equipo).
+LoL_Datos/anonimizado/*.csv
+LoL_Anonimizacion/salida/*.csv
+
+# Material de trabajo del video (cuadros de revisión); el video final sí va
+LoL_PresentacionHistoria/video/muestras/
+LoL_PresentacionHistoria/video/hoja*.jpg
+
+# Secretos
+.env
+*.key
+
+# Auxiliares de LaTeX y Python
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+__pycache__/
+.pytest_cache/

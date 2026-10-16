@@ -1,0 +1,9 @@
+# Texto con fin de línea LF en el repositorio, sea cual sea el sistema.
+* text=auto eol=lf
+
+# Binarios: nunca se convierten ni se comparan como texto.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.mp4   binary
+*.woff2 binary

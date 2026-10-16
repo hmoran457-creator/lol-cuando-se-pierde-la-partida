@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿En qué minuto se perdió la partida? — una historia con datos</title>
+<link rel="stylesheet" href="assets/deck.css">
+<link rel="stylesheet" href="assets/historia.css">
+</head>
+<!-- GENERADO por scripts/construir.py desde plantilla.html. Editar la plantilla, no la salida. -->
+<body class="animado">
+<div id="viewport">
+  <div id="stage">
+    <div id="rail"></div>
+    <div id="progress"></div>
+
+    <!-- ═══════════════════════════════════════════════ portada -->
+    <section class="slide bare active" id="h-portada">
+      <div class="eco" data-dibujo="eco" data-decor></div>
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:36px">
+        <div class="kicker">Una historia contada con datos</div>
+        <h1 style="font-size:100px; font-weight:900; line-height:.98; letter-spacing:-.035em;
+                   font-variation-settings:'wdth' 115; color:var(--parchment); max-width:16ch; margin:0">
+          ¿En qué minuto se perdió la partida?</h1>
+        <p class="lead" style="color:var(--muted); max-width:50ch; font-size:26px">
+          Lo que <b class="oro" data-count="1195" data-delay="900" data-dur="1800">1,195</b> partidas de un videojuego
+          dicen sobre cuándo se pierde: casi nunca en el último momento.</p>
+      </div>
+      <div class="footer"><div>Héctor Manuel Morán Maldonado · Especialidad en Ciencia de Datos</div>
+        <div>Visualización de datos y narración de historias</div></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ 1 · EL MISTERIO -->
+    <section class="slide bare" id="h-derrota" data-sec="1" data-steps>
+      <div class="fondo-derrota" data-decor></div><div class="velo" data-decor></div><div class="destello" data-decor></div>
+      <div class="derrota-caja">
+        <div class="defeat-word">DERROTA</div>
+        <div class="defeat-sub" data-step="1" style="font-size:24px">34 minutos y 8 segundos de partida. Esto es todo lo que el juego te dice al final.</div>
+        <div class="grande" data-step="2" style="text-align:center; max-width:30ch">¿Se perdió en el último minuto…
+          <em>o mucho antes?</em></div>
+      </div>
+    </section>
+
+    <section class="slide" id="h-juego" data-sec="1" data-steps>
+      <div class="kicker">1 · El misterio · el juego en 60 segundos</div>
+      <h2>League of Legends, para quien nunca lo ha jugado</h2>
+      <div class="body">
+        <div class="dos der-ancha">
+          <div class="narra">
+            <div data-step="1"><span class="num">1</span><b>Dos equipos de 5 personas</b> (los puntos de colores), cada uno en una esquina del mapa.</div>
+            <div data-step="2"><span class="num">2</span><b>Gana quien destruye la base del otro</b> (el juego la llama <span class="glosa">Nexo</span>).</div>
+            <div data-step="3"><span class="num">3</span>Para llegar, hay que tumbar <b>torres</b> que defienden tres caminos.</div>
+            <div data-step="4"><span class="num">4</span>En medio hay <b>monstruos</b> (los más valiosos: los dragones y el Barón); vencerlos da una ventaja grande. Torres y monstruos son los <span class="glosa">objetivos</span>.</div>
+          </div>
+          <div class="lienzo" data-dibujo="mapa"></div>
+        </div>
+      </div>
+      <div class="footer"><div>Una partida dura unos 30 minutos. Nadie gana por puntos: gana quien tumba la base.</div></div>
+    </section>
+
+    <section class="slide" id="h-oro" data-sec="1" data-steps>
+      <div class="kicker">1 · El misterio · el marcador oculto</div>
+      <h2>El oro: el marcador que no se ve</h2>
+      <div class="body">
+        <div class="dos">
+          <div class="narra">
+            <div data-step="1">Todo lo bueno que haces <b>da oro</b>: derrotar a un rival, tumbar una torre, vencer un monstruo.</div>
+            <div data-step="2">Con el oro compras equipo y te vuelves más fuerte. <b>El que tiene más oro suele ir ganando.</b></div>
+            <div data-step="3">Es como la <b>posesión del balón en el fútbol</b>: no es el marcador oficial, pero dice quién domina el partido.</div>
+          </div>
+          <div class="lienzo" data-dibujo="oro"></div>
+        </div>
+      </div>
+      <div class="footer"><div>Las barras son reales: el oro de los dos equipos en el minuto 16 de la partida que veremos</div></div>
+    </section>
+
+    <section class="slide" id="h-yo" data-sec="1" data-steps>
+      <div class="kicker">1 · El misterio · quién cuenta esta historia</div>
+      <h2>Las partidas son mías
+        <span class="sub">Juego casi siempre de <span class="glosa">tirador</span>: el personaje que ataca desde lejos y
+          necesita oro para volverse decisivo. Mis dos personajes más usados:</span></h2>
+      <div class="body" style="gap:28px">
+        <div class="tarjetas" data-step="1">
+          <div class="tarjeta" style="--k:0"><img src="assets/img/Smolder_splash.jpg" alt="Arte oficial de Smolder">
+            <div class="nombre">Smolder<small><span data-count="108" data-delay="700">108</span> partidas</small></div></div>
+          <div class="tarjeta" style="--k:1"><img src="assets/img/Caitlyn_splash.jpg" alt="Arte oficial de Caitlyn">
+            <div class="nombre">Caitlyn<small><span data-count="106" data-delay="900">106</span> partidas</small></div></div>
+        </div>
+        <div class="fichas" data-step="2" style="display:flex; gap:40px">
+          <div class="stat"><div class="v gold" data-count="1195">1,195</div><div class="k">partidas clasificatorias (las que cuentan para subir de nivel)</div></div>
+          <div class="stat"><div class="v gold" data-count="6" data-delay="200">6</div><div class="k">cuentas mías, en el mismo servidor</div></div>
+          <div class="stat"><div class="v gold"><span data-count="2" data-delay="400">2</span> años</div><div class="k">de partidas, de octubre de 2024 a octubre de 2026</div></div>
+        </div>
+      </div>
+      <div class="footer"><div>Arte oficial de Riot Games (Data Dragon)</div></div>
+    </section>
+
+    <section class="slide" id="h-caso" data-sec="1" data-steps>
+      <div class="kicker">1 · El misterio · el caso</div>
+      <h2>Una derrota mía: íbamos ganando 31 de los 34 minutos… y perdimos
+        <span class="sub">La línea es nuestra ventaja en oro (como parte de todo el oro del mapa; lo explico más
+          adelante). Arriba de la línea punteada vamos ganando; abajo, el rival.</span></h2>
+      <div class="body" style="gap:14px">
+        <div class="lienzo" data-dibujo="caso"></div>
+        <div class="narra" style="flex-direction:row; gap:40px; align-items:baseline">
+          <div data-step="2" style="max-width:none; white-space:nowrap"><span class="azul">◆</span> monstruos y <span class="azul">■</span> torres que tomamos</div>
+          <div data-step="3" style="max-width:none; white-space:nowrap"><span class="rojo">◆ ■</span> los del rival</div>
+          <div data-step="4" style="max-width:none; font-size:21px">De <b class="oro">+<span data-count="5.9" data-dec="1" data-delay="400">5.9</span> %</b> en el minuto 16 a
+            <b class="oro">+<span data-count="2.1" data-dec="1" data-delay="400">2.1</span> %</b> en el 32; luego, el remate: 6 objetivos del rival en 2 minutos.</div>
+        </div>
+      </div>
+      <div class="footer"><div>Partida real, elegida por regla: la más típica de las «ventajas tiradas», 1 de cada 10 derrotas (las veremos más adelante)</div></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ 2 · LAS PISTAS -->
+    <section class="slide" id="h-pregunta" data-sec="2" data-steps>
+      <div class="kicker">2 · Las pistas · lo que quise averiguar</div>
+      <h2>¿Las partidas se pierden en un momento, o se van perdiendo?</h2>
+      <div class="body" style="justify-content:center">
+        <div class="narra" style="gap:30px">
+          <div data-step="1" style="max-width:62ch"><span class="num">1</span><b>¿Aprovechamos la ventaja?</b> Cuando vamos ganando en oro, ¿tomamos menos objetivos en las partidas que al final perdemos?</div>
+          <div data-step="2" style="max-width:62ch"><span class="num">2</span><b>¿Un monstruo del rival decide la partida?</b> El momento en que la partida se voltea en nuestra contra —lo llamaré <span class="glosa">el quiebre</span>—, ¿coincide con un monstruo que tomó el rival?</div>
+          <div data-step="3" style="max-width:60ch"><span class="num">3</span><b>¿Hay un punto sin regreso?</b> ¿Existe un minuto a partir del cual ya casi nadie remonta?</div>
+        </div>
+      </div>
+      <div class="footer"><div>Las tres hipótesis del proyecto, escritas antes de ver los datos</div><div>Compararé siempre contra mis victorias</div></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ 3 · LAS PRUEBAS -->
+    <section class="slide" id="h-pruebas" data-sec="3" data-steps>
+      <div class="kicker">3 · Las pruebas · los datos</div>
+      <h2>1,195 partidas, cada una como una película de fotos
+        <span class="sub">El servidor del juego guarda, de cada partida, una «foto» del oro de cada jugador por
+          minuto, y la hora exacta de cada torre y cada monstruo. Así se ve la partida del caso, foto por foto:</span></h2>
+      <div class="body" style="gap:22px">
+        <div class="tira" data-dibujo="tira" data-step="1"></div>
+        <div class="pie-nota" data-step="1" style="font-size:17px; color:var(--muted); margin-top:-8px">Cada foto: altura = tamaño
+          de la ventaja · <span class="azul">azul</span>, vamos ganando · <span class="rojo">rojo</span>, va ganando el rival</div>
+        <div class="narra" style="flex-direction:row; gap:56px">
+          <div data-step="2" style="max-width:40ch">Descargué 1,241 y quité <b><span data-count="46">46</span></b> que no se jugaron de verdad: alguien se desconectó o terminaron en los primeros minutos.</div>
+          <div data-step="3" style="max-width:40ch">Quedan <b class="rojo"><span data-count="537">537</span> derrotas</b> y <b class="azul"><span data-count="658">658</span> victorias</b>. Las victorias son el grupo de comparación.</div>
+        </div>
+      </div>
+      <div class="footer"><div>Fuente: la API oficial de Riot Games · los nombres de los otros jugadores se borraron antes de analizar</div></div>
+    </section>
+
+    <section class="slide" id="h-medida" data-sec="3" data-steps>
+      <div class="kicker">3 · Las pruebas · cómo medir quién va ganando</div>
+      <h2>2,000 de oro no pesan igual en el minuto 5 que en el 30</h2>
+      <div class="body">
+        <div class="dos izq-ancha">
+          <div class="lienzo" data-dibujo="medida"></div>
+          <div class="narra">
+            <div data-step="1">Al inicio hay poco oro en el mapa: <b>2,000 de ventaja son el 13 %</b> de todo.</div>
+            <div data-step="2">En el minuto 30 hay mucho más: la misma ventaja es apenas <b>el 2 %</b>.</div>
+            <div data-step="3">Por eso mido la ventaja como <b class="oro">porcentaje del oro del mapa</b>, no en oro suelto.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><div>Oro total del mapa: la mediana de mis partidas en cada minuto</div></div>
+    </section>
+
+    <section class="slide" id="h-tropiezo" data-sec="3" data-steps>
+      <div class="kicker">3 · Las pruebas · un tropiezo honesto</div>
+      <h2>Mi primera forma de encontrar «el minuto del quiebre» falló
+        <span class="sub">Primero definí el quiebre como el minuto en que más cae la ventaja. Cada barra: qué parte de las
+          partidas tuvo su mayor caída en ese minuto.</span></h2>
+      <div class="body" style="gap:20px">
+        <div class="lienzo" data-dibujo="tropiezo"></div>
+        <div class="narra">
+          <div data-step="3" style="max-width:80ch">Caía casi siempre <b>en los primeros minutos, igual al ganar que al perder</b>: al inicio una sola jugada mueve mucho la balanza. No medía el quiebre: medía jugadas sueltas del inicio.
+            Cambié a la regla que tenía de respaldo: <b class="oro">el quiebre es la última vez que mi equipo pasa a ir perdiendo</b>.</div>
+        </div>
+      </div>
+      <div class="footer"><div>El cambio se decidió después de ver este resultado, y así se reporta</div></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ 4 · LO QUE ENCONTRÉ -->
+    <section class="slide" id="h-pista1" data-sec="4" data-steps>
+      <div class="kicker">4 · Lo que encontré · pista 1</div>
+      <h2>Con ventaja, al perder tomamos menos objetivos… pero solo después del minuto 15
+        <span class="sub">Objetivos tomados por cada 10 minutos en que íbamos ganando con claridad (5 % o más
+          de todo el oro del mapa):</span></h2>
+      <div class="body" style="gap:16px">
+        <div class="lienzo" data-dibujo="pista1"></div>
+        <div class="grande" data-step="4" style="font-size:30px; max-width:none">No es que no consigamos ventaja: <em>es que después del minuto 15 no la usamos para tomar objetivos</em>.</div>
+      </div>
+      <div class="footer"><div>Es una asociación, no una causa: tomar objetivos también da oro</div></div>
+    </section>
+
+    <section class="slide" id="h-pista2" data-sec="4" data-steps>
+      <div class="kicker">4 · Lo que encontré · pista 2</div>
+      <h2>¿Un monstruo del rival decide el quiebre? No se puede afirmar
+        <span class="sub">¿Qué tan seguido el quiebre cae a un minuto o menos de un monstruo del rival? «Pura casualidad»
+          = los mismos monstruos puestos en minutos al azar. (Al ganar, el quiebre es la última vez que fuimos abajo.)</span></h2>
+      <div class="body" style="gap:16px">
+        <div class="lienzo" data-dibujo="pista2"></div>
+        <div class="grande" data-step="3" style="font-size:30px; max-width:none">Cuando pierdo, apenas supera al azar, y midiéndolo de otra forma ni eso.
+          Cuando gano, lo supera por más (+9 contra +4 puntos): <em>describe el ritmo de cualquier partida</em>, no por qué pierdo.</div>
+      </div>
+      <div class="footer"><div>La «pura casualidad»: mover los monstruos del rival a otros minutos al azar, 10,000 veces, y medir lo mismo</div></div>
+    </section>
+
+    <section class="slide" id="h-pista3" data-sec="4" data-steps>
+      <div class="kicker">4 · Lo que encontré · pista 3</div>
+      <h2>La puerta se va cerrando poco a poco… y hacia el minuto 27 ya casi no se abre
+        <span class="sub">De cada 20 partidas que van claramente perdiendo en ese minuto (5 % o más del oro del mapa
+          abajo), cuántas terminan ganando:</span></h2>
+      <div class="body" style="gap:10px">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:40px">
+          <div data-step="1"><div class="figuras-tit">En el minuto 5</div><div data-dibujo="figuras:7"></div>
+            <div class="figuras-res"><b><span data-count="37" data-delay="300">37</span> %</b> remonta: unas 7 de cada 20</div></div>
+          <div data-step="2"><div class="figuras-tit">En el minuto 15</div><div data-dibujo="figuras:4"></div>
+            <div class="figuras-res"><b><span data-count="20" data-delay="300">20</span> %</b> remonta: unas 4 de cada 20</div></div>
+          <div data-step="3"><div class="figuras-tit">En el minuto 30</div><div data-dibujo="figuras:1"></div>
+            <div class="figuras-res"><b><span data-count="4" data-delay="300">4</span> %</b> remonta: 1 de cada 20, o menos</div></div>
+        </div>
+        <div class="lienzo" data-dibujo="curva3" data-step="4"></div>
+      </div>
+      <div class="footer"><div>La curva baja sin un salto. «Casi nadie» = menos de 1 de cada 20, umbral fijado después de ver los datos (con 2 de cada 20 sería el minuto 22)</div></div>
+    </section>
+
+    <section class="slide" id="h-formas" data-sec="4" data-steps>
+      <div class="kicker">4 · Lo que encontré · las formas de perder</div>
+      <h2>Cuatro formas de perder… y una mitad pareja hasta el final</h2>
+      <div class="body" style="gap:24px">
+        <div class="formas">
+          <div class="forma-c" data-step="1" style="--k:0"><div class="figuras-tit">Desde el inicio</div><div data-dibujo="forma:A1" data-paso="1"></div><div class="figuras-res"><b><span data-count="19">19</span> %</b> abajo desde los primeros minutos</div></div>
+          <div class="forma-c" data-step="1" style="--k:1"><div class="figuras-tit">Aplastados</div><div data-dibujo="forma:A4" data-paso="1"></div><div class="figuras-res"><b><span data-count="15" data-delay="160">15</span> %</b> muy abajo, sin reacción</div></div>
+          <div class="forma-c" data-step="1" style="--k:2"><div class="figuras-tit">Ventaja tirada</div><div data-dibujo="forma:A2" data-paso="1"></div><div class="figuras-res"><b><span data-count="10" data-delay="320">10</span> %</b> íbamos ganando y la perdimos</div></div>
+          <div class="forma-c" data-step="1" style="--k:3"><div class="figuras-tit">Por un objetivo</div><div data-dibujo="forma:A3" data-paso="1"></div><div class="figuras-res"><b><span data-count="4" data-delay="480">4</span> %</b> parejas hasta un monstruo del rival</div></div>
+          <div class="forma-c resto" data-step="2"><div class="figuras-tit" style="color:var(--gold-lit)">Parejas hasta el final</div><div data-dibujo="forma:Sin clasificar" data-paso="2"></div><div class="figuras-res"><b><span data-count="52">52</span> %</b> no encajan en ninguna</div></div>
+        </div>
+        <div class="grande" data-step="3" style="font-size:30px; max-width:none">En la partida típica de esa mitad, nadie lleva una ventaja clara
+          el 78 % del tiempo… <em>y mi equipo se va quedando atrás poco a poco</em>.</div>
+      </div>
+      <div class="footer"><div>Cada línea es la partida típica de su grupo · reglas escritas antes de ver los datos, sin ajustarlas después</div></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ 5 · LA RESPUESTA -->
+    <section class="slide" id="h-veredicto" data-sec="5" data-steps>
+      <div class="kicker">5 · La respuesta · cómo terminaron las tres pistas</div>
+      <h2>Lo que pensaba al inicio, y lo que encontré</h2>
+      <div class="body" style="justify-content:center">
+        <div class="veredictos">
+          <div class="veredicto-c" data-step="1"><div class="q">Pista 1 · la ventaja</div>
+            <div class="p">«Al perder aprovechamos menos la ventaja».</div>
+            <div class="r">Sí, pero solo después del minuto 15.</div><span class="sello si">Se confirma y se precisa</span></div>
+          <div class="veredicto-c" data-step="2"><div class="q">Pista 2 · el objetivo</div>
+            <div class="p">«Un monstruo del rival decide la partida».</div>
+            <div class="r">No se puede afirmar: depende de cómo se mida, y pasa más cuando gano.</div><span class="sello medio">No concluyente</span></div>
+          <div class="veredicto-c" data-step="3"><div class="q">Pista 3 · sin regreso</div>
+            <div class="p">«Hay un minuto a partir del cual ya casi nadie remonta».</div>
+            <div class="r">Sí: desde el minuto 27 casi nadie remonta, pero se llega ahí poco a poco.</div><span class="sello si">Se confirma</span></div>
+        </div>
+      </div>
+      <div class="footer"><div>Las tres hipótesis escritas antes de ver los datos, y su resultado</div></div>
+    </section>
+
+    <section class="slide" id="h-respuesta" data-sec="5" data-steps>
+      <div class="kicker">5 · La respuesta</div>
+      <div class="body" style="justify-content:center; gap:30px">
+        <div class="cierre-grande" style="font-size:58px; max-width:24ch">Mis partidas casi nunca se pierden en el último momento. <em>Se van perdiendo.</em></div>
+        <div class="lienzo" data-dibujo="cierre" style="max-height:330px"></div>
+        <div class="narra" style="flex-direction:row; gap:48px">
+          <div data-step="1" style="max-width:none">En la partida del inicio pasamos a ir abajo en el minuto 34… <b class="oro">pero la ventaja
+            se venía encogiendo desde el 16: perdimos el 64 % de la ventaja antes del remate.</b></div>
+          <div data-step="2" style="max-width:52ch; font-size:18px; color:var(--muted)">Lo que no puedo afirmar: causas (solo veo asociaciones), cuánto pesé yo (el resultado es del equipo), ni que valga para otros jugadores.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide bare" id="h-gracias">
+      <div class="eco" data-dibujo="eco" data-dur="2600" data-decor></div>
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:30px">
+        <h1 style="font-size:132px; font-weight:900; line-height:.95; letter-spacing:-.04em;
+                   font-variation-settings:'wdth' 118; color:var(--parchment); margin:0">Gracias</h1>
+        <p class="closer" style="margin-top:0">La próxima vez que veas «DERROTA», pregúntate
+          <em class="hinge">cuándo</em> empezó, no cuándo terminó.</p>
+        <p class="lead" style="color:var(--muted); max-width:60ch; font-size:20px; margin:0">
+          El reporte completo trae el método, las pruebas estadísticas y todo el código.</p>
+      </div>
+      <div class="footer">
+        <div style="max-width:70ch">Proyecto no avalado por Riot Games. League of Legends y Riot Games son marcas
+          registradas de Riot Games, Inc.</div>
+        <div>Elaborada con la asistencia de Claude (Anthropic)</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+<div id="blank"></div>
+<div id="help">
+  <span><kbd>→</kbd> avanzar</span><span><kbd>←</kbd> regresar</span><span><kbd>F</kbd> pantalla completa</span>
+  <span><kbd>R</kbd> repetir lámina</span><span><kbd>P</kbd> modo cine</span><span><kbd>1</kbd>–<kbd>5</kbd> acto</span>
+</div>
+<script>
+window.HISTORIA = {"caso": {"serie": [{"min": 0.0, "v": 0.0}, {"min": 1.0, "v": 0.0}, {"min": 2.0, "v": 1.77}, {"min": 3.0, "v": 1.65}, {"min": 4.0, "v": 3.63}, {"min": 5.0, "v": 0.3}, {"min": 6.0, "v": 1.11}, {"min": 7.0, "v": -2.85}, {"min": 8.0, "v": 1.56}, {"min": 9.0, "v": 5.19}, {"min": 10.0, "v": 2.22}, {"min": 11.0, "v": 4.01}, {"min": 12.0, "v": 3.03}, {"min": 13.0, "v": 5.33}, {"min": 14.0, "v": 5.54}, {"min": 15.0, "v": 5.75}, {"min": 16.0, "v": 5.89}, {"min": 17.0, "v": 4.51}, {"min": 18.0, "v": 4.15}, {"min": 19.0, "v": 4.45}, {"min": 20.0, "v": 4.6}, {"min": 21.0, "v": 4.12}, {"min": 22.0, "v": 3.14}, {"min": 23.0, "v": 2.63}, {"min": 24.0, "v": 2.7}, {"min": 25.0, "v": 3.41}, {"min": 26.0, "v": 4.55}, {"min": 27.0, "v": 3.78}, {"min": 28.0, "v": 2.17}, {"min": 29.0, "v": 1.87}, {"min": 30.0, "v": 2.18}, {"min": 31.0, "v": 3.02}, {"min": 32.0, "v": 2.1}, {"min": 33.0, "v": 0.72}, {"min": 34.0, "v": -1.71}, {"min": 34.13, "v": -1.74}], "objetivos": [{"min": 6.68, "propio": false, "monstruo": true, "nombre": "Larvas"}, {"min": 6.86, "propio": false, "monstruo": true, "nombre": "Larvas"}, {"min": 7.43, "propio": true, "monstruo": true, "nombre": "Larvas"}, {"min": 10.69, "propio": true, "monstruo": true, "nombre": "Dragón"}, {"min": 12.44, "propio": true, "monstruo": true, "nombre": "Larvas"}, {"min": 12.63, "propio": true, "monstruo": true, "nombre": "Larvas"}, {"min": 12.83, "propio": true, "monstruo": true, "nombre": "Larvas"}, {"min": 14.95, "propio": true, "monstruo": true, "nombre": "Heraldo"}, {"min": 15.87, "propio": true, "monstruo": false, "nombre": "Torre"}, {"min": 16.05, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 16.5, "propio": true, "monstruo": true, "nombre": "Dragón"}, {"min": 16.93, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 17.08, "propio": true, "monstruo": false, "nombre": "Torre"}, {"min": 18.08, "propio": true, "monstruo": false, "nombre": "Torre"}, {"min": 22.47, "propio": false, "monstruo": true, "nombre": "Dragón"}, {"min": 27.56, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 27.76, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 27.9, "propio": false, "monstruo": true, "nombre": "Dragón"}, {"min": 31.08, "propio": true, "monstruo": false, "nombre": "Torre"}, {"min": 32.18, "propio": false, "monstruo": true, "nombre": "Barón"}, {"min": 33.34, "propio": false, "monstruo": true, "nombre": "Dragón"}, {"min": 33.76, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 33.82, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 33.95, "propio": false, "monstruo": false, "nombre": "Torre"}, {"min": 34.0, "propio": false, "monstruo": false, "nombre": "Torre"}], "duracion": 34.13, "d2": 34, "min_max": 16, "v_max": 5.9, "oroMax": {"propio": 31458, "rival": 27958}, "oroSerie": [{"min": 0, "p": 2500, "r": 2500}, {"min": 1, "p": 2500, "r": 2500}, {"min": 2, "p": 2991, "r": 2887}, {"min": 3, "p": 4572, "r": 4424}, {"min": 4, "p": 6487, "r": 6032}, {"min": 5, "p": 8088, "r": 8040}, {"min": 6, "p": 9876, "r": 9660}, {"min": 7, "p": 11424, "r": 12094}, {"min": 8, "p": 13843, "r": 13417}, {"min": 9, "p": 16391, "r": 14773}, {"min": 10, "p": 17513, "r": 16751}, {"min": 11, "p": 20337, "r": 18768}, {"min": 12, "p": 21662, "r": 20386}, {"min": 13, "p": 24406, "r": 21937}, {"min": 14, "p": 26952, "r": 24122}, {"min": 15, "p": 28757, "r": 25632}, {"min": 16, "p": 31458, "r": 27958}], "umbral": 15}, "ejemplo": {"ventaja": 2000, "total5": 15899, "total30": 115788}, "d1": {"derrotas": [0.0, 3.72, 7.26, 18.44, 16.57, 10.61, 6.89, 6.89, 4.84, 4.66, 3.17, 2.05, 2.05, 1.68, 0.74, 1.3, 0.37, 0.93, 0.37, 0.56, 0.93, 0.37, 0.74, 0.37, 0.74, 0.37, 0.37, 0.56, 0.56, 0.74, 1.12], "victorias": [0.0, 3.34, 9.27, 14.29, 13.98, 10.94, 7.6, 6.84, 4.56, 5.47, 3.19, 1.37, 1.82, 1.82, 2.43, 1.82, 1.52, 1.22, 1.37, 1.37, 0.91, 1.22, 1.22, 0.3, 0.15, 0.76, 0.3, 0.61, 0.15, 0.0, 0.15]}, "curva": [{"min": 1, "p": 48.9}, {"min": 2, "p": 55.0}, {"min": 3, "p": 46.0}, {"min": 4, "p": 40.2}, {"min": 5, "p": 36.9}, {"min": 6, "p": 35.7}, {"min": 7, "p": 30.0}, {"min": 8, "p": 28.8}, {"min": 9, "p": 27.9}, {"min": 10, "p": 23.6}, {"min": 11, "p": 22.1}, {"min": 12, "p": 19.2}, {"min": 13, "p": 20.3}, {"min": 14, "p": 19.9}, {"min": 15, "p": 20.4}, {"min": 16, "p": 18.4}, {"min": 17, "p": 16.8}, {"min": 18, "p": 15.6}, {"min": 19, "p": 12.1}, {"min": 20, "p": 12.0}, {"min": 21, "p": 12.8}, {"min": 22, "p": 9.3}, {"min": 23, "p": 7.2}, {"min": 24, "p": 9.3}, {"min": 25, "p": 8.1}, {"min": 26, "p": 6.0}, {"min": 27, "p": 4.0}, {"min": 28, "p": 2.6}, {"min": 29, "p": 4.0}, {"min": 30, "p": 3.9}, {"min": 31, "p": 4.0}, {"min": 32, "p": 3.0}, {"min": 33, "p": 2.4}, {"min": 34, "p": 3.2}, {"min": 35, "p": 2.0}, {"min": 36, "p": 0.0}], "formas": {"A1": [{"min": 0, "v": 0.0}, {"min": 1, "v": 0.0}, {"min": 2, "v": -0.25}, {"min": 3, "v": -1.43}, {"min": 4, "v": -2.57}, {"min": 5, "v": -3.74}, {"min": 6, "v": -2.92}, {"min": 7, "v": -3.93}, {"min": 8, "v": -3.9}, {"min": 9, "v": -4.32}, {"min": 10, "v": -4.78}, {"min": 11, "v": -4.91}, {"min": 12, "v": -6.06}, {"min": 13, "v": -5.94}, {"min": 14, "v": -6.68}, {"min": 15, "v": -7.16}, {"min": 16, "v": -7.33}, {"min": 17, "v": -6.98}, {"min": 18, "v": -7.0}, {"min": 19, "v": -7.43}, {"min": 20, "v": -7.47}, {"min": 21, "v": -6.82}, {"min": 22, "v": -7.04}, {"min": 23, "v": -7.65}, {"min": 24, "v": -7.51}, {"min": 25, "v": -6.85}, {"min": 26, "v": -6.69}, {"min": 27, "v": -6.9}, {"min": 28, "v": -6.79}, {"min": 29, "v": -7.16}, {"min": 30, "v": -7.13}, {"min": 31, "v": -6.19}, {"min": 32, "v": -5.82}, {"min": 33, "v": -5.97}, {"min": 34, "v": -5.75}, {"min": 35, "v": -5.62}], "A2": [{"min": 0, "v": 0.0}, {"min": 1, "v": 0.0}, {"min": 2, "v": 0.72}, {"min": 3, "v": 1.65}, {"min": 4, "v": 3.03}, {"min": 5, "v": 1.81}, {"min": 6, "v": 2.28}, {"min": 7, "v": 3.31}, {"min": 8, "v": 3.25}, {"min": 9, "v": 3.73}, {"min": 10, "v": 3.58}, {"min": 11, "v": 4.54}, {"min": 12, "v": 4.5}, {"min": 13, "v": 4.68}, {"min": 14, "v": 4.65}, {"min": 15, "v": 5.59}, {"min": 16, "v": 5.24}, {"min": 17, "v": 4.78}, {"min": 18, "v": 5.17}, {"min": 19, "v": 5.29}, {"min": 20, "v": 4.44}, {"min": 21, "v": 3.62}, {"min": 22, "v": 3.25}, {"min": 23, "v": 2.96}, {"min": 24, "v": 2.7}, {"min": 25, "v": 2.93}, {"min": 26, "v": 3.05}, {"min": 27, "v": 2.34}, {"min": 28, "v": 2.3}, {"min": 29, "v": 1.75}, {"min": 30, "v": 1.22}, {"min": 31, "v": 0.83}, {"min": 32, "v": 0.77}, {"min": 33, "v": 0.71}, {"min": 34, "v": 0.59}, {"min": 35, "v": 0.25}, {"min": 36, "v": -0.27}, {"min": 37, "v": -0.83}, {"min": 38, "v": -0.83}, {"min": 39, "v": -0.53}, {"min": 40, "v": -1.1}, {"min": 41, "v": -0.45}], "A3": [{"min": 0, "v": 0.0}, {"min": 1, "v": 0.0}, {"min": 2, "v": 0.82}, {"min": 3, "v": -0.88}, {"min": 4, "v": -1.09}, {"min": 5, "v": -0.08}, {"min": 6, "v": 0.49}, {"min": 7, "v": -0.42}, {"min": 8, "v": -1.94}, {"min": 9, "v": -0.94}, {"min": 10, "v": 0.0}, {"min": 11, "v": 0.19}, {"min": 12, "v": -0.49}, {"min": 13, "v": 0.15}, {"min": 14, "v": 0.07}, {"min": 15, "v": -0.27}, {"min": 16, "v": -1.15}, {"min": 17, "v": -1.24}, {"min": 18, "v": -1.17}, {"min": 19, "v": -1.01}, {"min": 20, "v": -1.64}, {"min": 21, "v": -2.13}, {"min": 22, "v": -2.9}, {"min": 23, "v": -3.06}, {"min": 24, "v": -3.67}, {"min": 25, "v": -3.48}, {"min": 26, "v": -4.22}, {"min": 27, "v": -4.92}, {"min": 28, "v": -5.65}, {"min": 29, "v": -6.5}, {"min": 30, "v": -6.13}], "A4": [{"min": 0, "v": 0.0}, {"min": 1, "v": 0.0}, {"min": 2, "v": -0.18}, {"min": 3, "v": -2.24}, {"min": 4, "v": -4.82}, {"min": 5, "v": -5.32}, {"min": 6, "v": -6.19}, {"min": 7, "v": -6.99}, {"min": 8, "v": -8.24}, {"min": 9, "v": -8.32}, {"min": 10, "v": -8.73}, {"min": 11, "v": -9.77}, {"min": 12, "v": -9.32}, {"min": 13, "v": -9.7}, {"min": 14, "v": -11.54}, {"min": 15, "v": -11.84}, {"min": 16, "v": -12.25}, {"min": 17, "v": -11.36}, {"min": 18, "v": -10.97}, {"min": 19, "v": -10.63}, {"min": 20, "v": -10.71}, {"min": 21, "v": -10.53}, {"min": 22, "v": -10.67}, {"min": 23, "v": -10.33}, {"min": 24, "v": -10.56}, {"min": 25, "v": -9.91}, {"min": 26, "v": -9.64}, {"min": 27, "v": -9.68}, {"min": 28, "v": -9.67}, {"min": 29, "v": -9.08}, {"min": 30, "v": -8.69}], "Sin clasificar": [{"min": 0, "v": 0.0}, {"min": 1, "v": 0.0}, {"min": 2, "v": -0.1}, {"min": 3, "v": -0.33}, {"min": 4, "v": -0.48}, {"min": 5, "v": -0.98}, {"min": 6, "v": -1.08}, {"min": 7, "v": -0.87}, {"min": 8, "v": -0.72}, {"min": 9, "v": -1.04}, {"min": 10, "v": -1.07}, {"min": 11, "v": -1.47}, {"min": 12, "v": -1.27}, {"min": 13, "v": -1.1}, {"min": 14, "v": -1.5}, {"min": 15, "v": -1.72}, {"min": 16, "v": -1.66}, {"min": 17, "v": -1.67}, {"min": 18, "v": -1.92}, {"min": 19, "v": -2.17}, {"min": 20, "v": -2.45}, {"min": 21, "v": -2.33}, {"min": 22, "v": -2.45}, {"min": 23, "v": -2.97}, {"min": 24, "v": -3.06}, {"min": 25, "v": -3.38}, {"min": 26, "v": -3.45}, {"min": 27, "v": -3.63}, {"min": 28, "v": -4.04}, {"min": 29, "v": -3.89}, {"min": 30, "v": -3.94}, {"min": 31, "v": -3.72}, {"min": 32, "v": -3.06}, {"min": 33, "v": -3.5}, {"min": 34, "v": -3.01}, {"min": 35, "v": -2.7}, {"min": 36, "v": -2.35}, {"min": 37, "v": -2.41}]}, "punto": {"minuto": 27, "umbral": 0.05}, "h1": {"<15": {"der": 0.47452, "vic": 0.54439, "empate": true}, "15-25": {"der": 0.60741, "vic": 0.95117, "empate": false}, ">=25": {"der": 0.58427, "vic": 1.10142, "empate": false}}, "h2": {"obsDer": 39.6, "azarDer": 35.9, "obsVic": 28.2, "azarVic": 19.0}, "figuras": {"5": 7, "15": 4, "30": 1}, "pctFormas": {"A1": 19.2, "A2": 10.2, "A3": 4.3, "A4": 14.5, "Sin clasificar": 51.8}};
+</script>
+<script src="assets/historia.js"></script>
+</body>
+</html>

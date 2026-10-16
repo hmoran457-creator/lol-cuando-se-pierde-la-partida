@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="840pt" height="360pt" viewBox="0 0 840 360" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 360 
+L 840 360 
+L 840 0 
+L 0 0 
+L 0 360 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 217.902115 356.99976 
+L 836.99976 356.99976 
+L 836.99976 3.00024 
+L 217.902115 3.00024 
+L 217.902115 356.99976 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m131240bc2f" d="M 0 0 
+L -3.5 0 
+" style="stroke: #8fa6be; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="36.331364" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="41.130426" transform="rotate(-0 210.902115 41.130426)">Cola 420, partidas únicas</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="93.798818" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="98.357881" transform="rotate(-0 210.902115 98.357881)">Cola 420 confirmada en el registro</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="151.266273" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="155.825335" transform="rotate(-0 210.902115 155.825335)">Diez participantes</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="208.733727" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="213.29279" transform="rotate(-0 210.902115 213.29279)">Sin remake</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="266.201182" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="271.000244" transform="rotate(-0 210.902115 271.000244)">Duración de al menos 5 minutos</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m131240bc2f" x="217.902115" y="323.668636" style="fill: #8fa6be; stroke: #8fa6be; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 12px; font-family: Archivo, sans-serif; text-anchor: end; fill: #8fa6be" x="210.902115" y="328.467699" transform="rotate(-0 210.902115 328.467699)">Sin rendición antes del minuto 10</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 217.902115 53.5716 
+L 694.131073 53.5716 
+L 694.131073 19.091127 
+L 217.902115 19.091127 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 217.902115 111.039055 
+L 694.131073 111.039055 
+L 694.131073 76.558582 
+L 217.902115 76.558582 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 217.902115 168.506509 
+L 694.131073 168.506509 
+L 694.131073 134.026036 
+L 217.902115 134.026036 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 217.902115 225.973964 
+L 679.932466 225.973964 
+L 679.932466 191.493491 
+L 217.902115 191.493491 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 217.902115 283.441418 
+L 679.164973 283.441418 
+L 679.164973 248.960945 
+L 217.902115 248.960945 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 217.902115 340.908873 
+L 676.47875 340.908873 
+L 676.47875 306.4284 
+L 217.902115 306.4284 
+z
+" clip-path="url(#p98c1deb972)" style="fill: #0e9eb4"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 217.902115 356.99976 
+L 217.902115 3.00024 
+" style="fill: none; stroke: #1e3a56; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="699.887265" y="39.708317" transform="rotate(-0 699.887265 39.708317)">1,241</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="699.887265" y="97.175771" transform="rotate(-0 699.887265 97.175771)">1,241</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="699.887265" y="154.643226" transform="rotate(-0 699.887265 154.643226)">1,241</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="685.688658" y="212.11068" transform="rotate(-0 685.688658 212.11068)">1,204   −37</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="684.921165" y="269.578135" transform="rotate(-0 684.921165 269.578135)">1,202   −2</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 13px; font-family: Archivo, sans-serif; text-anchor: start; fill: #dce6f0" x="682.234942" y="327.045589" transform="rotate(-0 682.234942 327.045589)">1,195   −7</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p98c1deb972">
+   <rect x="217.902115" y="3.00024" width="619.097645" height="353.99952"/>
+  </clipPath>
+ </defs>
+</svg>

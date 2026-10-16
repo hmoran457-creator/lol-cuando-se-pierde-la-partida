@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿En qué minuto se perdió la partida? — 5 min</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<!-- class="animado" enciende las animaciones extra del mazo corto (ver deck.css).
+     El mazo largo comparte varios ids de lámina, así que van bajo esta clase para
+     no tocarlo; para activarlas allá basta con ponerle la misma clase. -->
+<body class="animado">
+
+<div id="viewport">
+  <div id="stage">
+
+    <div id="rail"></div>
+    <div id="progress"></div>
+
+    <!-- ══════════════════════════════════════════════════════ 1 · portada -->
+    <section class="slide bare active" id="s-cover">
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:40px">
+        <div class="kicker">Planteamiento de proyecto · Análisis de datos</div>
+        <h1 style="font-size:96px; font-weight:900; line-height:.98; letter-spacing:-.035em;
+                   font-variation-settings:'wdth' 115; color:var(--parchment); max-width:19ch; margin:0">
+          ¿En qué minuto<br>se perdió la partida?
+        </h1>
+        <p class="lead" style="color:var(--muted); max-width:52ch; font-size:26px">
+          Anatomía de mis derrotas en <em>ranked</em>. Una reconstrucción minuto a minuto
+          de partidas de League&nbsp;of&nbsp;Legends.
+        </p>
+      </div>
+      <div class="footer">
+        <div>Héctor Manuel Morán Maldonado</div>
+        <div>Fuente principal: Riot Games API · Fuente de apoyo: Data Dragon</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ 2 · PROBLEMÁTICA · gancho -->
+    <section class="slide bare" id="s-defeat" data-sec="1">
+      <div id="defeat-screen" style="position:absolute; inset:0; display:flex;
+           flex-direction:column; align-items:center; justify-content:center">
+        <div class="defeat-word">DERROTA</div>
+        <div class="defeat-sub">
+          28:35 · partida clasificatoria · Esto es todo lo que el juego te dice al terminar.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── 3 · la partida, en una lámina -->
+    <section class="slide" id="s-partida" data-sec="1">
+      <div class="kicker">1 · Problemática</div>
+      <h2>El marcador dice una cosa; el oro dice otra
+        <span class="sub">Ventaja de oro del equipo que perdió, minuto a minuto.
+          Nunca cruzó la línea de cero — ni siquiera al final.</span></h2>
+      <div class="body">
+        <div class="chart-wrap" data-chart></div>
+        <div class="row">
+          <!-- data-count anima la cifra; el texto ya trae el valor final, asi que
+               sin JS o con menos movimiento la lamina se lee igual. El tercero es
+               un 0: contar hasta cero no dice nada, se queda quieto. -->
+          <div class="stat"><div class="v gold" data-count="8052" data-prefix="+">+8,052</div>
+            <div class="k">ventaja máxima, en el minuto 22</div></div>
+          <div class="stat"><div class="v gold" data-count="1034" data-prefix="+">+1,034</div>
+            <div class="k">ventaja que <em>todavía</em> tenían cuando cayó su Nexo</div></div>
+          <div class="stat"><div class="v">0</div>
+            <div class="k">minutos que pasaron por detrás en oro, en toda la partida</div></div>
+        </div>
+        <p class="note" style="max-width:none">
+          <strong>21:44 – 22:02</strong> tiran el inhibidor y las dos torres del Nexo — están dentro
+          de la base rival. <strong>23:03</strong> el equipo contrario mata al Barón. Después del
+          minuto 22: <strong>0 asesinatos propios contra 9 recibidos</strong>.
+        </p>
+      </div>
+      <div class="footer">
+        <span class="illus real">Partida pública real · EUW1_6569580003 · cola clasificatoria</span>
+        <div>El marcador fue 16/25/29. No es lo que decidió la partida.</div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────── 4 · la pregunta -->
+    <section class="slide" id="s-question" data-sec="1">
+      <div class="kicker">1 · Problemática</div>
+      <h2>La pregunta
+        <span class="sub">Esa partida es pública y la escogí a propósito, por extrema. La pregunta
+          es si mis propias derrotas tienen una forma parecida — y si se puede medir.</span></h2>
+      <div class="body">
+        <div class="panel" style="border-left:3px solid var(--gold); background:rgba(188,139,44,.06)">
+          <p class="lead" style="color:var(--parchment); max-width:none">
+            ¿Las partidas se pierden por un gran error final, o por la acumulación de
+            decisiones anteriores que nadie registra como error?
+          </p>
+        </div>
+        <div class="row grow" style="margin-top:4px">
+          <div class="col half">
+            <h3 style="margin-bottom:12px">Lo que sí busca</h3>
+            <ul class="ticks">
+              <li>Identificar <em>en qué minuto</em> cambia la dirección de una partida.</li>
+              <li>Ver si ese minuto se repite y forma patrones.</li>
+              <li>Clasificar mis derrotas por <em>cómo</em> ocurrieron, no por quién falló.</li>
+            </ul>
+          </div>
+          <div class="col half">
+            <h3 style="margin-bottom:12px">Lo que explícitamente no busca</h3>
+            <ul class="ticks">
+              <li class="no">No son «mis» derrotas: son las de <em>mis equipos</em>. Soy uno de diez.</li>
+              <li class="no">No mide estado emocional. Los datos registran acciones, no <em>tilt</em>.</li>
+              <li class="no">Es dato observacional: muestra asociación, nunca causa.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div>El límite declarado es parte del planteamiento, no una advertencia al final</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════ 5 · FUENTES DE DATOS · cuáles -->
+    <section class="slide" id="s-sources" data-sec="2">
+      <div class="kicker">2 · Fuentes de datos</div>
+      <h2>De dónde sale el dato
+        <span class="sub">Dos fuentes oficiales de Riot. Y un tamaño de muestra que no elijo yo:
+          me lo impone la API.</span></h2>
+      <div class="body">
+        <div class="row grow">
+          <div class="col half">
+            <div class="panel" style="height:100%">
+              <h3>Riot Games API <span style="color:var(--gold); font-weight:400">· principal</span></h3>
+              <p class="note" style="margin:10px 0 14px">
+                Requiere llave de desarrollador. Por cada partida entrega dos documentos distintos.
+              </p>
+              <div class="srclist">
+                <div class="srcitem"><div class="n">Registro de partida<small>resultado, campeones, roles, KDA, oro, daño, objetivos</small></div><div class="v">1 por partida</div></div>
+                <div class="srcitem"><div class="n">Línea temporal<small>estado y eventos, cuadro por cuadro</small></div><div class="v">1 por partida</div></div>
+                <div class="srcitem"><div class="n">Data Dragon<small>CDN sin llave: nombres e imágenes de 173 campeones</small></div><div class="v">apoyo</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="col half">
+            <div class="panel" style="height:100%">
+              <h3>El tamaño de la muestra <span style="color:var(--red); font-weight:400">· no lo decido</span></h3>
+              <p class="note" style="margin:10px 0 14px">
+                Dos techos, y ninguno avisa: la lista y el registro siguen respondiendo bien
+                mientras la línea temporal ya devuelve 404.
+              </p>
+              <div class="srclist">
+                <div class="srcitem"><div class="n">Retención de la línea temporal<small>las partidas duran ≈ 2 años; su línea temporal solo ≈ 1</small></div><div class="v">≈ 1 año</div></div>
+                <div class="srcitem"><div class="n">Ventana utilizable<small>solo mis clasificatorias desde ≈ septiembre de 2025</small></div><div class="v">12 meses</div></div>
+                <div class="srcitem"><div class="n">Tope de la lista<small>los ARAM y las personalizadas ocupan lugar sin avisar</small></div><div class="v">≈ 1,000</div></div>
+              </div>
+              <p class="note" style="margin-top:12px">
+                Por eso la primera tarea del proyecto es <em>contar</em> cuántas partidas alcanzo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="illus real">Catálogo consultado en vivo · Data Dragon 16.17.1</span>
+        <div>Pido la cola 420 explícita: “ranked” a secas mezcla la cola flexible</div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────────────── 6 · vista general de la fuente -->
+    <section class="slide" id="s-timeline" data-sec="2">
+      <div class="kicker">2 · Fuentes de datos · vista general</div>
+      <h2>Qué hay dentro de una línea temporal
+        <span class="sub">Un cuadro por minuto con el estado de los diez jugadores, más los
+          eventos con su marca de tiempo.</span></h2>
+      <div class="body">
+        <div class="row grow">
+          <div class="col half" style="min-height:0">
+<pre class="code"><span class="c">// participantFrames["1"] — minuto 22, recortado</span>
+{
+  <span class="k">"totalGold"</span>:     <span class="n">11343</span>,
+  <span class="k">"level"</span>:         <span class="n">14</span>,
+  <span class="k">"minionsKilled"</span>: <span class="n">187</span>,
+  <span class="k">"position"</span>: { <span class="k">"x"</span>: <span class="n">12869</span>, <span class="k">"y"</span>: <span class="n">12969</span> },
+  <span class="k">"championStats"</span>: { <span class="c">… 25 atributos</span> }
+}
+
+<span class="c">// events[] — el barón, minuto 23:03</span>
+{
+  <span class="k">"type"</span>:        <span class="s">"ELITE_MONSTER_KILL"</span>,
+  <span class="k">"monsterType"</span>: <span class="s">"BARON_NASHOR"</span>,
+  <span class="k">"killerTeamId"</span>: <span class="n">200</span>,
+  <span class="hl"><span class="k">"timestamp"</span>:   <span class="n">1383435</span></span>
+}</pre>
+          </div>
+          <div class="col half">
+            <h3 style="margin-bottom:12px">Lo que hay en esta partida</h3>
+            <div class="srclist">
+              <div class="srcitem"><div class="n">CHAMPION_KILL<small>con asistencias, recompensa y posición</small></div><div class="v">42</div></div>
+              <div class="srcitem"><div class="n">BUILDING_KILL<small>torres e inhibidores, con línea y tipo</small></div><div class="v">16</div></div>
+              <div class="srcitem"><div class="n">ELITE_MONSTER_KILL<small>dragón, heraldo y barón</small></div><div class="v">7</div></div>
+              <div class="srcitem"><div class="n">Tipos de evento distintos<small>enumerados desde la partida, no desde la documentación</small></div><div class="v">17</div></div>
+            </div>
+            <div class="panel" style="margin-top:16px; border-left:3px solid var(--gold); background:rgba(188,139,44,.06)">
+              <p style="max-width:none; margin:0; font-size:16px">
+                <strong>La diferencia de oro no es un campo de la API.</strong> La calculo yo:
+                sumo el <code>totalGold</code> de los participantes 1 a 5 y le resto la del 6 al 10,
+                cuadro por cuadro. Y el <em>timeline</em> ni siquiera dice de qué equipo es cada
+                jugador: eso hay que cruzarlo con el registro de partida.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="illus real">Extractos literales del payload de EUW1_6569580003</span>
+        <div>El intervalo entre cuadros lo reporta la API: midió 60,000 ms en 7 de 7 partidas</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 7 · HIPÓTESIS -->
+    <section class="slide" id="s-hyp" data-sec="3">
+      <div class="kicker">3 · Hipótesis</div>
+      <h2>Tres hipótesis, y la trampa de cada una
+        <span class="sub">Todas están escritas para poder salir falsas, y al lado va lo
+          que podría arruinarlas. Se comparan contra mis propias victorias.</span></h2>
+      <div class="body">
+        <div class="hyplist">
+          <div class="hyp wide">
+            <div class="id">H1</div>
+            <div class="txt">Con la misma ventaja temprana, mi equipo toma menos objetivos por minuto
+              en las partidas que perdemos que en las que ganamos.</div>
+            <div class="test"><b>Trampa:</b> la queja “desperdiciamos la ventaja” es una <em>tautología</em>:
+              toda ventaja perdida fue, por definición, desperdiciada. Por eso lo mido sin mirar
+              el resultado: objetivos por minuto mientras vamos arriba, en derrotas y victorias.</div>
+          </div>
+          <div class="hyp wide">
+            <div class="id">H2</div>
+            <div class="txt">El minuto en que más cae la ventaja coincide con un objetivo —barón,
+              dragón o heraldo— más seguido de lo que explicaría el azar.</div>
+            <div class="test"><b>Trampa:</b> el objetivo marca el momento, no lo causa: la pelea ocurre
+              <em>antes</em>. Y como el oro crece con la partida, las caídas tardías son mayores
+              por sí solas — hay que normalizar.</div>
+          </div>
+          <div class="hyp wide">
+            <div class="id">H3</div>
+            <div class="txt">Existe un punto de no retorno: un minuto a partir del cual mis derrotas
+              ya casi nunca se revierten.</div>
+            <div class="test"><b>Trampa:</b> sesgo de supervivencia. Un punto de no retorno en el minuto 30
+              solo se puede ver en las partidas que llegaron al 30, y a esa altura quedan pocas: el
+              denominador se encoge justo donde digo que está el efecto. Espero intervalos
+              demasiado anchos para ubicarlo — y ese sería el resultado.</div>
+          </div>
+        </div>
+        <div class="panel" style="border-left:3px solid var(--gold); background:rgba(188,139,44,.06); padding:14px var(--s3)">
+          <p style="max-width:none; font-size:16.5px">
+            <strong>Son tres y no seis a propósito.</strong> Las tres corren sobre la línea
+            temporal y forman un solo hilo: aprovechar la ventaja, qué marca el quiebre, y si hay
+            un punto sin retorno. Además, tres pruebas al 5&nbsp;% dan un 14&nbsp;% de
+            probabilidad de al menos un falso positivo; con seis eran 26&nbsp;%.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────── 8 · el entregable y lo que sigue -->
+    <section class="slide" id="s-arch" data-sec="3">
+      <div class="kicker">3 · Hipótesis · el entregable</div>
+      <h2>Cuatro formas de perder, con su regla
+        <span class="sub">El entregable no es un número: es una clasificación cuyas reglas fijo
+          por escrito, con su umbral, antes de ver la distribución.</span></h2>
+      <div class="body">
+        <div class="medida">
+          <p class="def"><strong>La medida:</strong> <code>v</code> = diferencia de oro
+            ÷ oro total en el mapa, cuadro por cuadro.</p>
+          <div class="bandas">
+            <div><span class="et">Ventaja real</span><code>v ≥ 5 %</code> y al menos 1,500 de oro</div>
+            <div><span class="et">Decisiva</span><code>|v| ≥ 10 %</code></div>
+            <div><span class="et">Sostenida</span><code>≥ 3 minutos</code> seguidos</div>
+          </div>
+          <p class="pie">Es relativa a propósito: 2,467 de oro son el 7.7 % del mapa en el
+            minuto 10, y solo el 2.3 % en el minuto 28. Se aplican en orden <em>A4 → A2 → A1 → A3</em>; el resto queda <em>sin clasificar</em>.</p>
+        </div>
+        <div class="hyplist">
+          <div class="hyp wide">
+            <div class="id">A1</div>
+            <div class="txt">Derrota desde línea</div>
+            <div class="test"><code>v ≤ −5 %</code> en el minuto 15, y nunca vuelve a ser positiva.</div>
+          </div>
+          <div class="hyp wide">
+            <div class="id">A2</div>
+            <div class="txt">Ventaja temprana desperdiciada</div>
+            <div class="test">Ventaja real <code>≥ 3 minutos</code> seguidos, alguno en el 15 o después. La partida del inicio: 12 seguidos.</div>
+          </div>
+          <div class="hyp wide">
+            <div class="id">A3</div>
+            <div class="txt">Decidida por un objetivo</div>
+            <div class="test"><code>|v| &lt; 5 %</code> hasta la mayor caída de <code>v</code>, y esa caída a ±1 minuto de un objetivo mayor del rival.</div>
+          </div>
+          <div class="hyp wide">
+            <div class="id">A4</div>
+            <div class="txt">Partida muy desigual</div>
+            <div class="test"><code>v ≤ −10 %</code> antes del minuto 15, y nunca se recupera sobre <code>−5 %</code>.</div>
+          </div>
+        </div>
+        <div class="row" style="gap:var(--s4)">
+          <div class="panel" style="flex:1 1 50%; border-left:3px solid var(--gold)">
+            <p style="max-width:none; font-size:16px; margin:0">
+              <strong>Las victorias entran como grupo de control.</strong> Toda partida tiene su
+              mayor cambio de oro, también las que gano. Sin compararlas, esto describiría cómo son
+              las partidas de League, no cómo pierdo yo.
+            </p>
+          </div>
+          <div class="panel" style="flex:1 1 50%; border-left:3px solid var(--red)">
+            <p style="max-width:none; font-size:16px; margin:0">
+              <strong>Qué haría fracasar esto:</strong> si al contar la muestra tengo menos de ~150
+              clasificatorias con línea temporal viva, bajo el número de arquetipos antes de escribir
+              una sola regla.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div style="max-width:70ch">
+          Este proyecto no está avalado por Riot Games y no refleja las opiniones de Riot Games
+          ni de nadie involucrado oficialmente en la producción o administración de
+          League of Legends. League of Legends y Riot Games son marcas registradas de Riot Games,&nbsp;Inc.
+        </div>
+        <div>Héctor Morán · 2026</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════ cierre ═══ -->
+    <section class="slide bare" id="s-thanks">
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:34px">
+        <h1 style="font-size:132px; font-weight:900; line-height:.95; letter-spacing:-.04em;
+                   font-variation-settings:'wdth' 118; color:var(--parchment); margin:0">
+          Gracias
+        </h1>
+        <p class="closer" style="margin-top:0">
+          Sé en qué minuto se perdió <em class="hinge">esta</em> partida.<br>
+          La pregunta es si se puede decir lo mismo de las mías, y con qué intervalo.
+        </p>
+        <p class="lead" style="color:var(--muted); max-width:48ch; font-size:22px; margin:0">
+          Quedo atento a sus preguntas.
+        </p>
+      </div>
+      <div class="footer">
+        <div>Héctor Manuel Morán Maldonado · Especialidad en Ciencia de Datos</div>
+        <div>Presentación elaborada con la asistencia de Claude (Anthropic)</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div id="blank"></div>
+
+<div id="help">
+  <span><kbd>←</kbd><kbd>→</kbd> navegar</span>
+  <span><kbd>F</kbd> pantalla completa</span>
+  <span><kbd>B</kbd> negro</span>
+  <span><kbd>R</kbd> repetir</span>
+  <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> sección</span>
+</div>
+
+<script src="data/story.js"></script>
+<script src="assets/deck.js"></script>
+</body>
+</html>

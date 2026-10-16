@@ -1,0 +1,32 @@
+\begin{table}[H]
+\centering
+\small
+\caption{Política de anonimización, campo por campo (generada desde el script).}
+\label{tab:politica}
+\begin{tabular}{p{4.2cm}p{2.3cm}p{4.6cm}p{2.4cm}}
+\toprule
+Campo & Nivel & Técnica & Columna de salida \\
+\midrule
+riotIdGameName / riotIdName & participante & Supresión & — \\
+riotIdTagline & participante & Supresión & — \\
+summonerName & participante & Supresión & — \\
+summonerId & participante & Supresión & — \\
+profileIcon & participante & Supresión & — \\
+puuid & participante & Seudonimización (HMAC-SHA256) & jugador, es\_propio, cuenta \\
+metadata.participants & partida & Supresión & — \\
+matchId & partida & Seudonimización (HMAC-SHA256) & partida \\
+gameId & partida y eventos & Supresión & — \\
+gameName, tournamentCode & partida & Supresión & — \\
+gameCreation & partida & Generalización (fecha → mes) & mes \\
+gameStartTimestamp, gameEndTimestamp & partida & Supresión & — \\
+gameVersion & partida & Generalización (versión → parche) & parche \\
+summonerLevel & participante & Generalización (bandas) & bandaNivel \\
+victimDamage*[].name & eventos & Supresión (no se exporta) & — \\
+championName, teamPosition & participante & Se conserva (análisis) & campeon, rol \\
+timestamp de cuadros y eventos & cuadros, eventos & Se conserva (relativo al inicio) & ms, minuto \\
+position \{x, y\} & cuadros, eventos & Se conserva & x, y \\
+oro, xp, KDA, daño, visión, objetivos & todos & Se conserva (no identifica) & — \\
+eventos de la tabla pública & eventos (público) & Minimización: solo torres y monstruos épicos; sin posición ni víctima & eventos\_equipo \\
+\bottomrule
+\end{tabular}
+\end{table}

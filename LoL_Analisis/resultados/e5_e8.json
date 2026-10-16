@@ -1,0 +1,219 @@
+{
+ "derrotas": 537,
+ "e5": [
+  {
+   "arquetipo": "A1",
+   "n": 103,
+   "p": 0.1918,
+   "lo": 0.1607,
+   "hi": 0.2273
+  },
+  {
+   "arquetipo": "A2",
+   "n": 55,
+   "p": 0.1024,
+   "lo": 0.0795,
+   "hi": 0.131
+  },
+  {
+   "arquetipo": "A3",
+   "n": 23,
+   "p": 0.0428,
+   "lo": 0.0287,
+   "hi": 0.0634
+  },
+  {
+   "arquetipo": "A4",
+   "n": 78,
+   "p": 0.1453,
+   "lo": 0.118,
+   "hi": 0.1776
+  },
+  {
+   "arquetipo": "Sin clasificar",
+   "n": 278,
+   "p": 0.5177,
+   "lo": 0.4755,
+   "hi": 0.5597
+  }
+ ],
+ "e6": {
+  "conteos": {
+   "4.0": {
+    "A1": 122,
+    "A2": 75,
+    "A3": 10,
+    "A4": 86,
+    "Sin clasificar": 244
+   },
+   "5.0": {
+    "A1": 103,
+    "A2": 55,
+    "A3": 23,
+    "A4": 78,
+    "Sin clasificar": 278
+   },
+   "6.0": {
+    "A1": 88,
+    "A2": 33,
+    "A3": 49,
+    "A4": 64,
+    "Sin clasificar": 303
+   }
+  },
+  "cambian_con_4": 64,
+  "cambian_con_6": 83
+ },
+ "e7": {
+  "corte_mes": "2025-06",
+  "derrotas_primera": 209,
+  "derrotas_segunda": 328,
+  "mediana_d2_primera": 12.0,
+  "mediana_d2_segunda": 14.0,
+  "se_mueve_mas_de_2_min": false,
+  "arquetipos_primera": {
+   "A1": 40,
+   "A2": 20,
+   "A3": 12,
+   "A4": 32,
+   "Sin clasificar": 105
+  },
+  "arquetipos_segunda": {
+   "A1": 63,
+   "A2": 35,
+   "A3": 11,
+   "A4": 46,
+   "Sin clasificar": 173
+  },
+  "chi2_p": 0.7079561403454827
+ },
+ "e8_cuentas": {
+  "tabla": {
+   "C1": {
+    "A1": 7,
+    "A2": 1,
+    "A3": 2,
+    "A4": 4,
+    "Sin clasificar": 27
+   },
+   "C2": {
+    "A1": 45,
+    "A2": 30,
+    "A3": 5,
+    "A4": 32,
+    "Sin clasificar": 128
+   },
+   "C3": {
+    "A1": 19,
+    "A2": 11,
+    "A3": 7,
+    "A4": 12,
+    "Sin clasificar": 40
+   },
+   "C4": {
+    "A1": 17,
+    "A2": 6,
+    "A3": 1,
+    "A4": 11,
+    "Sin clasificar": 37
+   },
+   "C5": {
+    "A1": 10,
+    "A2": 3,
+    "A3": 4,
+    "A4": 13,
+    "Sin clasificar": 26
+   },
+   "C6": {
+    "A1": 5,
+    "A2": 4,
+    "A3": 4,
+    "A4": 6,
+    "Sin clasificar": 20
+   }
+  },
+  "chi2": 25.36683469457692,
+  "chi2_p_aprox": 0.1877555564421293,
+  "esperado_min": 1.670391061452514,
+  "p_permutacion": 0.18568143185681432
+ },
+ "exploratorio_sin_clasificar": {
+  "n": 278,
+  "mediana_max_v": 4.3,
+  "mediana_min_v": -8.2,
+  "pct_nunca_bajo_menos_10": 74.5,
+  "pct_nunca_arriba_mas_5": 56.5,
+  "mediana_pct_partida_con_abs_v_menor_5": 77.6,
+  "mediana_d2": 19.0,
+  "mediana_duracion": 33.0,
+  "mediana_duracion_clasificadas": 30.0
+ },
+ "e8_bottom": {
+  "partidas": 839,
+  "derrotas": 366,
+  "e5": [
+   {
+    "arquetipo": "A1",
+    "n": 74,
+    "p": 0.2022,
+    "lo": 0.1642,
+    "hi": 0.2463
+   },
+   {
+    "arquetipo": "A2",
+    "n": 39,
+    "p": 0.1066,
+    "lo": 0.0789,
+    "hi": 0.1424
+   },
+   {
+    "arquetipo": "A3",
+    "n": 18,
+    "p": 0.0492,
+    "lo": 0.0313,
+    "hi": 0.0764
+   },
+   {
+    "arquetipo": "A4",
+    "n": 56,
+    "p": 0.153,
+    "lo": 0.1197,
+    "hi": 0.1935
+   },
+   {
+    "arquetipo": "Sin clasificar",
+    "n": 179,
+    "p": 0.4891,
+    "lo": 0.4382,
+    "hi": 0.5401
+   }
+  ],
+  "h1_por_fase": {
+   "<15": {
+    "derrotas": 0.418,
+    "victorias": 0.552
+   },
+   "15-25": {
+    "derrotas": 0.6,
+    "victorias": 0.962
+   },
+   ">=25": {
+    "derrotas": 0.597,
+    "victorias": 1.122
+   }
+  },
+  "h2_derrotas": {
+   "observado": 0.385,
+   "nula_corregida": 0.346,
+   "p_mayor": 0.0336
+  },
+  "h3": {
+   "5": 0.359,
+   "10": 0.233,
+   "15": 0.197,
+   "20": 0.128,
+   "25": 0.063,
+   "30": 0.044
+  }
+ }
+}

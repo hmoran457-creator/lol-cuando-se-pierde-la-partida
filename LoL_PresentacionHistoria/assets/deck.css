@@ -1,0 +1,734 @@
+@import url("./fonts.css");
+
+/* =========================================================================
+   Expediente de una derrota - hoja de estilo de la presentacion
+   Paleta validada con el validador de contraste/CVD (dataviz):
+     superficie #0A1A2B - divergente #0E9EB4 / #DE4361 - acento #BC8B2C
+   ========================================================================= */
+
+:root {
+  /* --- superficies --- */
+  --void:      #06101C;
+  --deep:      #0A1A2B;
+  --rift:      #12293F;
+  --raised:    #17334D;
+  --line:      #1E3A56;
+  --line-soft: #16293D;
+
+  /* --- tinta --- */
+  --parchment: #F0E6D2;
+  --ink:       #DCE6F0;
+  --muted:     #8FA6BE;
+  --faint:     #5C7089;
+
+  /* --- datos (validados) --- */
+  --blue:      #0E9EB4;   /* equipo azul / ventaja positiva */
+  --red:       #DE4361;   /* equipo rojo / ventaja negativa */
+  --gold:      #BC8B2C;   /* anotacion, siempre acompanada de texto */
+  --gold-lit:  #E8C87A;
+  --neutral:   #4A5D72;   /* punto medio del divergente */
+
+  /* --- ritmo --- */
+  --s1: 8px;  --s2: 16px; --s3: 24px; --s4: 40px;
+  --s5: 64px; --s6: 96px;
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --ease-sharp: cubic-bezier(.65,.05,.36,1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  height: 100%;
+  background: var(--void);
+  color: var(--ink);
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+}
+
+/* =========================================================================
+   Escenario: lienzo fijo de 1600x900 escalado al viewport.
+   Garantiza que la diapositiva se vea identica en cualquier proyector.
+   ========================================================================= */
+
+#viewport {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background: radial-gradient(ellipse 120% 90% at 50% 0%, #0C1E31 0%, var(--void) 62%);
+}
+
+/* El escenario se centra con left/top + margenes negativos, NO con el grid del
+   #viewport: cuando el elemento es MAS GRANDE que su contenedor, el grid fija su
+   borde inicial en 0,0 en vez de centrarlo, y al escalar desde el centro la
+   diapositiva se corria a la derecha y se salia de la pantalla sin scroll.
+   En 1024x768 se perdia el 28% de cada lamina. */
+#stage {
+  width: 1600px; height: 900px;
+  position: absolute; left: 50%; top: 50%;
+  margin-left: -800px; margin-top: -450px;
+  transform-origin: center center;
+  background: var(--deep);
+  box-shadow: 0 40px 120px rgba(0,0,0,.65);
+  overflow: hidden;
+}
+
+/* =========================================================================
+   Riel superior: los 3 puntos obligatorios de la rubrica, siempre visibles.
+   Es informacion estructural, no decoracion: el evaluador ve donde estamos.
+   ========================================================================= */
+
+#rail {
+  position: absolute; top: 0; left: 0; right: 0; height: 64px;
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--line-soft);
+  background: linear-gradient(to bottom, rgba(6,16,28,.9), rgba(6,16,28,0));
+  z-index: 40;
+  font-size: 13px;
+}
+
+.rail-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 var(--s3);
+  color: var(--muted);
+  border-right: 1px solid var(--line-soft);
+  transition: color .4s var(--ease), background .4s var(--ease);
+  letter-spacing: .01em;
+}
+.rail-item .num {
+  width: 22px; height: 22px; flex: none;
+  display: grid; place-items: center;
+  border: 1px solid currentColor; border-radius: 2px;
+  font-size: 11px; font-weight: 700;
+}
+.rail-item.on { color: var(--gold-lit); background: rgba(188,139,44,.08); }
+/* Tres formas, no tres tonos: a escala de proyector el color no se lee, el
+   contraste lleno-contra-contorno si. */
+.rail-item.done { color: var(--muted); }
+.rail-item.done .num { background: var(--muted); color: var(--deep); border-color: var(--muted); }
+
+#rail .spacer { flex: 1; border-right: 0; }
+#rail .counter {
+  display: flex; align-items: center; padding: 0 var(--s3);
+  color: var(--muted); font-weight: 600;
+}
+
+/* barra de progreso fina */
+#progress {
+  position: absolute; top: 63px; left: 0; height: 2px;
+  background: var(--gold); z-index: 41;
+}
+
+/* =========================================================================
+   Diapositivas
+   ========================================================================= */
+
+.slide {
+  position: absolute; inset: 0;
+  padding: 104px var(--s6) var(--s5);
+  display: none;
+  flex-direction: column;
+}
+.slide.active { display: flex; }
+
+/* corte direccional, no un fade-up generico */
+/* Avanzar descubre de IZQUIERDA a derecha, que es como se lee; retroceder al reves.
+   260ms: a 420ms el corte se notaba como espera entre laminas. */
+.slide.enter { animation: cut .26s cubic-bezier(0,0,.2,1) both; }
+@keyframes cut {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+.slide.enter-back { animation: cut-back .26s cubic-bezier(0,0,.2,1) both; }
+@keyframes cut-back {
+  from { clip-path: inset(0 0 0 100%); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* Diapositivas a sangre: portada y pantalla de derrota. El riel y la barra de
+   progreso se ocultan para que la apertura no tenga cromo encima. */
+.slide.bare { padding: var(--s6); }
+#stage:has(.slide.bare.active) #rail,
+#stage:has(.slide.bare.active) #progress { opacity: 0; pointer-events: none; }
+#rail     { transition: opacity .35s var(--ease); }
+#progress { transition: width .26s var(--ease), opacity .35s var(--ease); }
+
+/* =========================================================================
+   Tipografia
+   ========================================================================= */
+
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+
+.kicker {
+  font-size: 14px; font-weight: 600;
+  color: var(--gold); margin-bottom: var(--s2);
+  font-variation-settings: "wdth" 100;
+}
+
+h2 {
+  font-size: 52px; line-height: 1.02;
+  font-weight: 800;
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -.025em;
+  color: var(--parchment);
+  max-width: 24ch;
+}
+h2 .sub {
+  display: block; margin-top: var(--s2);
+  font-size: 21px; font-weight: 400; line-height: 1.45;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: 0;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+h3 {
+  font-size: 19px; font-weight: 700;
+  color: var(--parchment);
+  font-variation-settings: "wdth" 105;
+  letter-spacing: -.01em;
+}
+
+p { font-size: 18px; line-height: 1.6; color: var(--ink); max-width: 68ch; }
+p.lead { font-size: 22px; line-height: 1.5; }
+p + p { margin-top: var(--s2); }
+
+strong { color: var(--gold-lit); font-weight: 700; }
+em { font-style: normal; color: var(--parchment); font-weight: 600; }
+code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .88em; color: var(--blue);
+  background: rgba(14,158,180,.10);
+  border-radius: 2px; padding: 1px 5px;
+}
+
+.note {
+  font-size: 13px; line-height: 1.5;
+  color: var(--muted); max-width: 78ch;
+}
+
+/* =========================================================================
+   Rejilla y bloques
+   ========================================================================= */
+
+.body { flex: 1; display: flex; flex-direction: column; gap: var(--s4); min-height: 0; }
+.row  { display: flex; gap: var(--s4); align-items: flex-start; }
+.row.grow { flex: 1; min-height: 0; }
+.col  { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+.col.half  { flex: 1 1 50%; }
+.col.third { flex: 1 1 33%; }
+.col.wide  { flex: 1 1 62%; }
+.col.narrow{ flex: 1 1 38%; }
+
+.panel {
+  background: var(--rift);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: var(--s3);
+}
+.panel.flush { padding: 0; overflow: hidden; }
+
+/* =========================================================================
+   Cifras
+   ========================================================================= */
+
+.stat-row { display: flex; gap: var(--s5); }
+.stat { display: flex; flex-direction: column; gap: 6px; }
+.stat .v {
+  font-size: 62px; font-weight: 800; line-height: .95;
+  font-variation-settings: "wdth" 108;
+  letter-spacing: -.03em;
+  color: var(--parchment);
+}
+.stat .v.blue { color: var(--blue); }
+.stat .v.red  { color: var(--red); }
+.stat .v.gold { color: var(--gold-lit); }
+.stat .k { font-size: 14px; color: var(--muted); line-height: 1.35; max-width: 26ch; }
+
+/* =========================================================================
+   Pantalla de DERROTA (apertura, desaturada)
+   ========================================================================= */
+
+/* La pantalla abre en gris y recupera el color mientras se sostiene. El filtro va
+   en el ::before y NO en el contenedor: aplicado al contenedor tambien lavaba el
+   texto, y sin una imagen debajo la animacion no se veia en absoluto. */
+#defeat-screen {
+  background: #0B1119;
+  align-items: center; justify-content: center;
+}
+/* Se retiro la transicion gris->color: medida contra el velo, la sala no la veia,
+   y costaba 2.7s de la apertura. Se conserva el estado final. */
+#defeat-screen::before {
+  content: ""; position: absolute; inset: 0;
+  background: url("./misc/splash_Yone.jpg") center 20% / cover no-repeat;
+  filter: saturate(1) brightness(.66) contrast(1);
+}
+/* velo para que el texto siga legible sobre cualquier zona de la ilustracion */
+#defeat-screen::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 62% at 50% 48%, rgba(8,14,22,.72) 0%, rgba(6,12,20,.94) 72%),
+    linear-gradient(to bottom, rgba(6,12,20,.55), rgba(6,12,20,.30) 45%, rgba(6,12,20,.85));
+}
+#defeat-screen > * { position: relative; z-index: 2; }
+
+.defeat-word {
+  font-size: 172px; font-weight: 900; line-height: .9;
+  font-variation-settings: "wdth" 118;
+  letter-spacing: .06em;
+  color: #93A0AE;
+  text-align: center;
+}
+.defeat-sub {
+  margin-top: var(--s3); text-align: center;
+  color: #6C7A89; font-size: 19px;
+}
+
+/* =========================================================================
+   Marcador (la explicacion facil)
+   ========================================================================= */
+
+.board { width: 100%; border-collapse: collapse; font-size: 15px; }
+.board th {
+  text-align: left; font-weight: 600; font-size: 12px;
+  color: var(--muted); padding: 0 10px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.board th.n, .board td.n { text-align: right; }
+.board td { padding: 7px 10px; border-bottom: 1px solid var(--line-soft); color: var(--ink); }
+/* El tinte solo daba 1.06:1 de separacion: el equipo tambien se marca con una
+   barra lateral, para que no dependa unicamente del color de fondo. */
+.board tr.us td { background: rgba(14,158,180,.07); }
+.board tr.them td { background: rgba(222,67,97,.06); }
+.board tr.us td:first-child { border-left: 4px solid var(--blue); }
+.board tr.them td:first-child { border-left: 4px solid var(--red); }
+.board .champ { display: flex; align-items: center; gap: 10px; }
+.board .champ img {
+  width: 30px; height: 30px; border-radius: 2px;
+  border: 1px solid var(--line);
+}
+.board .pos { color: var(--muted); font-size: 12px; }
+
+/* =========================================================================
+   Grafico de ventaja de oro (el momento memorable)
+   ========================================================================= */
+
+/* La misma grafica ocupa los MISMOS pixeles en 04, 05 y 06: el eje X es una regla
+   fija a la que el presentador apunta tres veces. Sin esto la curva salta 32px
+   entre laminas y el borde de la cortina deja de ser "el reloj". */
+.chart-wrap { position: relative; flex: 1; min-height: 0; }
+#s-break h2, #s-break h2 .sub { max-width: 96ch; }
+#s-reveal .chart-wrap, #s-rewind .chart-wrap, #s-break .chart-wrap { flex: 0 0 428px; height: 428px; }
+/* El mazo de 5 min tiene UNA sola grafica, asi que no la ata la soldadura de las
+   tres: se le baja el alto para dejar sitio a las cifras y al resumen de hechos.
+   Y el titulo se ensancha para caber en UNA linea -- a 24ch se partia en dos y
+   esos 53px eran justo lo que hacia que las cifras se comieran el pie. */
+#s-partida .chart-wrap { flex: 0 0 360px; height: 360px; }
+#s-curva .chart-wrap   { flex: 0 0 330px; height: 330px; }
+#s-quiebre .chart-wrap { flex: 0 0 360px; height: 360px; }
+#s-partida h2 { max-width: 48ch; }
+svg.chart { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.grid-line { stroke: var(--line-soft); stroke-width: 1; }
+/* 3.46:1 sobre el fondo: visible, pero mas callada que la curva (5.49:1) */
+.zero-line { stroke: var(--faint); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.axis-label { fill: var(--muted); font-size: 12px; font-family: "Archivo", sans-serif; }
+
+.area-pos { fill: var(--blue); opacity: .13; }
+.adv-line {
+  fill: none; stroke: var(--blue); stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* La cortina: 1400ms LINEALES sobre el ancho del area de trazo, o sea ~48ms por
+   minuto de partida, igual en las tres laminas. Lineal a proposito: el borde
+   representa el paso del tiempo de juego, que no acelera. */
+.chart-wipe      { animation: wipe-fwd 1400ms linear 260ms backwards; }
+.chart-wipe.back { animation-name: wipe-back; }
+.chart-wipe.tail { animation: wipe-tail 560ms linear 260ms backwards; }
+@keyframes wipe-fwd  { from { transform: translateX(var(--span)); } to { transform: none; } }
+@keyframes wipe-back { from { transform: translateX(calc(var(--span) * -1)); } to { transform: none; } }
+@keyframes wipe-tail { from { transform: translateX(var(--tail)); } to { transform: none; } }
+
+.evt { opacity: 1; }
+
+.evt circle { stroke: var(--deep); stroke-width: 2; }
+.evt.ours   circle { fill: var(--blue); }
+.evt.theirs circle { fill: var(--red); }
+.evt text {
+  font-size: 11px; fill: var(--muted); font-family: "Archivo", sans-serif;
+  /* halo: la curva pasaba por encima del texto de "Barón" */
+  paint-order: stroke; stroke: var(--deep); stroke-width: 4; stroke-linejoin: round;
+}
+
+/* La banda deja de ser una animacion propia y pasa a ser un ESTADO que la cortina
+   descubre al llegar al minuto 22. El borde le da peso sin subir el tinte. */
+.peak-band { fill: var(--gold); opacity: 0; }
+.peak-band.show {
+  opacity: 1; fill-opacity: .12;
+  stroke: var(--gold); stroke-width: 1.5; stroke-opacity: .85;
+}
+
+.marker-line { stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 3 3; opacity: .8; }
+.marker-text {
+  fill: var(--gold-lit); font-size: 13px; font-weight: 700;
+  font-family: "Archivo", sans-serif;
+}
+
+/* =========================================================================
+   Bloque JSON (vista general de la fuente)
+   ========================================================================= */
+
+.code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12.5px; line-height: 1.65;
+  color: var(--ink);
+  background: var(--void);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: var(--s3);
+  overflow: auto;
+  white-space: pre;
+  max-height: 100%;
+}
+.code .k  { color: var(--blue); }
+.code .s  { color: var(--gold-lit); }
+.code .n  { color: var(--parchment); }
+.code .c  { color: var(--muted); }
+.code .hl { background: rgba(188,139,44,.16); border-radius: 2px; }
+
+/* =========================================================================
+   Bloque «La medida»: definicion, umbrales y advertencia, cada cosa en su linea.
+   Los tres umbrales van en bandas paralelas y no en prosa corrida: asi se puede
+   buscar uno solo sin leer el parrafo entero.
+   ========================================================================= */
+
+.medida { display: flex; flex-direction: column; gap: 10px; }
+.medida .def { font-size: 16px; max-width: none; margin: 0; line-height: 1.45; }
+.medida .bandas { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); }
+.medida .bandas > div {
+  font-size: 15px; line-height: 1.4; color: var(--ink);
+  border-left: 2px solid var(--line); padding-left: 12px;
+}
+.medida .et {
+  display: block; color: var(--gold-lit); font-weight: 700;
+  font-size: 12.5px; letter-spacing: .01em; margin-bottom: 3px;
+}
+.medida .pie { font-size: 13.5px; color: var(--muted); max-width: none; margin: 0; line-height: 1.45; }
+
+/* =========================================================================
+   Fichas de hipotesis
+   ========================================================================= */
+
+.hyp {
+  display: grid; grid-template-columns: 46px 1fr;
+  gap: var(--s2); align-items: start;
+  padding: 14px var(--s2) 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.hyp:last-child { border-bottom: 0; }
+.hyp .id {
+  font-size: 13px; font-weight: 800; color: var(--gold);
+  border: 1px solid var(--gold); border-radius: 2px;
+  padding: 3px 0; text-align: center;
+}
+.hyp .txt { font-size: 16px; line-height: 1.45; color: var(--ink); }
+.hyp .test {
+  display: block; margin-top: 5px;
+  font-size: 13.5px; color: var(--muted); line-height: 1.45;
+}
+
+/* Tres hipotesis por lamina: el enunciado y su trampa van en dos columnas,
+   separadas por una linea, para que se lean como las dos mitades que son. */
+/* Con solo tres fichas sobra alto: se reparten en la lamina y se aprovecha
+   para subir el cuerpo de texto, que es lo que se lee desde el fondo del salon. */
+.hyplist { display: flex; flex-direction: column; flex: 1; justify-content: space-evenly; }
+.hyp.wide {
+  grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: start;
+  padding: 22px var(--s2) 22px 0;
+}
+.hyp.wide .txt { font-size: 21px; line-height: 1.45; }
+.hyp.wide .test {
+  margin-top: 0; font-size: 16.5px; line-height: 1.5;
+  border-left: 1px solid var(--line);
+  padding-left: var(--s3);
+  align-self: stretch;
+}
+.hyp.wide .id { font-size: 14px; padding: 5px 0; }
+.hyp.wide .test b { color: var(--gold-lit); font-weight: 700; }
+
+/* La lamina 16 se tapaba a si misma: .row.grow media 36px con 196px de contenido,
+   asi que los dos paneles se encimaban sobre las reglas A2 y A4 -- justo el
+   entregable de la lamina. Los paneles pasan a ser notas con filete. */
+/* .hyplist trae flex:1 para repartirse el alto en las hipotesis; en arquetipos
+   esa lamina lleva ademas avisos y cierre, asi que crecer empujaba todo sobre el
+   pie. Aqui toma su alto natural y es el CUERPO el que se centra: los mazos con
+   sitio de sobra quedan equilibrados en vez de apelmazados arriba. */
+#s-arch .body { gap: 16px; justify-content: center; }
+#s-arch .hyplist { flex: 0 1 auto; }
+/* OJO: los DOS mazos usan id="s-arch", asi que esta regla los toca a ambos. En el
+   largo los paneles ya viven en su propia lamina y sobraria alto, pero en el de
+   5 min siguen aqui: dejar que la fila crezca empujaba el cierre sobre el pie.
+   Se queda en 0 0 auto, que es lo unico seguro para los dos. */
+#s-arch .row.grow { flex: 0 0 auto; }
+#s-arch .panel {
+  padding: 0 0 0 16px; background: none; border: 0;
+  border-left-width: 3px; border-left-style: solid;
+}
+#s-arch .panel p { font-size: 15px; line-height: 1.45; }
+/* Los arquetipos usan la ficha ancha de las hipotesis, pero su nombre es corto:
+   no necesitan el mismo aire, y en el mazo de 5 min la lamina lleva ademas dos
+   avisos y el cierre. Se aprietan solo aqui. */
+#s-arch .hyp.wide { padding: 12px var(--s2) 12px 0; }
+#s-arch .hyp.wide .txt  { font-size: 19px; }
+#s-arch .hyp.wide .test { font-size: 15px; }
+/* solo el mazo de 5 min tiene el cierre DENTRO de esta lamina */
+#s-arch .closer { margin-top: 4px; font-size: 20px; }
+#s-arch h2 .sub { font-size: 19px; max-width: 78ch; }
+
+/* =========================================================================
+   Etiqueta de dato ilustrativo - obligatoria en todo grafico sin datos reales
+   ========================================================================= */
+
+.illus {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 600;
+  color: var(--gold-lit);
+  border: 1px solid rgba(188,139,44,.45);
+  background: rgba(188,139,44,.08);
+  border-radius: 2px; padding: 4px 9px;
+}
+.illus::before {
+  content: ""; width: 7px; height: 7px; flex: none;
+  background: var(--gold); border-radius: 50%;
+}
+.illus.real {
+  color: var(--blue); border-color: rgba(14,158,180,.45);
+  background: rgba(14,158,180,.08);
+}
+.illus.real::before { background: var(--blue); }
+
+/* =========================================================================
+   Fuentes / listas
+   ========================================================================= */
+
+.srclist { display: flex; flex-direction: column; gap: 2px; }
+.srcitem {
+  display: grid; grid-template-columns: 1fr auto; gap: var(--s2);
+  padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+  align-items: baseline;
+}
+.srcitem:last-child { border-bottom: 0; }
+.srcitem .n { font-size: 16px; color: var(--ink); }
+.srcitem .n small { display: block; color: var(--muted); font-size: 13px; margin-top: 3px; }
+.srcitem .v { font-size: 16px; font-weight: 700; color: var(--gold-lit); white-space: nowrap; }
+
+ul.ticks { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+ul.ticks li {
+  position: relative; padding-left: 26px;
+  font-size: 16.5px; line-height: 1.5; color: var(--ink);
+}
+ul.ticks li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: 12px; height: 1px; background: var(--gold);
+}
+ul.ticks li.no::before { background: var(--red); }
+
+/* =========================================================================
+   Mapa esquematico de Summoner's Rift (dibujado, no una captura)
+   ========================================================================= */
+
+.rift-map { width: 100%; height: auto; max-width: 420px; }
+.rift-base { fill: var(--void); stroke: var(--line-soft); stroke-width: 1; }
+/* el rio es una banda ancha y tenue; los carriles son trazos finos y nitidos.
+   Con el mismo peso, el cruce de rio y linea central se lee como una X. */
+.rift-river {
+  stroke: #2C6E8A; stroke-width: 26; fill: none; opacity: .17;
+  stroke-linecap: butt;
+}
+.rift-lane {
+  stroke: #35547A; stroke-width: 5; fill: none;
+  opacity: .95; stroke-linecap: round; stroke-linejoin: round;
+}
+.rift-nexus-b { fill: var(--blue); }
+.rift-nexus-r { fill: var(--red); }
+.rift-kill { stroke: var(--void); stroke-width: 1.4; }
+
+/* =========================================================================
+   Pie / disclaimer
+   ========================================================================= */
+
+.footer {
+  position: absolute; left: var(--s6); right: var(--s6); bottom: 26px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: var(--s4);
+  font-size: 12px; color: var(--muted);
+  border-top: 1px solid var(--line-soft); padding-top: 12px;
+}
+
+/* El cierre rima con el titulo: merece tamano propio, y el subrayado se dibuja
+   una vez para que la frase caiga en vez de diluirse en el descargo legal. */
+.closer {
+  font-size: 23px; line-height: 1.45; color: var(--parchment);
+  max-width: 62ch; margin-top: var(--s3);
+}
+.closer .hinge {
+  color: var(--gold-lit); font-weight: 700;
+  background-image: linear-gradient(var(--gold), var(--gold));
+  background-repeat: no-repeat; background-position: 0 100%; background-size: 0% 3px;
+}
+.slide.active .closer .hinge { animation: underline 600ms var(--ease) 500ms forwards; }
+@keyframes underline { to { background-size: 100% 3px; } }
+#s-plan .footer div:first-child { max-width: 92ch; }
+
+/* =========================================================================
+   Ayuda de navegacion
+   ========================================================================= */
+
+#blank {
+  position: fixed; inset: 0; background: #000; z-index: 100;
+  opacity: 0; pointer-events: none; transition: opacity .18s var(--ease);
+}
+body.blank #blank { opacity: 1; pointer-events: auto; }
+
+#help {
+  position: fixed; bottom: 12px; right: 12px; z-index: 60;
+  background: rgba(6,16,28,.94); border: 1px solid #22384E;
+  border-radius: 3px; padding: 6px 10px;
+  font-size: 11.5px; color: #56687D;
+  display: flex; gap: 12px; align-items: center;
+  opacity: 0; transition: opacity .35s var(--ease); pointer-events: none;
+}
+#help.show { opacity: 1; }
+#help kbd {
+  border: 1px solid #2A3F55; border-radius: 3px;
+  padding: 1px 6px; color: #7E93A8; font-family: inherit; font-size: 11px;
+}
+
+/* =========================================================================
+   Animaciones extra del mazo corto (body.animado)
+   Al comprimir cuatro laminas de grafica en una, el mazo de 5 min perdio tres
+   momentos de movimiento. Estos tres los devuelven, y cada uno pone en secuencia
+   algo que la lamina ARGUMENTA -- no son entradas decorativas.
+   Van bajo .animado porque los dos mazos comparten ids (#s-defeat, #s-timeline).
+   ========================================================================= */
+
+/* 1 · Primero el veredicto; despues, lo que el juego NO te dice.
+      La lamina dice justo eso, asi que el orden es el argumento. */
+.animado #s-defeat.slide:not(.visto) .defeat-sub { animation: llega 520ms var(--ease) 900ms backwards; }
+@keyframes llega { from { opacity: 0; transform: translateY(10px); } }
+
+/* 2 · timestamp: el campo del que depende todo el proyecto se ilumina cuando el
+      bloque ya se pudo leer, en vez de competir con el desde el primer cuadro. */
+.animado #s-timeline.slide:not(.visto) .code .hl {
+  background-color: transparent;
+  background-image: linear-gradient(rgba(188,139,44,.16), rgba(188,139,44,.16));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  animation: resaltar 560ms var(--ease) 1150ms forwards;
+}
+@keyframes resaltar { to { background-size: 100% 100%; } }
+
+/* 3 · Los hechos en prosa llegan cuando la cortina ya los conto en la grafica. */
+.animado #s-partida.slide:not(.visto) .body > .note { animation: llega 420ms var(--ease) 1700ms backwards; }
+
+/* -------------------------------------------------------------------------
+   CASCADA DE ENTRADA DENTRO DE LA LAMINA
+   El titular llega casi de inmediato (90ms): nada que haya que LEER espera.
+   Detras entra el cuerpo escalonado, con recorrido corto (9px) para que se lea
+   como que la lamina se arma, no como que las cosas vuelan.
+   Todo termina antes de 700ms, asi que el presentador nunca se queda esperando.
+   `:not(.visto)` = no se repite al retroceder, igual que la grafica.
+   ------------------------------------------------------------------------- */
+@keyframes llega     { from { opacity: 0; transform: translateY(9px); } }
+@keyframes aterriza  { from { opacity: 0; transform: scale(1.05); } }
+
+.animado .slide.active:not(.visto) .kicker { animation: llega 320ms var(--ease) 40ms backwards; }
+.animado .slide.active:not(.visto) h2      { animation: llega 380ms var(--ease) 90ms backwards; }
+.animado .slide.active:not(.visto) .footer { animation: llega 380ms var(--ease) 430ms backwards; }
+
+/* bloques directos del cuerpo */
+.animado .slide.active:not(.visto) .body > *:not([data-step]) { animation: llega 380ms var(--ease) 210ms backwards; }
+.animado .slide.active:not(.visto) .body > *:nth-child(2) { animation-delay: 280ms; }
+.animado .slide.active:not(.visto) .body > *:nth-child(3) { animation-delay: 350ms; }
+.animado .slide.active:not(.visto) .body > *:nth-child(4) { animation-delay: 420ms; }
+.animado .slide.active:not(.visto) .body > *:nth-child(5) { animation-delay: 490ms; }
+
+/* laminas a sangre (portada, DERROTA, cierre): no tienen .body */
+.animado .slide.bare.active:not(.visto) > div > *:not([data-step]) { animation: llega 420ms var(--ease) 120ms backwards; }
+.animado .slide.bare.active:not(.visto) > div > *:nth-child(2) { animation-delay: 230ms; }
+.animado .slide.bare.active:not(.visto) > div > *:nth-child(3) { animation-delay: 340ms; }
+
+/* elementos de lista, escalonados dentro de su propio contenedor */
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):not([data-step]) {
+  animation: llega 340ms var(--ease) backwards;
+}
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):nth-child(1) { animation-delay: 330ms; }
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):nth-child(2) { animation-delay: 395ms; }
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):nth-child(3) { animation-delay: 460ms; }
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):nth-child(4) { animation-delay: 525ms; }
+.animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp):nth-child(5) { animation-delay: 590ms; }
+
+/* DERROTA aterriza en vez de aparecer: es la lamina del veredicto */
+.animado #s-defeat.slide:not(.visto) .defeat-word { animation: aterriza 600ms var(--ease) backwards; }
+
+/* =========================================================================
+   REVELACION POR PASOS
+   Solo actua en laminas marcadas con [data-steps]; los otros dos mazos no las
+   tienen, asi que esto no los toca. Cada elemento [data-step="n"] aparece
+   cuando el presentador llega al paso n. Los elementos SIN data-step estan
+   desde el principio.
+   Escotilla: la tecla A revela todos los pasos, y ?todo en la direccion apaga
+   el sistema entero (para leer el archivo o entregarlo).
+   ========================================================================= */
+
+.slide[data-steps] [data-step] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 420ms var(--ease), transform 420ms var(--ease);
+}
+.slide[data-steps] [data-step].mostrado { opacity: 1; transform: none; }
+
+/* indicador de pasos para el presentador, en el contador del riel */
+#rail .pasos {
+  display: inline-flex; gap: 4px; margin-left: 10px; align-items: center;
+}
+#rail .pasos i {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--line); display: block;
+}
+#rail .pasos i.on { background: var(--gold); }
+
+/* =========================================================================
+   Reduccion de movimiento
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.enter, .slide.enter-back { animation: none; }
+  /* La cortina se apaga y el rect de recorte se queda cubriendo todo: la grafica
+     aparece completa. NO se toca .peak-band.show: su opacidad ahora es estado, y
+     una regla posterior aqui la volveria invisible (opacity .10 x fill-opacity .12). */
+  .chart-wipe, .chart-wipe.back, .chart-wipe.tail { animation: none; }
+  #rail, #progress, #help, .rail-item, #blank { transition: none; }
+  /* el subrayado del cierre es contenido: se queda puesto, solo no se dibuja */
+  .closer .hinge { animation: none; background-size: 100% 3px; }
+  /* Estos selectores REPITEN el `:not(.visto)` de las reglas que apagan. Sin el,
+     la regla animada es mas especifica y gana, y la cascada seguia corriendo con
+     prefers-reduced-motion puesto. El estado FINAL siempre queda visible: el
+     resaltado del timestamp es contenido, no adorno. */
+  .animado #s-defeat.slide:not(.visto) .defeat-sub,
+  .animado #s-defeat.slide:not(.visto) .defeat-word,
+  .animado #s-partida.slide:not(.visto) .body > .note,
+  .animado .slide.active:not(.visto) .kicker,
+  .animado .slide.active:not(.visto) h2,
+  .animado .slide.active:not(.visto) .footer,
+  .animado .slide.active:not(.visto) .body > *,
+  .animado .slide.bare.active:not(.visto) > div > *,
+  .animado .slide.active:not(.visto) :is(.ticks li, .srcitem, .hyp) { animation: none; }
+  .animado #s-timeline.slide:not(.visto) .code .hl {
+    animation: none; background-size: 100% 100%;
+  }
+}

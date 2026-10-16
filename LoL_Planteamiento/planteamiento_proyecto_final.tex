@@ -1,0 +1,719 @@
+% ===========================================================================
+%  Planteamiento del proyecto final — ¿En qué minuto se perdió la partida?
+%  Héctor Manuel Morán Maldonado
+%  Compilar:  latexmk -pdf planteamiento_proyecto_final.tex
+% ===========================================================================
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.5cm,top=2.6cm,bottom=2.6cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+\emergencystretch=2em
+\definecolor{azul}{HTML}{2A78D6}
+\definecolor{naranja}{HTML}{EB6834}
+\definecolor{aqua}{HTML}{1BAF7A}
+\definecolor{tinta}{HTML}{1A1A19}
+\definecolor{suave}{HTML}{52514E}
+\definecolor{papel}{HTML}{F4F6F8}
+
+\captionsetup{font=small,labelfont={bf,color=azul},width=.92\linewidth}
+\titleformat{\section}{\Large\bfseries\color{tinta}}{\thesection}{.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{suave}}{\thesubsection}{.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{.4pt}
+\fancyhead[L]{\footnotesize\color{suave}Planteamiento del proyecto final · ¿En qué minuto se perdió la partida?}
+\fancyhead[R]{\footnotesize\color{suave}H. M. Morán Maldonado}
+\fancyfoot[C]{\footnotesize\color{suave}\thepage}
+
+\newsavebox{\cajaresp}
+\newenvironment{respuesta}[1]
+  {\par\medskip\setlength{\fboxsep}{10pt}%
+   \begin{lrbox}{\cajaresp}%
+   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-3pt\relax}%
+   \color{tinta}\textcolor{azul}{\textbf{#1}}\par\smallskip\ignorespaces}
+  {\end{minipage}%
+   \end{lrbox}%
+   \noindent\textcolor{azul}{\rule[-\dp\cajaresp]{3pt}{\dimexpr\ht\cajaresp+\dp\cajaresp\relax}}%
+   \colorbox{papel}{\usebox{\cajaresp}}\par\medskip}
+
+\newcommand{\dato}[1]{\textbf{\textcolor{azul}{#1}}}
+\newcommand{\hecho}{\textcolor{aqua}{\textbf{Hecho}}}
+\newcommand{\falta}{\textcolor{naranja}{\textbf{Falta}}}
+\newcommand{\parcial}{\textcolor{azul}{\textbf{Parcial}}}
+
+\begin{document}
+
+% ===========================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{0.6cm}
+\includegraphics[width=6.4cm]{assets/logo-up.png}
+
+\vspace{1.1cm}
+{\large\color{suave}Especialidad en Ciencia de Datos\par}
+\vspace{0.25cm}
+{\large\color{suave}Visualización de datos y narración de historias\par}
+
+\vspace{1.5cm}
+{\color{azul}\rule{\linewidth}{1.6pt}}
+\vspace{0.85cm}
+
+{\Huge\bfseries Planteamiento del proyecto final\par}
+\vspace{0.45cm}
+{\LARGE \emph{¿En qué minuto se perdió la partida?}\\[.25cm]
+ Anatomía de mis derrotas en clasificatoria\par}
+\vspace{0.35cm}
+{\large\color{suave} Qué se va a presentar, cómo se va a construir y en qué orden\par}
+
+\vspace{0.85cm}
+{\color{azul}\rule{\linewidth}{1.6pt}}
+
+\vfill
+
+\begin{minipage}{0.46\linewidth}
+  \raggedright
+  {\color{suave}\small ALUMNO}\par\smallskip
+  {\large Héctor Manuel Morán Maldonado\par}
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
+  \raggedleft
+  {\color{suave}\small PROFESOR}\par\smallskip
+  {\large Dr.\ Rodolfo Rubén Álvarez González\par}
+\end{minipage}
+
+\vspace{1.1cm}
+{\color{suave}\rule{\linewidth}{.4pt}}
+\vspace{0.45cm}
+
+{\color{suave}\small
+Entregables: presentación oral de máximo 10 minutos (30\,\%) y reporte en PDF
+con la construcción de los recursos (40\,\%)\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ===========================================================================
+\section{Resumen y estado actual}
+
+El proyecto reconstruye mis partidas clasificatorias de League of Legends minuto a
+minuto, con la línea temporal de la API de Riot, para identificar \textbf{en qué
+minuto cambia la dirección de una partida perdida}, si ese minuto forma patrones y si
+las derrotas se pueden clasificar por \emph{cómo} ocurrieron.
+
+\begin{respuesta}{Dónde está el proyecto hoy}
+Están hechos el planteamiento (presentación de la primera entrega), el EDA piloto y la
+política de anonimización sobre 7 partidas públicas de ejemplo, y \textbf{ya está
+descargada la muestra propia}: \dato{1\,241 partidas} de cola 420 de mis \dato{seis
+cuentas} en LAN. Después del filtrado quedan \dato{1\,195 partidas: 658 victorias y
+537 derrotas}. La muestra ya está anonimizada y el barrido de fugas da cero, y los
+nueve experimentos (E0--E8) ya corrieron. Están hechos también el reporte final, V1, las
+presentaciones y el repositorio público. Este documento conserva el plan tal como se
+registró; las cifras y veredictos definitivos son los del reporte final.
+\end{respuesta}
+
+\begin{longtable}{p{4.6cm}p{2.0cm}p{8.0cm}}
+\caption{Cada punto de la rúbrica, dónde se va a cubrir y en qué estado está.}\\
+\toprule
+Punto de la rúbrica & Estado & Qué existe o qué falta \\
+\midrule
+\endfirsthead
+\toprule
+Punto de la rúbrica & Estado & Qué existe o qué falta \\
+\midrule
+\endhead
+Descripción del problema & \hecho & Láminas 2--8 del planteamiento; se reutilizan. \\
+Hipótesis iniciales & \hecho & H1--H3, presentadas en la primera entrega (sección~\ref{sec:hip}). \\
+Hipótesis finales & \hecho & Con la muestra propia las tres se mantienen: H1 se precisa, H2 queda no concluyente y H3 se confirma (sección~\ref{sec:prelim}). \\
+Bases de datos & \hecho & 1\,241 partidas de seis cuentas descargadas y verificadas (sección~\ref{sec:datos}). \\
+Etapa de filtrado & \hecho & Embudo medido: de 1\,241 a 1\,195 partidas (tabla~\ref{tab:embudo}). \\
+Preprocesamiento & \hecho & Cuatro tablas, anonimización y medida \(v(t)\) sobre la muestra propia. \\
+Modelos / experimentos & \hecho & E0--E8 hechos (sección~\ref{sec:exp}), con sus desviaciones documentadas. \\
+Visualizaciones & \hecho & V1--V10 hechas; V1 es una derrota propia elegida por regla (la mediana de A2). \\
+Conclusiones & \hecho & En el reporte final; solo afirmaciones de asociación, no causales. \\
+Reporte reproducible & \hecho & Reporte final en PDF con el código en anexo, y repositorio público: github.com/hmoran457/lol-cuando-se-pierde-la-partida. \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\section{Descripción del problema}
+
+Al terminar una partida, el juego muestra «DERROTA» y un marcador: KDA, daño, oro.
+Esa es la primera evidencia que todos usamos para explicar el resultado, y es la más
+pobre, porque \textbf{describe el final en lugar de explicarlo}. La partida pública
+que se usó en el planteamiento lo muestra: el equipo que perdió nunca estuvo detrás
+en oro, llegó a +8\,052 en el minuto 22 y todavía iba +1\,034 cuando cayó su Nexo.
+
+\noindent La pregunta del proyecto es:
+\begin{quote}
+\emph{¿Mis partidas se pierden por un gran error final, o por la acumulación de
+decisiones anteriores que nadie registra como error? ¿Y existe un minuto, medible,
+en que la derrota deja de ser reversible?}
+\end{quote}
+
+\noindent \textbf{Lo que no busca}, y se repetirá en la presentación final: no busca
+culpables, no mide estado emocional (\emph{tilt}), no predice partidas futuras y no
+demuestra causalidad. El dato es observacional y de equipo: describe las derrotas
+\emph{de mis equipos}, no mi aporte individual, que no es separable con esta fuente.
+La unidad es \textbf{un jugador en seis cuentas}, todas jugadas por mí en el mismo
+servidor (LAN).
+
+% ===========================================================================
+\section{Hipótesis}
+\label{sec:hip}
+
+\subsection{Hipótesis iniciales (primera entrega)}
+
+El EDA piloto partió de seis hipótesis. En la presentación del planteamiento se
+redujeron a \textbf{tres}, a propósito: tres pruebas al 5\,\% dan un 14\,\% de
+probabilidad de al menos un falso positivo, y seis daban un 26\,\%. Las tres corren
+sobre la línea temporal y forman un solo hilo.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=.45em]
+  \item \textbf{H1 · Ventaja desaprovechada.} Con la misma ventaja temprana, mi equipo
+        toma menos objetivos por minuto en las partidas que perdemos que en las que
+        ganamos.\\
+        \emph{Trampa:} «desperdiciamos la ventaja» es una tautología si se mira el
+        resultado. Se mide sin mirarlo: objetivos por minuto mientras vamos arriba,
+        en derrotas y victorias.
+  \item \textbf{H2 · El quiebre coincide con un objetivo.} El minuto en que más cae la
+        ventaja coincide con un objetivo mayor del rival (barón, dragón, heraldo,
+        larvas, Atakhan) más seguido de lo que explicaría el azar.\\
+        \emph{Trampa:} el objetivo marca el momento, no lo causa; y las caídas
+        tardías son mayores solo porque hay más oro, así que hay que normalizar.
+  \item \textbf{H3 · Punto de no retorno.} Existe un minuto a partir del cual mis
+        derrotas ya casi nunca se revierten.\\
+        \emph{Trampa:} sesgo de supervivencia. En el minuto 30 solo quedan las
+        partidas que llegaron al 30; el denominador se encoge justo donde estaría el
+        efecto.
+\end{itemize}
+
+\subsection{Hipótesis finales: cómo se van a decidir}
+
+Las hipótesis finales pueden ser las mismas o cambiar, pero el criterio se fija
+\textbf{ahora}, antes de ver mis datos, para que un cambio no parezca un ajuste a
+conveniencia:
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.3em]
+  \item Una hipótesis \textbf{se mantiene} si la muestra alcanza para contrastarla,
+        aunque el resultado sea en contra. Refutar H1 es un resultado, no un fracaso.
+  \item Una hipótesis \textbf{se reformula} solo por una razón de dato, documentada:
+        por ejemplo, si H3 resulta imposible de ubicar porque después de cierto minuto
+        quedan menos de 20 derrotas, se reformula como «¿hasta qué minuto se puede
+        siquiera medir un punto de no retorno con esta muestra?». Con la muestra real,
+        622 partidas llegan al minuto 30, así que ese caso queda más allá del 30.
+  \item \textbf{No se agregan hipótesis} después de ver los datos. Lo que aparezca y
+        no estaba previsto se reporta como observación exploratoria, separada de
+        las hipótesis.
+\end{enumerate}
+
+\noindent En la presentación final, la lámina de hipótesis mostrará las dos versiones
+lado a lado (inicial y final), con la razón de cada cambio.
+
+% ===========================================================================
+\Needspace{10\baselineskip}
+\section{Bases de datos}
+\label{sec:datos}
+
+\begin{longtable}{p{3.4cm}p{11.2cm}}
+\caption{Fuentes del proyecto.}\\
+\toprule
+Fuente & Qué aporta \\
+\midrule
+\endfirsthead
+\toprule
+Fuente & Qué aporta \\
+\midrule
+\endhead
+Riot Games API, \texttt{match-v5} &
+Fuente principal; requiere llave de desarrollador. Por partida: el \emph{registro}
+(resultado, campeones, roles, estadísticas finales) y la \emph{línea temporal} (un
+cuadro por minuto con el estado de los diez jugadores, más los eventos con marca de
+tiempo). Se descargaron las partidas de cola \textbf{420} (clasificatoria
+individual) de \textbf{mis seis cuentas}, todas en LAN: 1\,241 pares de JSON,
+915\,MB. \\
+\addlinespace
+Data Dragon 16.17.1 &
+CDN estático sin llave. Traduce identificadores a nombres e imágenes (campeones,
+objetos). No aporta hechos de partida. \\
+\addlinespace
+Corpus piloto (7 partidas) &
+Ejemplos públicos de \texttt{MingweiSamuel/riotapi-schema}. Se usó para el EDA y la
+anonimización; en el proyecto final solo aparece como ejemplo de la pregunta, nunca
+como resultado. \\
+\bottomrule
+\end{longtable}
+
+\begin{respuesta}{La retención se midió, y era más larga de lo supuesto}
+El planteamiento suponía que la API conserva la línea temporal \textbf{alrededor de un
+año}, según una nota de Riot de 2019. Medido: las 1\,241 líneas temporales pedidas
+respondieron, \textbf{ninguna dio 404}, y la más vieja es de \textbf{octubre de 2024},
+unos dos años atrás. El supuesto era falso, y en la dirección favorable. El JSON crudo
+se guardó de todos modos, porque volver a descargar no daría la misma muestra.
+\end{respuesta}
+
+\noindent \textbf{Cómo se descargó:} un script propio
+(\texttt{LoL\_Datos/scripts/descargar\_partidas.py}) que pide la lista completa y la de cola 420 explícita,
+descarga de la partida más vieja a la más nueva, retoma si la llave caduca o se cae la
+red, y respeta los límites de la llave de desarrollo. La llave nunca se escribe a disco.
+
+\noindent \textbf{Seis cuentas, un jugador.} Una sola cuenta daba 41 derrotas, por
+debajo del criterio de continuar (\(\sim\)150 partidas). Con las seis cuentas propias
+quedan 537 derrotas y el criterio se cumple holgadamente, así que \textbf{se conservan
+los cuatro arquetipos}. Las cuentas se identifican como C1--C6, sin nombres.
+
+\begin{table}[H]\centering\small
+\caption{La muestra por cuenta, después del filtrado.}
+\label{tab:cuentas}
+\begin{tabular}{lrrrr}
+\toprule
+Cuenta & Cola 420 en la lista & Muestra final & Victorias & Derrotas \\
+\midrule
+C1 & 103 & 102 & 61 & 41 \\
+C2 & 552 & 529 & 289 & 240 \\
+C3 & 191 & 188 & 99 & 89 \\
+C4 & 166 & 156 & 84 & 72 \\
+C5 & 141 & 132 & 76 & 56 \\
+C6 & 98 & 88 & 49 & 39 \\
+\midrule
+\textbf{Total} & 1\,251 & \textbf{1\,195} & \textbf{658} & \textbf{537} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent La suma de las listas (1\,251) es mayor que las partidas únicas (1\,241)
+porque hay partidas que aparecen en dos listas (ver «dúo entre cuentas propias» en el
+preprocesamiento).
+
+\noindent \textbf{Cobertura:} de octubre de 2024 a octubre de 2026, \textbf{46 parches}
+(14.20 a 16.20), con un hueco casi completo entre febrero y abril de 2026 (13
+partidas en tres meses). Mi rol es BOTTOM en 839 de 1\,195 partidas (70\,\%).
+
+% ===========================================================================
+\section{Etapa de filtrado}
+
+Sí hubo filtrado, y cada paso se reporta con cuántas partidas elimina, como un
+embudo (es la visualización V8, sección~\ref{sec:vis}). Las reglas, y lo que midieron
+sobre la muestra:
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.3em]
+  \item \textbf{Lista completa de partidas} de cada cuenta, paginando hasta agotarla.
+  \item \textbf{Cola 420 explícita.} Pedir «ranked» a secas mezcla la cola flexible
+        (440), que admite grupos de cinco y tiene otra dispersión de nivel.
+  \item \textbf{Con línea temporal disponible} (descarta las que dan 404 por
+        retención).
+  \item \textbf{Diez participantes} y dos equipos. El piloto encontró una partida de
+        Arena con 8 jugadores que producía una diferencia de oro falsa \emph{sin
+        fallar}.
+  \item \textbf{Sin \emph{remakes} ni rendiciones tempranas}, usando
+        \texttt{gameEndedInEarlySurrender}, y duración de al menos 5 minutos.
+        \textbf{No} se filtra por \texttt{endOfGameResult}: Riot tiene un error
+        abierto que marca mal partidas normales, justo en la cola 420.
+  \item \textbf{Sin partidas abandonadas:} una rendición antes del minuto 10 casi
+        siempre significa que alguien abandonó la partida. No es un \emph{remake} (no
+        la marca \texttt{gameEndedInEarlySurrender}) y pasa el filtro de 5 minutos,
+        pero la partida no se jugó: se trata como atípica, se excluye y se reporta
+        cuántas fueron. La regla se agregó al revisar la primera descarga, antes de
+        calcular cualquier resultado.
+\end{enumerate}
+
+\begin{table}[H]\centering\small
+\caption{Embudo de filtrado medido sobre las seis cuentas.}
+\label{tab:embudo}
+\begin{tabular}{lrr}
+\toprule
+Paso & Partidas & Quita \\
+\midrule
+Lista completa, todas las colas (suma de cuentas) & 2\,442 & — \\
+Cola 420, partidas únicas & 1\,241 & — \\
+Con registro y línea temporal & 1\,241 & 0 \\
+Cola 420 confirmada en el registro & 1\,241 & 0 \\
+Diez participantes & 1\,241 & 0 \\
+Sin \emph{remake} (\texttt{gameEndedInEarlySurrender}) & 1\,204 & 37 \\
+Duración de al menos 5 minutos & 1\,202 & 2 \\
+Sin rendición antes del minuto 10 (abandono) & 1\,195 & 7 \\
+\midrule
+\textbf{Muestra final} & \textbf{1\,195} & \textbf{46} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Las 1\,241 partidas tienen \texttt{endOfGameResult = GameComplete}, así que
+no filtrar por ese campo no cambió nada esta vez; la regla se mantiene por el error
+de Riot que afecta a la cola 420.
+
+\noindent \textbf{Lo que no se filtra:} las victorias. Entran como grupo de control,
+porque toda partida tiene su mayor caída de oro, también las ganadas. Sin ellas, el
+análisis describiría cómo son las partidas de League, no cómo se pierden las mías.
+
+% ===========================================================================
+\section{Preprocesamiento}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.35em]
+  \item \textbf{Anonimización primero.} Antes de que cualquier dato llegue a un CSV,
+        una gráfica o el repositorio, se aplica la política de la actividad de
+        anonimización: nombres suprimidos, \texttt{puuid} y \texttt{matchId}
+        seudonimizados con HMAC, fecha generalizada a mes. Medido sobre la muestra
+        propia: el barrido busca 9\,852 \texttt{puuid}, 10\,473 nombres y 1\,241
+        \texttt{matchId}, los encuentra todos en el crudo (control negativo) y
+        \dato{ninguno} en la salida. Con 1\,241 partidas, quitar el campeón deja
+        solo el 1\,\% de participantes únicos (eran 63\,\% en el piloto, como
+        advertía el reporte de anonimización); la composición de diez campeones
+        sigue siendo única en todas, por eso al repositorio solo van tablas a nivel
+        equipo.
+  \item \textbf{Cuatro tablas} desde el JSON anidado: \texttt{partidas},
+        \texttt{participantes}, \texttt{cuadros} (jugador × minuto) y
+        \texttt{eventos}. Sobre la muestra propia: 1\,241 partidas, 12\,410
+        participantes y más de un millón de eventos.
+  \item \textbf{Cuál de los diez soy yo.} Las seis cuentas se marcan antes de
+        seudonimizar (\texttt{es\_propio} y \texttt{cuenta} = C1--C6), porque después
+        del HMAC ya no se puede saber.
+  \item \textbf{Dúo entre cuentas propias.} En \dato{13 partidas} aparecen dos de mis
+        cuentas, siempre en el \emph{mismo} equipo: otra persona jugaba una de ellas en
+        dúo conmigo. Regla: \textbf{yo soy la cuenta en BOTTOM} (en las 13 hay
+        exactamente una), y la otra cuenta es un compañero más. Esas 13 partidas
+        tampoco son independientes del resto, y se reporta.
+  \item \textbf{Equipo de cada jugador} cruzado desde el registro: la línea temporal
+        solo trae \texttt{participantId} y \texttt{puuid}.
+  \item \textbf{Diferencia de oro} calculada, porque no es un campo de la API: suma de
+        \texttt{totalGold} de un equipo menos el otro, cuadro por cuadro.
+  \item \textbf{Medida relativa}
+        \(v(t) = \dfrac{\text{diferencia de oro}}{\text{oro total de los diez}}\).
+        2\,467 de oro son el 7.7\,\% del mapa en el minuto 10 y el 2.3\,\% en el 28;
+        un umbral fijo en oro diría que son lo mismo.
+  \item \textbf{Cuadros indexados por posición}, nunca por
+        \texttt{timestamp // 60000}: las marcas se desvían hasta +582\,ms y esa
+        división junta dos minutos en la misma casilla.
+  \item \textbf{Estructuras atribuidas por \texttt{killerId}}, no por
+        \texttt{teamId}, que en \texttt{BUILDING\_KILL} nombra al equipo que
+        \emph{perdió} la torre. Verificado sobre la muestra propia: las torres por
+        equipo cuadran contra el conteo oficial del registro en \dato{1\,195 de
+        1\,195} partidas. Las que derriban los súbditos (\texttt{killerId = 0}) se
+        atribuyen al equipo contrario al \texttt{teamId}.
+  \item \textbf{Vocabulario de eventos desde mis partidas}, no desde la
+        documentación. Medido: 20 tipos de evento, y entre los objetivos mayores
+        aparecen las larvas del vacío (\texttt{HORDE}, 4\,725) y Atakhan (647), que la
+        documentación no lista. Ambos entran en la lista de objetivos de H2 y del
+        arquetipo A3.
+  \item \textbf{Campos opcionales con acceso defensivo}, con tasa de ausencia
+        reportada.
+\end{enumerate}
+
+% ===========================================================================
+\section{Modelos y experimentos}
+\label{sec:exp}
+
+El encuadre no es «seis pruebas de hipótesis», sino una \textbf{taxonomía descriptiva
+pre-registrada, con intervalos}: reglas escritas antes de ver la distribución, y cada
+resultado con su incertidumbre. Las proporciones se reportan con intervalos de
+\textbf{Wilson}, no de Wald, que con muestras pequeñas se equivoca hasta por un factor
+de dos en el límite inferior.
+
+\begin{longtable}{p{1.0cm}p{4.2cm}p{9.4cm}}
+\caption{Experimentos, en el orden en que se corren.}\\
+\toprule
+Id & Experimento & Método \\
+\midrule
+\endfirsthead
+\toprule
+Id & Experimento & Método \\
+\midrule
+\endhead
+E0 & Tamaño de muestra & \textbf{Hecho.} Embudo de la tabla~\ref{tab:embudo}: 1\,195 partidas, 537 derrotas. Se conservan los cuatro arquetipos. \\
+\addlinespace
+E1 & Definir el minuto de quiebre & \textbf{Hecho.} D1 (mayor caída de \(v\) en un cuadro) contra D2 (último cruce de \(v\) hacia abajo). Difieren por más de 2 minutos en el \dato{67\,\%} de las derrotas (IC 95\,\%: 63--71). D1 resultó inservible: cae en el minuto 5 de mediana \emph{igual en victorias que en derrotas}, porque al inicio hay poco oro y una sola muerte mueve mucho \(v\). \textbf{D2 pasa a ser la definición principal} (ver desviaciones). \\
+\addlinespace
+E2 & H1 · objetivos con ventaja & \textbf{Hecho.} Objetivos propios por minuto mientras hay ventaja real (\(v \ge 5\)\,\% y 1\,500 de oro), con bootstrap por \emph{partida}. Agregado: 0.54 en derrotas contra 0.87 en victorias. Por fase, para comparar la misma ventaja: antes del minuto 15, 0.47 contra 0.54 (intervalos traslapados); entre el 15 y el 25, \dato{0.61 contra 0.95}; después del 25, \dato{0.58 contra 1.10}. \\
+\addlinespace
+E3 & H2 · quiebre y objetivo & \textbf{Hecho.} El 39.6\,\% de los quiebres (D2) de derrotas cae a \(\pm 1\) minuto de un monstruo épico del rival. Contra la nula registrada (45.6\,\% esperado) quedaría \emph{por debajo} del azar, pero esa nula pone objetivos antes del minuto 5, donde no existen. Contra la nula corregida (35.9\,\% esperado) queda por encima: \dato{p = 0.017}. En las victorias la coincidencia es mayor todavía (28\,\% contra 19\,\%). \\
+\addlinespace
+E4 & H3 · punto de no retorno & \textbf{Hecho.} De las partidas abajo con \(v \le -5\)\,\%, terminó ganando el 37\,\% en el minuto 5, el 24\,\% en el 10, el 20\,\% en el 15, el 12\,\% en el 20, el 8\,\% en el 25 y el \dato{4\,\%} en el 30 (IC 95\,\%: 2--8, 154 en riesgo). La caída es gradual; desde el minuto 27 remonta menos del 5\,\% en todos los minutos siguientes. \\
+\addlinespace
+E5 & Arquetipos A1--A4 & \textbf{Hecho.} Reglas registradas, en orden A4 → A2 → A1 → A3, sin ajustar umbrales. De 537 derrotas: A1 \dato{19\,\%} (16--23), A4 \dato{15\,\%} (12--18), A2 \dato{10\,\%} (8--13), A3 \dato{4\,\%} (3--6) y \dato{sin clasificar 52\,\%} (48--56). El residuo es la barra más alta: es el criterio de refutación de V6. \\
+\addlinespace
+E6 & Sensibilidad & \textbf{Hecho.} Con el umbral en 4\,\% cambian de arquetipo 64 derrotas (12\,\%); con 6\,\%, 83 (15\,\%). A3 es el más inestable: 10, 23 y 49 derrotas con 4, 5 y 6\,\%. \\
+\addlinespace
+E7 & Estabilidad & \textbf{Hecho.} Muestra partida por mes (hasta mayo de 2025: 209 derrotas; después: 328). Mediana de D2: minuto 12 contra 14, no se mueve más de 2 minutos. Reparto de arquetipos igual en ambas mitades (\(\chi^2\), p = 0.71). \\
+\addlinespace
+E8 & Cuentas y rol & \textbf{Hecho.} Las seis cuentas no se reparten distinto entre arquetipos (permutación, \dato{p = 0.19}), así que se juntan. Solo con BOTTOM (839 partidas, 366 derrotas) todo se repite: arquetipos con diferencias de 3 puntos o menos, H1 por fase 0.42/0.60/0.60 contra 0.55/0.96/1.12, H2 p = 0.034, H3 4\,\% en el minuto 30. Mezclar roles no cambia las conclusiones. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Desviaciones del plan, documentadas}
+
+Cada cambio respecto a lo escrito antes de ver los datos se declara aquí, con su razón.
+Tres de ellos (la definición de E1, la nula de E3 y la comparación por fase de H1) se
+decidieron \emph{después} de ver los resultados, al verificar supuestos, y uno ---la nula
+de E3--- cambia la conclusión a favor de H2. Por eso, en esos tres casos se reportan
+siempre las dos versiones, la registrada y la corregida, para que el lector juzgue.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.3em]
+  \item \textbf{D2 sustituye a D1 como definición principal del quiebre.} Razón de
+        dato (E1): D1 no distingue derrotas de victorias y se concentra en los primeros
+        5 minutos. D2 ya estaba registrada como control; no es una regla nueva. D1 se
+        reporta como la definición que falló.
+  \item \textbf{La nula de E3 se corrige.} La registrada desplazaba los objetivos por
+        toda la partida; ningún monstruo épico existe antes del minuto 5 (el primero de
+        la muestra cae en el 5.4) y 163 de 535 quiebres de derrotas ocurren antes. Se
+        reportan las dos nulas lado a lado (V4).
+  \item \textbf{H1 se compara por fase de la partida.} La hipótesis dice «con la misma
+        ventaja», y la tasa agregada no lo cumple: al ganar, la ventaja es mayor y más
+        tardía. La definición de la tasa no cambia; se reporta también la agregada.
+  \item \textbf{A3 usa D2 en lugar de «la mayor caída de \(v\)».} Consecuencia directa
+        de E1, decidida antes de correr E5. Las demás reglas de los arquetipos siguen
+        la implementación de referencia escrita antes de ver los datos
+        (\texttt{probe\_umbrales.py}), incluido el piso de 1\,500 de oro en A1; la
+        lista de objetivos de A3 sigue la lámina (con larvas y Atakhan).
+  \item \textbf{E8 añade un valor p por permutación}, porque la tabla de cuentas tiene
+        celdas con frecuencia esperada menor a 5 (mínima de 1.7) y la aproximación
+        \(\chi^2\) no es confiable ahí. Las dos dan lo mismo (0.19).
+  \item \textbf{Precisiones de construcción}, fijadas antes de correr cada experimento:
+        las placas de torre no cuentan como objetivo; cada larva es un evento; los 86
+        monstruos que no tomó ningún equipo se excluyen; un evento se juzga con \(v\) del
+        cuadro de su minuto.
+\end{enumerate}
+
+\subsection{Propuesta de hipótesis finales}
+\label{sec:prelim}
+
+Aplicando los criterios de la sección~\ref{sec:hip} (se mantiene lo que la muestra
+alcanza a contrastar, se reformula solo por razón de dato, no se agrega nada):
+
+\begin{longtable}{p{1.0cm}p{6.4cm}p{7.2cm}}
+\toprule
+ & Versión final & Qué pasó y por qué \\
+\midrule
+\endfirsthead
+\toprule
+ & Versión final & Qué pasó y por qué \\
+\midrule
+\endhead
+H1 & \emph{A partir del minuto 15}, con ventaja real, mi equipo toma menos objetivos por minuto en las derrotas que en las victorias. & \textbf{Se mantiene y se precisa.} Antes del 15 la diferencia no se distingue del ruido (0.47 contra 0.54); desde el 15, sí (0.61 contra 0.95). Es asociación: tomar objetivos también produce oro. \\
+\addlinespace
+H2 & El quiebre (D2: el último minuto en que mi equipo pasa a ir abajo en oro) coincide con un monstruo del rival más de lo que explicaría el azar. & \textbf{Se mantiene; no concluyente.} Con la definición registrada (D1) no se distingue del azar (26.4\,\% contra 25.0\,\%, p = 0.18); con D2 solo supera a la nula corregida (39.6\,\% contra 35.9\,\%, p = 0.017, en el límite de \(\alpha = 0.05/3\)). En las victorias la coincidencia es mayor: describe el ritmo de cualquier partida, no cómo se pierde. \\
+\addlinespace
+H3 & Existe un minuto a partir del cual mis derrotas ya casi nunca se revierten. & \textbf{Se mantiene y se confirma.} Con «casi nunca» como menos del 5\,\% sostenido (umbral fijado después de ver los datos y declarado como desviación), es el minuto 27 (4.0\,\%, IC 95\,\%: 2.1--7.8, 198 en riesgo). Antes la probabilidad baja de forma gradual (37\,\% en el 5, 20\,\% en el 15), y por eso el minuto depende del umbral (22 con 10\,\%). \\
+\bottomrule
+\end{longtable}
+
+\noindent \textbf{Los arquetipos describen la mitad.} A1, A4 y A2 juntas explican el
+44\,\% de las derrotas; A3 casi no existe (4\,\%) y es inestable. El 52\,\% restante
+no cae en ninguna regla, y no se ajustaron umbrales para esconderlo.
+
+\noindent \textbf{Observación exploratoria, no hipótesis:} las derrotas sin clasificar
+son \emph{partidas parejas que se deciden tarde}. En la mediana, el 78\,\% de la
+partida transcurre con \(|v| < 5\)\,\%, el 75\,\% nunca baja de \(-10\)\,\%, su
+quiebre llega en el minuto 19 y duran más (33 minutos contra 30 de las clasificadas).
+Se reporta como patrón a explorar, no como un quinto arquetipo.
+
+\subsection{Aritmética de la muestra}
+
+\noindent \textbf{La aritmética, ahora con la muestra real:} con 537 derrotas, un
+arquetipo que agrupe el 30\,\% trae un intervalo de Wilson de [0.26, 0.34], y uno del
+20\,\%, [0.17, 0.24]. Dos arquetipos al 30\,\% y al 20\,\% difieren 0.10 \(\pm\) 0.05,
+así que diferencias de ese tamaño ya se pueden ordenar, lo que con una sola cuenta (41
+derrotas) no era posible. \textbf{Con los resultados reales}, el orden se sostiene solo
+en parte: A3 es claramente el más raro, pero los intervalos de A1 (16--23\,\%) y A4
+(12--18\,\%) se traslapan, así que no se afirma cuál de los dos es más común. Cada
+cuenta por separado sigue siendo débil: C6 tiene 39 derrotas.
+
+% ===========================================================================
+\section{Visualizaciones}
+\label{sec:vis}
+
+Cada visualización existe para soportar o refutar algo concreto. Si no hay hipótesis
+detrás, no entra a la presentación (puede ir al reporte como exploración).
+
+\begin{longtable}{p{0.8cm}p{4.0cm}p{2.0cm}p{7.8cm}}
+\caption{Visualizaciones planeadas.}\\
+\toprule
+Id & Visualización & Sirve a & Qué la haría refutar \\
+\midrule
+\endfirsthead
+\toprule
+Id & Visualización & Sirve a & Qué la haría refutar \\
+\midrule
+\endhead
+V1 & Curva de oro de una partida, con cortina animada y objetivos marcados & Problema & — (es el gancho). Se sustituye la partida pública por una mía: la \emph{mediana} de su arquetipo, elegida al final. \\
+\addlinespace
+V2 & \(v(t)\) de todas las derrotas, en paneles pequeños por arquetipo, con la mediana resaltada & E5 & Que los paneles se vean iguales entre sí: los arquetipos no separarían nada. \\
+\addlinespace
+V3 & Objetivos por minuto con ventaja: punto e intervalo, derrotas contra victorias & H1 & Intervalos que se traslapan por completo. \\
+\addlinespace
+V4 & Distribución nula de la permutación, con la proporción observada como línea & H2 & Que la línea caiga dentro del cuerpo de la distribución nula. \\
+\addlinespace
+V5 & Probabilidad de remontar por minuto, banda de Wilson, y barras de partidas en riesgo debajo & H3 & Que la curva no baje, o que la banda sea tan ancha que no permita ubicar ningún minuto. \\
+\addlinespace
+V6 & Frecuencia de arquetipos con intervalo de Wilson, incluido «sin clasificar» & E5 & Que «sin clasificar» sea la barra más alta. \\
+\addlinespace
+V7 & Mapa de calor umbral × arquetipo (4\,\%, 5\,\%, 6\,\%) & E6 & Que las partidas salten de arquetipo con un punto de umbral. \\
+\addlinespace
+V8 & Embudo de filtrado, con cuántas partidas quita cada paso & Datos & — (transparencia). \\
+\addlinespace
+V9 & Desacuerdo entre las dos definiciones de quiebre (dispersión, minuto contra minuto) & E1 & Puntos lejos de la diagonal: «el minuto de quiebre» dependería de la definición. \\
+\addlinespace
+V10 & Frecuencia de arquetipos por cuenta (C1--C6), con intervalo de Wilson & E8 & Que una cuenta se separe del resto: entonces no se pueden juntar sin decirlo. \\
+\bottomrule
+\end{longtable}
+
+\noindent Se mantiene la convención visual del planteamiento: \textcolor{azul}{azul}
+es el equipo propio y \textcolor{naranja}{naranja} el rival; lo medido lleva etiqueta
+azul y lo ilustrativo, etiqueta ámbar.
+
+% ===========================================================================
+\section{Conclusiones: qué se va a poder afirmar}
+
+Las conclusiones aún no existen, pero su \emph{forma} se fija ahora:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=.3em]
+  \item Se dirá «coincide con», nunca «causa». El barón no \emph{causó} el desplome:
+        la pelea ocurre antes que el objetivo.
+  \item Cada porcentaje irá con su intervalo y su \(n\).
+  \item Se reportarán también los patrones que \textbf{no} se resuelven con esta
+        muestra; que H3 resulte imposible de ubicar sería un resultado legítimo.
+  \item Las conclusiones son sobre \emph{un jugador} (seis cuentas, sobre todo en
+        BOTTOM) en \emph{una ventana de 46 parches}: no se generalizan a otros
+        jugadores, roles ni niveles.
+\end{itemize}
+
+% ===========================================================================
+\section{Plan de la presentación (10 minutos)}
+
+\begin{longtable}{p{0.6cm}p{5.0cm}r p{7.0cm}}
+\caption{Guion de tiempos. Total: 10 minutos.}\\
+\toprule
+\# & Bloque & Min. & Idea que hay que dejar \\
+\midrule
+\endfirsthead
+\toprule
+\# & Bloque & Min. & Idea que hay que dejar \\
+\midrule
+\endhead
+1 & Problema: «DERROTA» y la curva (V1) & 1.5 & El marcador describe el final; la curva muestra el quiebre. \\
+2 & Hipótesis iniciales y finales & 1.0 & Las tres, lado a lado con su versión final y la razón de cada cambio. \\
+3 & Bases de datos y filtrado (V8) & 1.0 & De dónde sale el dato y cuántas partidas sobreviven a cada filtro. \\
+4 & Preprocesamiento & 1.0 & La diferencia de oro no existe: se construye. Y se anonimiza antes de todo. \\
+5 & Experimentos & 1.0 & Taxonomía pre-registrada, permutación y Wilson; sin ajustar umbrales. \\
+6 & H1 (V3) & 1.0 & Resultado, a favor o en contra. \\
+7 & H2 (V4) & 1.0 & ¿Más que el azar? \\
+8 & H3 (V5) & 1.0 & Dónde está el punto de no retorno, o hasta dónde se puede medir. \\
+9 & Arquetipos (V2, V6) & 1.0 & Las formas de perder y cuántas quedan sin clasificar. \\
+10 & Conclusiones & 0.5 & Qué se puede afirmar y qué no. \\
+\midrule
+ & \textbf{Total} & \textbf{10.0} & \\
+\bottomrule
+\end{longtable}
+
+\noindent Se reutiliza el motor de la presentación del planteamiento (HTML sin
+conexión, cortina animada, riel de secciones). El riel se cambia a las secciones de
+esta rúbrica.
+
+% ===========================================================================
+\section{Plan del reporte y reproducibilidad}
+
+El reporte cubre los mismos puntos con más profundidad, más todo lo que no cabe en 10
+minutos: los dos criterios de quiebre completos, las tablas de sensibilidad, el
+embudo con cifras y las observaciones exploratorias. Para que alguien con
+conocimientos de análisis de datos pueda reproducirlo:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=.3em]
+  \item \textbf{Repositorio público} con los scripts de descarga, anonimización,
+        análisis y figuras; un \texttt{README} con el orden exacto de ejecución; y
+        las versiones de las bibliotecas fijadas en \texttt{requirements.txt}.
+  \item \textbf{Datos en el repositorio:} solo las tablas anonimizadas a nivel equipo
+        (\texttt{partidas}, \texttt{oro\_equipo}, \texttt{eventos\_equipo}). El JSON
+        crudo y la tabla por participante \textbf{no} se suben: la actividad de
+        anonimización midió que esta última es única fila por fila. Quien tenga su
+        propia llave puede regenerar todo con el script de descarga.
+  \item \textbf{\texttt{.gitignore} antes del primer \texttt{git init}.} Debe excluir
+        los JSON crudos desde el inicio: una vez que entran a un commit, quedan en el
+        historial aunque después se borren.
+  \item \textbf{Semillas fijas} en el bootstrap y la permutación, reportadas.
+  \item \textbf{Todas las cifras del texto salen de un archivo de resultados} generado
+        por los scripts (como ya hacen el EDA y la anonimización), para que el texto
+        no se desincronice de los datos.
+  \item \textbf{Código de internet referenciado} en el lugar donde se usa y en la
+        sección de referencias.
+  \item \textbf{Anexo} con el código de las visualizaciones, o la liga al
+        repositorio público.
+\end{itemize}
+
+% ===========================================================================
+\section{Cronograma}
+
+\begin{longtable}{p{2.0cm}p{12.6cm}}
+\caption{Orden de trabajo. Las semanas 1 a 4 ya están hechas.}\\
+\toprule
+Semana & Trabajo \\
+\midrule
+\endfirsthead
+\toprule
+Semana & Trabajo \\
+\midrule
+\endhead
+1 & \hecho: descarga de seis cuentas (E0), embudo de filtrado, anonimización de la muestra propia. Se continúa con cuatro arquetipos. \\
+2 & \hecho: medida \(v(t)\) y E1 (D2 pasa a ser la definición principal); V8 y V9. \\
+3 & \hecho: E2--E4 (H1, H2, H3); sus cifras observadas coinciden con un cálculo independiente hecho directamente desde el JSON crudo; V3--V5. \\
+4 & \hecho: E5--E8 (arquetipos, sensibilidad, estabilidad, cuentas y rol); V2, V6, V7, V10; propuesta de hipótesis finales. \\
+5 & \parcial: V1 (mediana de A2) y reporte final en PDF hechos; falta el repositorio público. \\
+6 & Presentación de 10 minutos y ensayo cronometrado. \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\section{Riesgos}
+
+\begin{longtable}{p{5.0cm}p{9.6cm}}
+\toprule
+Riesgo & Respuesta \\
+\midrule
+\endfirsthead
+\toprule
+Riesgo & Respuesta \\
+\midrule
+\endhead
+\textcolor{suave}{Muestra insuficiente} & \textcolor{suave}{Resuelto: con seis cuentas hay 537 derrotas.} \\
+\addlinespace
+\textcolor{suave}{La retención borra partidas} & \textcolor{suave}{Resuelto: retención medida de al menos dos años, y el crudo ya está en disco.} \\
+\addlinespace
+\textcolor{suave}{Las cuentas no son comparables} & \textcolor{suave}{Descartado: E8 no encuentra diferencias entre cuentas (p = 0.19).} \\
+\addlinespace
+\textcolor{suave}{Mezcla de roles (BOTTOM en el 70\,\%)} & \textcolor{suave}{Descartado: solo con BOTTOM los resultados se repiten (E8).} \\
+\addlinespace
+Residuo «sin clasificar» grande & \textbf{Ocurrió: 52\,\%.} Se reporta como resultado, sin ajustar umbrales, y se describe como observación exploratoria. \\
+\addlinespace
+A3 inestable ante el umbral & Se reporta E6 junto a A3; no se afirma nada sobre su frecuencia más allá de «rara». \\
+\addlinespace
+Efecto de parche (46 parches, con un hueco de febrero a abril de 2026) & Se reconoce, no se controla; se reporta cuántas partidas hay por parche. \\
+\addlinespace
+Partidas no independientes (rachas, sesiones, 13 dúos entre cuentas propias) & Bootstrap por partida; las conclusiones se plantean como descriptivas. \\
+\bottomrule
+\end{longtable}
+
+\vspace{.5cm}
+\noindent{\small\color{suave} Este proyecto no está avalado por Riot Games y no
+refleja las opiniones de Riot Games ni de nadie involucrado oficialmente en la
+producción o administración de League of Legends. League of Legends y Riot Games
+son marcas registradas de Riot Games,~Inc.}
+
+\end{document}

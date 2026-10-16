@@ -1,0 +1,10 @@
+# Versiones con las que se produjo el reporte final (Python 3.13.13).
+requests==2.33.1
+pandas==3.0.2
+numpy==2.4.4
+scipy==1.18.1
+matplotlib==3.11.1
+pytest==9.0.3
+# Solo para revisar las presentaciones (shoot.py, teclado.py) y grabar el video (video.py).
+# Después de instalarlo: python -m playwright install chromium
+playwright==1.58.0

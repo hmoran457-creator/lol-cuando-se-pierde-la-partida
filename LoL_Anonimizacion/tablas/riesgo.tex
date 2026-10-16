@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering
+\small
+\caption{Riesgo de reidentificación por participante (60 participantes de 6 partidas 5v5).}
+\label{tab:riesgo}
+\begin{tabular}{p{3.2cm}p{6.2cm}rrr}
+\toprule
+Nivel & Cuasi-identificadores & Clases & k mín. & \% únicos \\
+\midrule
+Crudo sin nombres & campeon, rol, parche, cola, dia, nivel & 60 & 1 & 100,0 \\
+Generalizado (mes, bandas) & campeon, rol, parche, cola, mes, bandaNivel & 60 & 1 & 100,0 \\
+Sin campeón & rol, parche, cola, mes, bandaNivel & 49 & 1 & 63,3 \\
+Solo campeón & campeon & 52 & 1 & 75,0 \\
+\bottomrule
+\end{tabular}
+\end{table}

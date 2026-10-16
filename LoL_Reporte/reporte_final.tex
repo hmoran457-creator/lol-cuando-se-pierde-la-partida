@@ -1,0 +1,697 @@
+% ===========================================================================
+%  Reporte final — ¿En qué minuto se perdió la partida?
+%  Héctor Manuel Morán Maldonado
+%  Compilar (desde la carpeta del proyecto):
+%     python LoL_Reporte/scripts/cifras.py      (cifras y tablas desde los resultados)
+%     latexmk -cd -lualatex LoL_Reporte/reporte_final.tex
+%  Requiere LuaLaTeX (TeX Live o MiKTeX) y la fuente DejaVu Sans Mono.
+% ===========================================================================
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{fontspec}
+\usepackage[spanish,es-tabla,es-nodecimaldot]{babel}
+\usepackage{microtype}
+\usepackage[margin=2.5cm,top=2.6cm,bottom=2.6cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{fvextra}
+\usepackage[hidelinks]{hyperref}
+
+\newfontfamily\codigo{DejaVu Sans Mono}[Scale=0.78]
+\graphicspath{{../LoL_Analisis/figuras/}}
+\emergencystretch=2em
+
+\definecolor{azul}{HTML}{2A78D6}
+\definecolor{naranja}{HTML}{EB6834}
+\definecolor{tinta}{HTML}{1A1A19}
+\definecolor{suave}{HTML}{52514E}
+\definecolor{papel}{HTML}{F4F6F8}
+
+\captionsetup{font=small,labelfont={bf,color=azul},width=.92\linewidth}
+\titleformat{\section}{\Large\bfseries\color{tinta}}{\thesection}{.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{suave}}{\thesubsection}{.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{.4pt}
+\fancyhead[L]{\footnotesize\color{suave}Reporte final · ¿En qué minuto se perdió la partida?}
+\fancyhead[R]{\footnotesize\color{suave}H. M. Morán Maldonado}
+\fancyfoot[C]{\footnotesize\color{suave}\thepage}
+
+\newsavebox{\cajaresp}
+\newenvironment{respuesta}[1]
+  {\par\medskip\setlength{\fboxsep}{10pt}%
+   \begin{lrbox}{\cajaresp}%
+   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-3pt\relax}%
+   \color{tinta}\textcolor{azul}{\textbf{#1}}\par\smallskip\ignorespaces}
+  {\end{minipage}%
+   \end{lrbox}%
+   \noindent\textcolor{azul}{\rule[-\dp\cajaresp]{3pt}{\dimexpr\ht\cajaresp+\dp\cajaresp\relax}}%
+   \colorbox{papel}{\usebox{\cajaresp}}\par\medskip}
+
+\newcommand{\dato}[1]{\textbf{\textcolor{azul}{#1}}}
+\newcommand{\figura}[3]{\begin{figure}[!htbp]\centering
+  \includegraphics[width=#2\linewidth]{#1}\caption{#3}\label{fig:#1}\end{figure}}
+\newcommand{\codigofuente}[2]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}
+  \VerbatimInput[breaklines, breakanywhere, numbers=left, numbersep=6pt,
+    fontsize=\scriptsize, formatcom=\codigo, frame=lines, framesep=4pt]{#2}}
+
+\input{tablas/cifras.tex}
+
+\begin{document}
+
+% ===========================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{0.6cm}
+\includegraphics[width=6.4cm]{assets/logo-up.png}
+
+\vspace{1.1cm}
+{\large\color{suave}Especialidad en Ciencia de Datos\par}
+\vspace{0.25cm}
+{\large\color{suave}Visualización de datos y narración de historias\par}
+
+\vspace{1.5cm}
+{\color{azul}\rule{\linewidth}{1.6pt}}
+\vspace{0.85cm}
+
+{\Huge\bfseries ¿En qué minuto se perdió la partida?\par}
+\vspace{0.45cm}
+{\LARGE Anatomía de mis derrotas en clasificatoria\par}
+\vspace{0.35cm}
+{\large\color{suave} Reporte final del proyecto · datos de la API de Riot Games\par}
+
+\vspace{0.85cm}
+{\color{azul}\rule{\linewidth}{1.6pt}}
+
+\vfill
+
+\begin{minipage}{0.46\linewidth}
+  \raggedright
+  {\color{suave}\small ALUMNO}\par\smallskip
+  {\large Héctor Manuel Morán Maldonado\par}
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
+  \raggedleft
+  {\color{suave}\small PROFESOR}\par\smallskip
+  {\large Dr.\ Rodolfo Rubén Álvarez González\par}
+\end{minipage}
+
+\vspace{1.1cm}
+{\color{suave}\rule{\linewidth}{.4pt}}
+\vspace{0.45cm}
+
+{\color{suave}\small
+\nFinal{} partidas · \nCuentas{} cuentas propias · \nDerrotas{} derrotas · \nEventos{} eventos\\
+Todas las cifras de este documento las generan los scripts del anexo a partir de los datos\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ===========================================================================
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+
+Reconstruí \nFinal{} partidas clasificatorias de mis \nCuentas{} cuentas de League of
+Legends minuto a minuto, con la línea temporal de la API de Riot, para buscar en qué
+minuto se pierde una partida. Medí la ventaja de oro relativa \(v(t)\) y contrasté tres
+hipótesis contra mis propias victorias. Con ventaja, mis equipos toman menos objetivos
+por minuto al perder, pero solo \emph{a partir del minuto 15} (H1). Que el quiebre de
+la partida coincida con un monstruo del rival no se puede afirmar: con la definición
+registrada no se distingue del azar, con la principal apenas lo supera, y en las
+victorias la coincidencia es mayor (H2, no concluyente). Sí hay un punto casi sin
+regreso, aunque se llega a él poco a poco: remontar estando abajo pasa del
+\hTresCinco\,\% en el minuto 5 al \hTresQuince\,\% en el 15, y desde el minuto
+\hTresPunto{} lo logra menos de una de cada veinte partidas (H3). Las cuatro formas de
+perder que propuse explican el \pctClas\,\% de las derrotas; el \pctSinClas\,\% restante
+son, sobre todo, partidas parejas que se deciden tarde. Cada cambio respecto al plan
+registrado antes de ver los datos se declara, con las dos versiones del resultado.
+
+% ===========================================================================
+\section{Descripción del problema}
+
+Al terminar una partida, el juego muestra «DERROTA» y un marcador: KDA, daño, oro. Es
+la primera evidencia que todos usamos para explicar el resultado, y es la más pobre,
+porque \textbf{describe el final en lugar de explicarlo}. Una partida perdida puede
+haberse decidido en el minuto 34 o en el 8, y el marcador final es el mismo.
+
+\noindent La pregunta del proyecto es:
+\begin{quote}
+\emph{¿Mis partidas se pierden por un gran error final, o por la acumulación de
+decisiones anteriores que nadie registra como error? ¿Y existe un minuto, medible, en
+que la derrota deja de ser reversible?}
+\end{quote}
+
+\noindent\textbf{Lo que el proyecto no busca:} culpables, estado emocional
+(\emph{tilt}), predicción de partidas futuras ni causalidad. El dato es observacional y
+de equipo: describe las derrotas \emph{de mis equipos}, no mi aporte individual, que
+no se puede separar con esta fuente. La unidad de análisis es \textbf{un jugador en
+\nCuentas{} cuentas}, todas jugadas por mí en el servidor LAN.
+
+\figura{v1_partida_ejemplo}{1}{V1 · Una derrota mía, elegida por regla y no a ojo: la
+partida de A2 cuya curva \(v(t)\) está más cerca de la mediana de su arquetipo (entre
+\vUnoN{} derrotas). Mi equipo fue arriba en oro \vUnoArriba{} de los \vUnoDurMin{}
+minutos: abajo solo en el minuto \vUnoAbajoAntes{} y desde el \vUnoDdos. La ventaja llegó
+a \vUnoMax\,\% (\vUnoMaxOro{} de oro) en el minuto \vUnoMaxMin, bajó a \vUnoAntesRemate\,\%
+en el \vUnoMinAntesRemate, y en los últimos 2 minutos el rival tomó \vUnoRemateRival{}
+objetivos. Arriba, los objetivos de mi equipo; abajo, los del rival ({\codigo ◆} monstruo
+épico, {\codigo ■} estructura).}
+
+% ===========================================================================
+\section{Hipótesis iniciales}
+
+En la primera entrega se plantearon tres hipótesis, reducidas a propósito desde seis:
+tres pruebas al 5\,\% dan 14\,\% de probabilidad de al menos un falso positivo, y seis
+daban 26\,\%. Cada una iba con la trampa que podía arruinarla.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=.4em]
+  \item \textbf{H1 · Ventaja desaprovechada.} Con la misma ventaja temprana, mi equipo
+        toma menos objetivos por minuto en las partidas que perdemos que en las que
+        ganamos. \emph{Trampa:} «desperdiciamos la ventaja» es tautológico si se mira
+        el resultado; se mide sin mirarlo.
+  \item \textbf{H2 · El quiebre coincide con un objetivo.} El minuto en que más cae la
+        ventaja (lo que después se llama D1) coincide con un objetivo mayor del rival
+        (barón, dragón, heraldo, larvas, Atakhan) más seguido de lo que explicaría el
+        azar. \emph{Trampa:} el objetivo marca el momento, no lo causa.
+  \item \textbf{H3 · Punto de no retorno.} Existe un minuto a partir del cual mis
+        derrotas ya casi nunca se revierten. \emph{Trampa:} sesgo de supervivencia; el
+        denominador se encoge justo donde estaría el efecto.
+\end{itemize}
+
+\noindent Además se registraron cuatro \textbf{arquetipos de derrota} con umbrales
+numéricos (sección~\ref{sec:arq}) y un plan de nueve experimentos (E0--E8), todo antes
+de descargar mis partidas.
+
+% ===========================================================================
+\section{Bases de datos}
+
+\begin{itemize}[leftmargin=1.4em,itemsep=.3em]
+  \item \textbf{Riot Games API, \texttt{match-v5}} (fuente principal). Por partida, el
+        \emph{registro} (resultado, campeones, roles, estadísticas finales) y la
+        \emph{línea temporal} (un cuadro por minuto con el oro de los diez jugadores,
+        más cada evento con su marca de tiempo en milisegundos).
+  \item \textbf{Data Dragon} (apoyo): catálogo estático para nombres e imágenes.
+  \item \textbf{Corpus piloto}: 7 partidas públicas de ejemplo, usadas en el EDA y en
+        la actividad de anonimización; aquí solo como antecedente.
+\end{itemize}
+
+\noindent\textbf{Descarga.} Un script propio pidió, por cada cuenta, la lista completa
+de partidas (\listaTotal{} en total) y la de cola 420 explícita (\listaCola), y
+descargó registro y línea temporal de la más vieja a la más nueva, retomando si la
+llave caducaba o se caía la red. Quedaron \nUnicas{} partidas únicas: 915\,MB de JSON
+que nunca salen de la computadora.
+
+\noindent\textbf{Seis cuentas.} Con la primera cuenta sola había \nCuentaUno{} partidas
+(\derCuentaUno{} derrotas), por debajo del criterio de continuar fijado en el plan
+(unas 150 partidas). Con las seis hay \nFinal{} partidas y \nDerrotas{} derrotas, y se
+pudieron conservar los cuatro arquetipos.
+
+\input{tablas/cuentas.tex}
+
+\noindent\textbf{Retención, medida.} El plan suponía que la línea temporal dura un año
+en la API. Ninguna de las \nUnicas{} pedidas devolvió 404, y la más vieja es de
+\mesInicio: el supuesto era falso, en la dirección favorable.
+
+\noindent\textbf{Cobertura.} De \mesInicio{} a \mesFin, \nParches{} parches del juego.
+Mi rol es BOTTOM en \nBottom{} de las \nFinal{} partidas (\pctBottom\,\%).
+
+% ===========================================================================
+\section{Etapa de filtrado}
+
+Hubo filtrado, con reglas fijadas antes de analizar y cada paso reportado:
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.25em]
+  \item Cola 420 confirmada en el registro (la lista de «ranked» mezcla la flexible).
+  \item Diez participantes: una partida de 8 da una diferencia de oro falsa sin fallar.
+  \item Sin \emph{remakes}, con \texttt{gameEndedInEarlySurrender}. No se filtra por
+        \texttt{endOfGameResult}, que Riot marca mal en la cola 420.
+  \item Duración de al menos 5 minutos.
+  \item Sin partidas abandonadas: rendición antes del minuto 10. Regla agregada al
+        revisar la primera descarga, antes de calcular cualquier resultado.
+\end{enumerate}
+
+\noindent Las victorias \textbf{no} se filtran: son el grupo de control.
+
+\input{tablas/embudo.tex}
+
+\figura{v8_embudo}{.9}{V8 · Embudo de filtrado: de \nUnicas{} partidas quedan
+\nFinal{} (\nVictorias{} victorias y \nDerrotas{} derrotas).}
+
+% ===========================================================================
+\section{Preprocesamiento}
+
+\subsection{Anonimización primero}
+Cada partida trae los identificadores de los diez jugadores, nueve de ellos
+desconocidos. Antes de que cualquier dato llegue a un CSV o a una gráfica se suprimen
+nombres y Riot ID, se seudonimizan \texttt{puuid} y \texttt{matchId} con HMAC-SHA256 y
+una llave efímera, y la fecha se generaliza a mes. Un barrido busca los \nPuuid{}
+\texttt{puuid} y \nNombres{} nombres originales: los encuentra todos en el crudo
+(control negativo) y \dato{\nFugas} en la salida. Como la composición de diez campeones
+identifica cada partida, al repositorio solo van tablas a nivel equipo, y el análisis
+completo se reproduce desde ellas. De los eventos solo se publica lo que el análisis lee:
+torres y monstruos épicos, con su minuto y el equipo que los tomó (\nEventosPublicos{}
+filas, sin posición ni víctima).
+
+\noindent\textbf{Riesgo que queda.} Las tablas públicas no tienen nombres, pero no son
+anónimas respecto a mí: el mes, la cuenta y la duración al segundo señalan una sola
+partida en el \pctPartidaUnica\,\% de las \nPartidasPublicas{} filas. Quien conozca mis
+cuentas podría ligar cada fila con mi historial público y, desde ahí, ver a los otros
+nueve jugadores; pero ese historial ya es público, así que el repositorio no les agrega
+exposición. La defensa es no publicar mis Riot ID. La duración no se redondea porque
+cambiaría el embudo y la partida V1 sin proteger nada.
+
+\subsection{Del JSON a la medida \(v(t)\)}
+\begin{enumerate}[leftmargin=1.6em,itemsep=.3em]
+  \item \textbf{Cuatro tablas}: partidas, participantes, cuadros y eventos; en la
+        muestra final, \nCuadros{} jugador-minuto y \nEventos{} eventos.
+  \item \textbf{Cuál de los diez soy yo}, decidido antes del HMAC. En \nDuo{}
+        partidas aparecen dos de mis cuentas en el mismo equipo: otra persona jugaba
+        una de ellas en dúo conmigo; yo soy la de BOTTOM.
+  \item \textbf{Ventaja relativa}
+        \(v(t) = \dfrac{\text{oro de mi equipo} - \text{oro del rival}}{\text{oro total de los diez}}\),
+        porque 2\,467 de oro son el 7.7\,\% del mapa en el minuto 10 y el 2.3\,\% en el 28.
+  \item \textbf{Cuadros indexados por posición}, nunca por \texttt{timestamp // 60000},
+        que junta dos minutos en una casilla.
+  \item \textbf{Estructuras atribuidas por \texttt{killerId}}: en
+        \texttt{BUILDING\_KILL}, \texttt{teamId} nombra al equipo que \emph{perdió} la
+        torre. Con la regla correcta, las torres cuadran con el conteo oficial en las
+        \nFinal{} partidas.
+  \item \textbf{Objetivos}: monstruos épicos (dragón, larvas, heraldo, barón, Atakhan)
+        y estructuras; no las placas. Se excluyen \neutrales{} monstruos que no tomó
+        ningún equipo.
+\end{enumerate}
+
+\figura{v_mediana}{1}{\(v(t)\) mediana y rango intercuartil. En la mediana, mis
+derrotas no van ganando y luego se caen: quedan abajo desde los primeros minutos. Solo
+\derrotasArriba{} de \nDerrotas{} terminaron arriba en oro.}
+
+% ===========================================================================
+\section{Modelos y experimentos}
+\label{sec:exp}
+
+El encuadre es una \textbf{taxonomía descriptiva pre-registrada con intervalos}, no
+una batería de pruebas. Las proporciones llevan intervalos de Wilson; las tasas,
+bootstrap remuestreando \emph{partidas} (10\,000 réplicas); las coincidencias, pruebas
+de permutación (10\,000). Semilla 20261010 en todo.
+
+\subsection{E1 · ¿Qué es «el minuto del quiebre»?}
+Se registraron dos definiciones: \textbf{D1}, el minuto de la mayor caída de \(v\) en
+un cuadro, y \textbf{D2}, el último minuto en que \(v\) cruza de \(\ge 0\) a \(< 0\).
+Difieren por más de 2 minutos en el \dato{\eUnoPct\,\%} de las derrotas (IC 95\,\%:
+\eUnoLo--\eUnoHi; \eUnoDesac{} de \eUnoConDdos), por \eUnoMedDif{} minutos en la mediana.
+
+\figura{d1_minuto}{1}{D1 cae en el minuto \dUnoMedDer{} de mediana en derrotas y en
+victorias por igual: al inicio hay poco oro en el mapa y una sola muerte mueve mucho
+\(v\). D1 mide el ruido de los primeros minutos, no el quiebre.}
+
+\figura{v9_d1_vs_d2}{.62}{V9 · Las dos definiciones, partida por partida. La banda
+gris es el acuerdo de \(\pm2\) minutos.}
+
+\noindent\textbf{Decisión:} D2 pasa a ser la definición principal. Ya estaba
+registrada como control, así que no es una regla inventada después; D1 se reporta como
+la definición que falló. La mediana de D2 en derrotas es el minuto \dDosMed. D2 es
+\emph{el último minuto en que mi equipo pasa a ir abajo en oro}, y se define en
+retrospectiva (hay que conocer toda la partida). No es «el minuto en que la partida
+quedó perdida»: en ese momento la partida suele seguir pareja.
+
+\subsection{E2 · H1: objetivos con ventaja}
+Tasa de objetivos propios por minuto mientras hay \emph{ventaja real} (\(v \ge 5\)\,\% y
+al menos 1\,500 de oro). Agregada, \hUnoDerTasa{} en derrotas contra \hUnoVicTasa{} en
+victorias. Pero H1 dice «con la misma ventaja», y al ganar la ventaja es mayor y más
+tardía; la comparación justa es por fase:
+
+\input{tablas/h1_fases.tex}
+
+\figura{v3_h1_objetivos}{1}{V3 · Antes del minuto 15 los intervalos se traslapan; desde
+el 15, las derrotas toman claramente menos objetivos con la misma ventaja.}
+
+\subsection{E3 · H2: quiebre y objetivo del rival}
+Proporción de quiebres (D2) a \(\pm1\) minuto de un monstruo épico del rival, contra una
+nula que desplaza los objetivos dentro de cada partida. Observado: \hDosObsDer\,\%.
+
+\noindent\textbf{La conclusión depende de la nula.} La registrada desplazaba los
+objetivos por toda la partida; pero ningún monstruo épico existe antes del minuto
+\(\approx 5\) (el primero de la muestra cae en el \hDosPrimerObj), y \hDosAntesCinco{}
+quiebres ocurren antes. Contra la registrada (\hDosRegDer\,\% esperado) lo observado
+queda \emph{por debajo} del azar; contra la corregida, que desplaza solo desde el minuto
+5 (\hDosCorDer\,\%), queda \emph{por encima}: \dato{p = \hDosPCorDer}. En las victorias
+la coincidencia es mayor todavía: \hDosObsVic\,\% contra \hDosCorVic\,\%.
+
+\noindent\textbf{Con la definición registrada.} H2 se registró con D1, la mayor caída.
+Con D1, en las derrotas lo observado es \hDosUnoObsDer\,\%: contra la nula registrada
+(\hDosUnoRegDer\,\%) queda por debajo (\hDosUnoPRegDer), y contra la corregida
+(\hDosUnoCorDer\,\%) no se distingue del azar (\hDosUnoPCorDer). En las victorias, otra
+vez, la coincidencia es mayor (\hDosUnoObsVic\,\% contra \hDosUnoCorVic\,\%,
+\hDosUnoPCorVic).
+
+\noindent\textbf{Veredicto: no concluyente.} De las cuatro combinaciones (D1 o D2, nula
+registrada o corregida), solo una apoya H2, y es la que suma los dos cambios hechos
+después de ver los datos. Su \(p = \hDosPCorDer\) queda justo en el límite del umbral
+corregido por tres hipótesis (\(\alpha = 0{,}05/3 = \alfaBonf\)). Lo que sí es robusto es
+que la coincidencia es mayor al ganar: describe el ritmo de cualquier partida, no cómo
+se pierde.
+
+\figura{v4_h2_permutacion}{1}{V4 · Las dos nulas lado a lado, con la proporción
+observada (D2). La rama con D1 se reporta en el texto.}
+
+\subsection{E4 · H3: ¿hay un punto de no retorno?}
+Para cada minuto, de las partidas que van abajo con \(v \le -5\)\,\%, cuántas terminaron
+ganando, con el número en riesgo a la vista.
+
+\input{tablas/h3_curva.tex}
+
+\noindent\textbf{Dónde está el punto sin regreso.} H3 dice «existe un minuto a partir del
+cual mis derrotas ya casi nunca se revierten», pero el plan no fijó cuánto es «casi
+nunca». Se fija aquí, y se declara como desviación: \emph{menos del \hTresUmbral\,\%}
+(menos de una de cada veinte), sostenido en todos los minutos siguientes con al menos
+30 partidas en riesgo. Con esa regla, el punto es el \dato{minuto \hTresPunto}: remontó el
+\hTresPuntoP\,\% (\hTresPuntoRemontaron{} de \hTresPuntoRiesgo; IC 95\,\%:
+\hTresPuntoLo--\hTresPuntoHi). El criterio de refutación registrado para V5 («que la curva
+no baje, o que la banda sea tan ancha que no permita ubicar ningún minuto») no se cumple:
+la curva baja y la banda es estrecha.
+
+\noindent El minuto exacto depende del umbral: con 10\,\% sería el \hTresPuntoDiez, y con
+3\,\% el \hTresPuntoTres{} (ya con solo \hTresPuntoTresRiesgo{} partidas en riesgo). Que se
+mueva tanto es justo lo que dice la curva: antes del punto, la probabilidad de remontar
+baja de forma gradual, sin un salto. Es una curva entre partidas: describe la
+probabilidad de remontar en cada minuto, no la trayectoria de cada partida.
+
+\figura{v5_h3_remontada}{.95}{V5 · La probabilidad de remontar baja de forma gradual;
+desde el minuto \hTresPunto{} queda por debajo del \hTresUmbral\,\% (línea punteada).}
+
+\subsection{E5 · Arquetipos de derrota}
+\label{sec:arq}
+Reglas registradas, aplicadas en orden A4 → A2 → A1 → A3 (lo que no cumple ninguna
+queda sin clasificar):
+\begin{itemize}[leftmargin=1.4em,itemsep=.2em]
+  \item \textbf{A4 · Muy desigual:} \(v \le -10\)\,\% en algún minuto hasta el 15, y
+        \(v \le -5\)\,\% desde el 15.
+  \item \textbf{A2 · Ventaja desperdiciada:} \(\ge 3\) minutos seguidos de ventaja real,
+        con ventaja real en el minuto 15 o después.
+  \item \textbf{A1 · Derrota desde línea:} desventaja real en el minuto 15 y la
+        diferencia de oro nunca vuelve a ser positiva.
+  \item \textbf{A3 · Decidida en un objetivo:} \(|v| < 5\)\,\% hasta D2, y un monstruo
+        épico del rival a \(\pm1\) minuto de D2.
+\end{itemize}
+
+\input{tablas/arquetipos.tex}
+
+\figura{v6_arquetipos}{.95}{V6 · El residuo «sin clasificar» es la barra más alta: ese
+era el criterio de refutación registrado para esta figura, y se cumplió.}
+
+\figura{v2_arquetipos_curvas}{1}{V2 · Cada derrota por arquetipo. Las formas sí se
+separan; A3 casi no existe.}
+
+\subsection{E6 · Sensibilidad del umbral}
+Con el umbral de 5\,\% en 4\,\% cambian de arquetipo \eSeisCuatro{} derrotas
+(\eSeisCuatroPct\,\%); con 6\,\%, \eSeisSeis{} (\eSeisSeisPct\,\%).
+
+\input{tablas/sensibilidad.tex}
+
+\figura{v7_sensibilidad}{.85}{V7 · A3 es el arquetipo más inestable.}
+
+\subsection{E7 · Estabilidad en el tiempo}
+Partiendo la muestra en \eSieteCorte{} (\eSieteUno{} derrotas antes, \eSieteDos{}
+después), la mediana de D2 es el minuto \eSieteMedUno{} contra el \eSieteMedDos: no se
+mueve más de 2 minutos. El reparto de arquetipos es igual en ambas mitades
+(\(\chi^2\), p = \eSieteP).
+
+\subsection{E8 · Cuentas y rol}
+Las \nCuentas{} cuentas no se reparten distinto entre arquetipos (permutación,
+\dato{p = \eOchoP}; la aproximación \(\chi^2\) da \eOchoPAprox, pero tiene celdas con
+frecuencia esperada de \eOchoEspMin). Solo con BOTTOM (\botPartidas{} partidas,
+\botDerrotas{} derrotas) todo se repite: H1 por fase \botHUnoDerA/\botHUnoDerB/\botHUnoDerC{}
+contra \botHUnoVicA/\botHUnoVicB/\botHUnoVicC, H2 p = \botHDosP, H3 \botHTresTreinta\,\% en
+el minuto 30.
+
+\figura{v10_cuentas}{1}{V10 · Arquetipos por cuenta: ninguna se aparta del resto.}
+
+% ===========================================================================
+\section{Visualizaciones y recursos}
+\label{sec:vis}
+
+Cada visualización se planeó para soportar o refutar algo concreto, con su criterio de
+refutación escrito antes de ver los datos. Esta tabla dice qué pasó con cada una.
+
+\begin{longtable}{p{0.8cm}p{3.3cm}p{1.2cm}p{4.3cm}p{4.6cm}}
+\caption{Las visualizaciones planeadas y su resultado.}\\
+\toprule
+Id & Visualización & Sirve a & Qué la haría refutar (registrado) & Qué pasó \\
+\midrule
+\endfirsthead
+\toprule
+Id & Visualización & Sirve a & Qué la haría refutar (registrado) & Qué pasó \\
+\midrule
+\endhead
+V1 & Curva de oro de una partida, con objetivos & Problema & — (es el gancho). & Una derrota mía elegida por regla: la mediana de A2 (figura~\ref{fig:v1_partida_ejemplo}). \\
+\addlinespace
+V2 & \(v(t)\) de cada derrota, por arquetipo & E5 & Que los paneles se vean iguales. & Se separan; A3 casi no existe. \\
+\addlinespace
+V3 & Objetivos por minuto con ventaja, por fase & H1 & Intervalos que se traslapan por completo. & Se traslapan antes del minuto 15 y se separan después. \\
+\addlinespace
+V4 & Distribución nula de la permutación & H2 & Que la línea caiga dentro del cuerpo de la nula. & Depende de la nula y de la definición: no concluyente. \\
+\addlinespace
+V5 & Probabilidad de remontar por minuto & H3 & Que la curva no baje, o una banda demasiado ancha. & No se refuta: baja, y desde el minuto \hTresPunto{} queda bajo el \hTresUmbral\,\%. \\
+\addlinespace
+V6 & Frecuencia de arquetipos & E5 & Que «sin clasificar» sea la barra más alta. & Se cumplió: es la más alta. \\
+\addlinespace
+V7 & Umbral \(\times\) arquetipo & E6 & Que las partidas salten con un punto de umbral. & A3 es inestable; el resto cambia poco. \\
+\addlinespace
+V8 & Embudo de filtrado & Datos & — (transparencia). & De \nUnicas{} a \nFinal{} partidas. \\
+\addlinespace
+V9 & D1 contra D2 & E1 & Puntos lejos de la diagonal. & Se cumplió: D1 se descartó como definición principal. \\
+\addlinespace
+V10 & Arquetipos por cuenta & E8 & Que una cuenta se separe. & Ninguna se separa (\(p = \eOchoP\)). \\
+\bottomrule
+\end{longtable}
+
+\noindent\textbf{Color.} Un solo código en todo el proyecto: azul para mi equipo y
+naranja para el rival en el reporte (rojo en las presentaciones, sobre fondo oscuro), y
+dorado solo para anotaciones que llevan texto. La paleta se validó con un verificador de
+contraste y de separación para daltonismo antes de usarla; el signo de la ventaja
+también va en la forma (arriba o abajo de la línea), no solo en el color.
+
+\noindent\textbf{Presentaciones.} Hay dos, generadas desde los mismos resultados:
+\begin{itemize}[leftmargin=1.4em,itemsep=.25em]
+  \item \textbf{La presentación final} (\texttt{LoL\_PresentacionFinal}, 13 láminas,
+        unos 10 minutos) es la de la exposición oral. Sigue los puntos de la rúbrica,
+        con el método completo: filtrado, anonimización, las dos definiciones del
+        quiebre y las dos nulas.
+  \item \textbf{La presentación narrada} (\texttt{LoL\_PresentacionHistoria}, 17
+        láminas) cuenta lo mismo como una historia para quien nunca ha jugado: explica
+        el juego en una lámina, traduce cada gráfica a una idea cotidiana y anima cada
+        gráfica paso a paso. Es material complementario, con un video de 6 minutos.
+\end{itemize}
+Las dos son HTML que funcionan sin internet. Las gráficas de la narrada se dibujan en el
+navegador desde los datos incrustados, y las de la final son las mismas figuras del
+análisis con el tema del mazo. En ninguna hay cifras escritas a mano: un script
+(\texttt{construir.py}) las toma de los archivos de resultados, y falla si queda alguna
+sin valor. Otro script (\texttt{shoot.py}) toma una captura de cada lámina y revisa que
+nada se salga del escenario ni se encime, que cada gráfica se dibuje y que el escenario
+quepa en pantallas de proyector.
+
+\noindent\textbf{El video} de la narrada no es una grabación de pantalla: se genera
+cuadro por cuadro con un reloj virtual que coloca cada animación en su instante exacto
+antes de cada captura, de modo que ninguna se acelera ni se atrasa. El código de las
+presentaciones y del video está en el repositorio público.
+
+% ===========================================================================
+\section{Desviaciones del plan}
+
+Lo que cambió respecto a lo registrado antes de ver los datos, y por qué. Cuatro cambios
+(la definición de E1, la nula de E3, la comparación por fase de H1 y el umbral que
+ubica el punto sin regreso de H3) se decidieron \emph{después} de ver resultados. Por
+eso en todos se reportan las dos versiones, la registrada y la corregida, o la
+sensibilidad al umbral.
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.25em]
+  \item D2 sustituye a D1 como definición del quiebre (E1), y por consecuencia A3 usa
+        D2. H2 se reporta con las dos.
+  \item La nula de E3 se corrige: no puede poner objetivos donde no existen.
+  \item H3 no fijaba cuánto es «casi nunca». Se fija en menos del \hTresUmbral\,\%
+        sostenido, y se reportan también 3\,\% y 10\,\%.
+  \item H1 se compara por fase, porque la hipótesis pide «la misma ventaja».
+  \item E8 agrega un valor p por permutación, porque la aproximación \(\chi^2\) no es
+        confiable con frecuencias esperadas menores a 5.
+  \item Precisiones fijadas antes de cada experimento: sin placas de torre, cada larva
+        es un evento, se excluyen los monstruos que no tomó nadie, y un evento se juzga
+        con \(v\) del cuadro de su minuto.
+\end{enumerate}
+
+% ===========================================================================
+\section{Hipótesis finales}
+
+Con los criterios registrados en el plan (una hipótesis se mantiene si la muestra
+alcanza para contrastarla, aunque el resultado sea en contra; se reformula solo por una
+razón de dato), las tres se mantienen. Lo que cambia es lo que los datos dicen de cada
+una.
+
+\begin{longtable}{p{1.0cm}p{6.4cm}p{7.2cm}}
+\toprule
+ & Versión final & Qué cambió y por qué \\
+\midrule
+\endfirsthead
+\toprule
+ & Versión final & Qué cambió y por qué \\
+\midrule
+\endhead
+H1 & \emph{A partir del minuto 15}, con ventaja real, mi equipo toma menos objetivos por minuto en las derrotas que en las victorias. & \textbf{Se mantiene y se precisa.} Antes del 15 no se distingue del ruido (\hUnoDerA{} contra \hUnoVicA); desde el 15, sí (\hUnoDerB{} contra \hUnoVicB). \\
+\addlinespace
+H2 & El quiebre (D2: el último minuto en que mi equipo pasa a ir abajo en oro, definido en retrospectiva) coincide con un monstruo del rival más de lo que explicaría el azar. & \textbf{Se mantiene; no concluyente.} Con la definición registrada (D1) no se distingue del azar (\hDosUnoPCorDer); con D2 solo supera a la nula corregida (\(p = \hDosPCorDer\), en el límite de \(\alpha = \alfaBonf\)). En las victorias coincide más. \\
+\addlinespace
+H3 & Existe un minuto a partir del cual mis derrotas ya casi nunca se revierten. & \textbf{Se mantiene y se confirma.} Con «casi nunca» como menos del \hTresUmbral\,\% (umbral fijado después de ver los datos), es el minuto \hTresPunto{} (\hTresPuntoP\,\%, IC 95\,\%: \hTresPuntoLo--\hTresPuntoHi). Antes, la probabilidad de remontar baja de forma gradual; por eso el minuto depende del umbral (\hTresPuntoDiez{} con 10\,\%). \\
+\bottomrule
+\end{longtable}
+
+% ===========================================================================
+\section{Conclusiones}
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=.45em]
+  \item \textbf{Mis partidas casi nunca se pierden en el último momento: se van
+        perdiendo, y hacia el minuto \hTresPunto{} ya casi no tienen regreso.} Remontar
+        estando abajo pasa del \hTresCinco\,\% en el minuto 5 al \hTresQuince\,\% en el
+        15, y desde el \hTresPunto{} lo logra menos de una de cada veinte partidas. Es
+        una curva entre partidas: dice qué tan probable es remontar en cada minuto, no
+        cómo cae cada partida.
+  \item \textbf{Lo que distingue mis derrotas no es tener ventaja, sino qué hago con
+        ella a mitad de partida.} Con la misma ventaja, antes del minuto 15 la tasa de
+        objetivos al perder (\hUnoDerA) no se distingue de la de ganar (\hUnoVicA);
+        después, las derrotas toman \hUnoDerB{} objetivos por minuto contra \hUnoVicB. Es asociación: tomar
+        objetivos también produce oro.
+  \item \textbf{Un monstruo del rival no explica el quiebre.} Con la definición
+        registrada no hay coincidencia; con la principal es débil y depende de la nula; y
+        al ganar es mayor que al perder. Describe el ritmo de cualquier partida, no cómo
+        pierdo yo.
+  \item \textbf{Las cuatro formas de perder explican menos de la mitad.} El
+        \pctSinClas\,\% sin clasificar son, sobre todo, partidas parejas que se deciden
+        tarde (observación exploratoria, no hipótesis): en la mediana pasan el
+        \exTranquilo\,\% del tiempo con \(|v| < 5\)\,\% y su quiebre llega en el minuto
+        \exDdos.
+  \item \textbf{El método importó tanto como los datos.} Una definición registrada
+        falló (D1) y una nula registrada estaba mal planteada; sin verificar supuestos,
+        H2 se habría reportado al revés. Y aplicar las reglas de decisión registradas,
+        en vez de la impresión de la curva, cambió el veredicto de H3.
+\end{enumerate}
+
+\subsection*{Limitaciones}
+Una sola persona en \nParches{} parches; el resultado es de equipo; el dato es
+observacional; las partidas se juegan en rachas y no son independientes (el bootstrap
+por partida lo mitiga, no lo resuelve); y la fecha está generalizada a mes por
+privacidad, así que E7 parte por mes y no por día.
+
+% ===========================================================================
+\section{Reproducibilidad}
+
+\noindent\textbf{Repositorio público:}
+\url{https://github.com/hmoran457/lol-cuando-se-pierde-la-partida}, con el código, las
+tablas públicas, los resultados, este documento y las presentaciones.
+
+Todo el análisis (E1--E8 y las figuras) y este documento se reproducen desde las
+\textbf{tablas públicas} anonimizadas, sin el JSON crudo ni una llave de la API: las
+pocas cifras que salen de los datos locales (listas por cuenta, dúos, eventos de la
+muestra) van ya contadas en \texttt{resumen\_descarga.json}. Las versiones están fijadas
+en \texttt{requirements.txt} (Python 3.13.13, pandas 3.0.2, numpy 2.4.4, scipy 1.18.1,
+matplotlib 3.11.1; playwright solo para revisar las presentaciones). Para el PDF hace
+falta LuaLaTeX (TeX Live o MiKTeX) y la fuente DejaVu Sans Mono. Orden de ejecución,
+desde la carpeta del proyecto:
+
+\begin{Verbatim}[fontsize=\small, formatcom=\codigo, frame=lines]
+# 1-4 · solo con llave propia (da otra muestra: la de quien descarga)
+python LoL_Datos/scripts/descargar_partidas.py --plataforma la1   # una vez por cuenta
+python LoL_Datos/scripts/revisar_descarga.py
+python LoL_Anonimizacion/scripts/anonimizar.py --datos LoL_Datos/crudo
+python LoL_Datos/scripts/resumen_publico.py
+# 5 · desde las tablas públicas (unos 5 minutos en total)
+python LoL_Analisis/scripts/e1_quiebre.py
+python LoL_Analisis/scripts/e2_e4.py
+python LoL_Analisis/scripts/e5_e8.py
+python LoL_Analisis/scripts/v1_partida.py
+# 6 · este documento
+python LoL_Reporte/scripts/cifras.py
+latexmk -cd -lualatex LoL_Reporte/reporte_final.tex
+\end{Verbatim}
+
+\noindent \textbf{Pruebas automáticas} (\texttt{python -m pytest} en
+\texttt{LoL\_Datos/tests}, \texttt{LoL\_Anonimizacion/tests} y
+\texttt{LoL\_Analisis/tests}): el descargador contra una API simulada, el barrido de
+fugas con fugas plantadas, el clasificador de arquetipos contra casos conocidos de
+antemano, y las definiciones centrales (\(v(t)\), D1, D2, el embudo y el punto sin
+regreso) contra casos construidos a mano. Corren en una copia limpia del repositorio.
+\textbf{Verificación independiente} (hecha durante el proyecto; no es un script del
+repositorio): las cifras observadas de E1--E4 se recalcularon directamente desde el
+JSON crudo, sin pasar por la anonimización, y coincidieron exactamente. Además, una
+copia limpia del repositorio regeneró los resultados idénticos byte a byte.
+
+\noindent \textbf{Código de terceros:} no se copió código de internet; las bibliotecas
+usadas se citan abajo. El código y este documento se elaboraron con la asistencia de
+Claude (Anthropic).
+
+% ===========================================================================
+\section*{Referencias}
+\addcontentsline{toc}{section}{Referencias}
+\begin{itemize}[leftmargin=1.4em,itemsep=.3em,label={}]
+  \item Efron, B., y Tibshirani, R.~J. (1993). \emph{An Introduction to the
+        Bootstrap}. Chapman \& Hall.
+  \item Good, P. (2005). \emph{Permutation, Parametric and Bootstrap Tests of
+        Hypotheses} (3.ª ed.). Springer.
+  \item Harris, C.~R., et al. (2020). Array programming with NumPy. \emph{Nature},
+        585, 357--362.
+  \item Hunter, J.~D. (2007). Matplotlib: A 2D graphics environment. \emph{Computing
+        in Science \& Engineering}, 9(3), 90--95.
+  \item McKinney, W. (2010). Data structures for statistical computing in Python.
+        \emph{Proceedings of the 9th Python in Science Conference}, 56--61.
+  \item MingweiSamuel. \emph{riotapi-schema} (ejemplos de respuestas de
+        \texttt{match-v5}). \url{https://github.com/MingweiSamuel/riotapi-schema}
+  \item Riot Games. \emph{Riot Developer Portal: APIs} y \emph{Data Dragon}.
+        \url{https://developer.riotgames.com}
+  \item Rocher, L., Hendrickx, J.~M., y de Montjoye, Y.-A. (2019). Estimating the
+        success of re-identifications in incomplete datasets using generative models.
+        \emph{Nature Communications}, 10, 3069.
+  \item Sweeney, L. (2002). k-anonymity: A model for protecting privacy.
+        \emph{International Journal of Uncertainty, Fuzziness and Knowledge-Based
+        Systems}, 10(5), 557--570.
+  \item Virtanen, P., et al. (2020). SciPy 1.0: Fundamental algorithms for scientific
+        computing in Python. \emph{Nature Methods}, 17, 261--272.
+  \item Wilson, E.~B. (1927). Probable inference, the law of succession, and
+        statistical inference. \emph{Journal of the American Statistical
+        Association}, 22(158), 209--212.
+\end{itemize}
+
+\vspace{.5cm}
+\noindent{\small\color{suave} Este proyecto no está avalado por Riot Games y no refleja
+las opiniones de Riot Games ni de nadie involucrado oficialmente en la producción o
+administración de League of Legends. League of Legends y Riot Games son marcas
+registradas de Riot Games,~Inc.}
+
+% ===========================================================================
+\newpage
+\appendix
+\section{Código}
+Los scripts completos del análisis y de este documento, en el orden en que se ejecutan.
+Se reproducen sin cambios. El código de las presentaciones y del video (los
+\texttt{construir.py}, \texttt{shoot.py} y \texttt{video.py}) está en el repositorio
+público.
+
+\codigofuente{A.1 · Descarga: \texttt{descargar\_partidas.py}}{../LoL_Datos/scripts/descargar_partidas.py}
+\codigofuente{A.2 · Revisión y embudo: \texttt{revisar\_descarga.py}}{../LoL_Datos/scripts/revisar_descarga.py}
+\codigofuente{A.3 · Anonimización: \texttt{anonimizar.py}}{../LoL_Anonimizacion/scripts/anonimizar.py}
+\codigofuente{A.3b · Resumen publicable de lo local: \texttt{resumen\_publico.py}}{../LoL_Datos/scripts/resumen_publico.py}
+\codigofuente{A.4 · Medida \(v(t)\) y E1: \texttt{e1\_quiebre.py}}{../LoL_Analisis/scripts/e1_quiebre.py}
+\codigofuente{A.5 · E2--E4: \texttt{e2\_e4.py}}{../LoL_Analisis/scripts/e2_e4.py}
+\codigofuente{A.6 · E5--E8: \texttt{e5\_e8.py}}{../LoL_Analisis/scripts/e5_e8.py}
+\codigofuente{A.7 · V1: \texttt{v1\_partida.py}}{../LoL_Analisis/scripts/v1_partida.py}
+\codigofuente{A.8 · Cifras del reporte: \texttt{cifras.py}}{scripts/cifras.py}
+
+\end{document}

@@ -1,0 +1,59 @@
+{
+ "embudo": [
+  {
+   "paso": "Con registro y línea temporal",
+   "n": 1241
+  },
+  {
+   "paso": "Cola 420 confirmada en el registro",
+   "n": 1241
+  },
+  {
+   "paso": "Diez participantes",
+   "n": 1241
+  },
+  {
+   "paso": "Sin remake",
+   "n": 1204
+  },
+  {
+   "paso": "Duración de al menos 5 minutos",
+   "n": 1202
+  },
+  {
+   "paso": "Sin rendición antes del minuto 10",
+   "n": 1195
+  }
+ ],
+ "partidas": 1195,
+ "derrotas": 537,
+ "victorias": 658,
+ "v0_cero": true,
+ "e1": {
+  "derrotas_con_d2": 535,
+  "derrotas_sin_d2": 2,
+  "desacuerdo_mas_de_2_min": 360,
+  "pct_desacuerdo": 67.3,
+  "ic95_wilson": [
+   63.2,
+   71.1
+  ],
+  "mediana_abs_dif": 6.0,
+  "d1_antes_de_d2": 289,
+  "d1_despues_de_d2": 71
+ },
+ "d1": {
+  "mediana_derrotas": 5.0,
+  "mediana_victorias": 5.0,
+  "pct_d1_antes_min5_derrotas": 46.0,
+  "pct_d1_antes_min5_victorias": 40.9,
+  "pct_d1_ultimo_cuadro_derrotas": 0.4,
+  "caida_mediana_derrotas_pp": -5.39,
+  "caida_mediana_victorias_pp": -4.91
+ },
+ "d2": {
+  "mediana_derrotas": 13.0
+ },
+ "derrotas_nunca_detras": 2,
+ "derrotas_terminan_arriba": 11
+}

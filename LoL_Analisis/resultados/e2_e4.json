@@ -1,0 +1,276 @@
+{
+ "objetivos_neutrales_excluidos": 86,
+ "e2_h1": {
+  "derrotas": {
+   "partidas": 126,
+   "minutos_con_ventaja": 673,
+   "objetivos": 365,
+   "tasa": 0.5423476968796433,
+   "ic95": [
+    0.490711615931438,
+    0.594285940683722
+   ]
+  },
+  "victorias": {
+   "partidas": 564,
+   "minutos_con_ventaja": 6190,
+   "objetivos": 5414,
+   "tasa": 0.8746365105008077,
+   "ic95": [
+    0.8521424136713851,
+    0.8967406555245581
+   ]
+  },
+  "diferencia_vic_menos_der": {
+   "valor": 0.33228881362116436,
+   "ic95": [
+    0.27575780033189484,
+    0.38859409511053633
+   ]
+  },
+  "razon_der_entre_vic": 0.6200835322654216,
+  "por_fase": {
+   "<15": {
+    "derrotas": {
+     "partidas": 91,
+     "minutos": 314,
+     "tasa": 0.4745222929936306,
+     "ic95": [
+      0.396875,
+      0.5521482720869224
+     ]
+    },
+    "victorias": {
+     "partidas": 365,
+     "minutos": 1791,
+     "tasa": 0.5443886097152428,
+     "ic95": [
+      0.5094115915172048,
+      0.5796485016317977
+     ]
+    }
+   },
+   "15-25": {
+    "derrotas": {
+     "partidas": 72,
+     "minutos": 270,
+     "tasa": 0.6074074074074074,
+     "ic95": [
+      0.5364959587732213,
+      0.6733067729083665
+     ]
+    },
+    "victorias": {
+     "partidas": 434,
+     "minutos": 2703,
+     "tasa": 0.951165371809101,
+     "ic95": [
+      0.9175681757369338,
+      0.984809610243013
+     ]
+    }
+   },
+   ">=25": {
+    "derrotas": {
+     "partidas": 29,
+     "minutos": 89,
+     "tasa": 0.5842696629213483,
+     "ic95": [
+      0.4533333333333333,
+      0.7307692307692307
+     ]
+    },
+    "victorias": {
+     "partidas": 428,
+     "minutos": 1696,
+     "tasa": 1.1014150943396226,
+     "ic95": [
+      1.051132643961952,
+      1.1513482016039631
+     ]
+    }
+   }
+  }
+ },
+ "e3_h2": {
+  "derrotas": {
+   "partidas": 535,
+   "observado": 0.39626168224299063,
+   "quiebres_antes_min5": 163,
+   "nula_registrada": {
+    "media": 0.4565,
+    "ic95": [
+     0.41495327102803736,
+     0.497196261682243
+    ],
+    "p_mayor": 0.9973002699730027,
+    "p_menor": 0.0033996600339966003
+   },
+   "nula_corregida": {
+    "media": 0.35882411214953275,
+    "ic95": [
+     0.3252336448598131,
+     0.3925233644859813
+    ],
+    "p_mayor": 0.0165983401659834,
+    "p_menor": 0.9879012098790121
+   }
+  },
+  "victorias": {
+   "partidas": 564,
+   "observado": 0.28191489361702127,
+   "quiebres_antes_min5": 205,
+   "nula_registrada": {
+    "media": 0.23986968085106383,
+    "ic95": [
+     0.2074468085106383,
+     0.2730496453900709
+    ],
+    "p_mayor": 0.0091990800919908,
+    "p_menor": 0.9931006899310069
+   },
+   "nula_corregida": {
+    "media": 0.19044485815602838,
+    "ic95": [
+     0.16312056737588654,
+     0.2198581560283688
+    ],
+    "p_mayor": 9.999000099990002e-05,
+    "p_menor": 1.0
+   }
+  },
+  "primer_objetivo_mayor_min": 5.41575,
+  "con_d1": {
+   "derrotas": {
+    "partidas": 537,
+    "observado": 0.2644320297951583,
+    "quiebres_antes_min5": 247,
+    "nula_registrada": {
+     "media": 0.4589528864059591,
+     "ic95": [
+      0.4171322160148976,
+      0.5009310986964618
+     ],
+     "p_mayor": 1.0,
+     "p_menor": 9.999000099990002e-05
+    },
+    "nula_corregida": {
+     "media": 0.25011154562383614,
+     "ic95": [
+      0.22160148975791433,
+      0.27932960893854747
+     ],
+     "p_mayor": 0.17748225177482252,
+     "p_menor": 0.8515148485151485
+    }
+   },
+   "victorias": {
+    "partidas": 658,
+    "observado": 0.1884498480243161,
+    "quiebres_antes_min5": 269,
+    "nula_registrada": {
+     "media": 0.22947705167173255,
+     "ic95": [
+      0.19908814589665655,
+      0.2613981762917933
+     ],
+     "p_mayor": 0.9968003199680032,
+     "p_menor": 0.0044995500449955
+    },
+    "nula_corregida": {
+     "media": 0.13120197568389058,
+     "ic95": [
+      0.1094224924012158,
+      0.15501519756838905
+     ],
+     "p_mayor": 9.999000099990002e-05,
+     "p_menor": 1.0
+    }
+   }
+  },
+  "alfa_bonferroni": 0.0167
+ },
+ "e4_h3": {
+  "min_5": {
+   "en_riesgo": 241.0,
+   "remontaron": 89.0,
+   "p": 0.3693,
+   "lo": 0.3109,
+   "hi": 0.4318
+  },
+  "min_10": {
+   "en_riesgo": 216.0,
+   "remontaron": 51.0,
+   "p": 0.2361,
+   "lo": 0.1844,
+   "hi": 0.2971
+  },
+  "min_15": {
+   "en_riesgo": 245.0,
+   "remontaron": 50.0,
+   "p": 0.2041,
+   "lo": 0.1584,
+   "hi": 0.2589
+  },
+  "min_20": {
+   "en_riesgo": 216.0,
+   "remontaron": 26.0,
+   "p": 0.1204,
+   "lo": 0.0835,
+   "hi": 0.1705
+  },
+  "min_25": {
+   "en_riesgo": 209.0,
+   "remontaron": 17.0,
+   "p": 0.0813,
+   "lo": 0.0514,
+   "hi": 0.1264
+  },
+  "min_30": {
+   "en_riesgo": 154.0,
+   "remontaron": 6.0,
+   "p": 0.039,
+   "lo": 0.018,
+   "hi": 0.0824
+  },
+  "min_35": {
+   "en_riesgo": 51.0,
+   "remontaron": 1.0,
+   "p": 0.0196,
+   "lo": 0.0035,
+   "hi": 0.103
+  }
+ },
+ "e4_punto_sin_regreso": {
+  "regla": "primer minuto desde el cual la remontada es menor al umbral en todos los minutos siguientes con al menos 30 partidas en riesgo",
+  "umbral_principal": 0.05,
+  "por_umbral": {
+   "0.05": {
+    "minuto": 27,
+    "en_riesgo": 198,
+    "remontaron": 8,
+    "p": 0.0404,
+    "lo": 0.0206,
+    "hi": 0.0777
+   },
+   "0.03": {
+    "minuto": 35,
+    "en_riesgo": 51,
+    "remontaron": 1,
+    "p": 0.0196,
+    "lo": 0.0035,
+    "hi": 0.103
+   },
+   "0.10": {
+    "minuto": 22,
+    "en_riesgo": 205,
+    "remontaron": 19,
+    "p": 0.0927,
+    "lo": 0.0601,
+    "hi": 0.1402
+   }
+  }
+ },
+ "semilla": 20261010,
+ "replicas": 10000
+}

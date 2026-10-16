@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿En qué minuto se perdió la partida? — proyecto final</title>
+<link rel="stylesheet" href="assets/deck.css">
+<link rel="stylesheet" href="assets/final.css">
+</head>
+<!-- GENERADO por scripts/construir.py desde plantilla.html. No editar el HTML de salida:
+     las cifras ({{...}}) y las figuras (svg:...) salen de los archivos de resultados. -->
+<body class="animado">
+
+<div id="viewport">
+  <div id="stage">
+
+    <div id="rail"></div>
+    <div id="progress"></div>
+
+    <!-- ══════════════════════════════════════════════════════ portada -->
+    <section class="slide bare active" id="f-cover">
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:40px">
+        <div class="kicker">Proyecto final · Visualización de datos y narración de historias</div>
+        <h1 style="font-size:96px; font-weight:900; line-height:.98; letter-spacing:-.035em;
+                   font-variation-settings:'wdth' 115; color:var(--parchment); max-width:19ch; margin:0">
+          ¿En qué minuto<br>se perdió la partida?
+        </h1>
+        <p class="lead" style="color:var(--muted); max-width:56ch; font-size:26px">
+          Anatomía de {{nFinal}} partidas clasificatorias de mis {{nCuentas}} cuentas de
+          League&nbsp;of&nbsp;Legends, reconstruidas minuto a minuto.
+        </p>
+      </div>
+      <div class="footer">
+        <div>Héctor Manuel Morán Maldonado · Especialidad en Ciencia de Datos</div>
+        <div>Fuente: Riot Games API (match-v5)</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 1 · PROBLEMA · gancho -->
+    <section class="slide bare" id="f-defeat" data-sec="1">
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column;
+                  align-items:center; justify-content:center">
+        <div class="defeat-word">DERROTA</div>
+        <div class="defeat-sub">{{v1Dur}} · partida clasificatoria · Esto es todo lo que el juego te dice al terminar.</div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-partida" data-sec="1">
+      <div class="kicker">1 · Problema</div>
+      <h2>Arriba en oro {{v1Arriba}} minutos, y aun así perdida
+        <span class="sub">Una derrota mía, elegida por regla y no por llamativa: la mediana
+          de su arquetipo. El marcador final no cuenta esto.</span></h2>
+      <div class="body">
+        <div class="chart-wrap" data-chart></div>
+        <div class="fichas">
+          <div class="ficha"><div class="v azul" data-count="{{v1MaxOroN}}" data-prefix="+">+{{v1MaxOro}}</div>
+            <div class="k">de oro de ventaja, en el minuto {{v1MinMax}}</div></div>
+          <div class="ficha"><div class="v">+{{v1VMax}} % → +{{v1VAntes}} %</div>
+            <div class="k">la ventaja se encoge del minuto {{v1MinMax}} al {{v1MinAntes}}; luego el rival toma {{v1RemateRival}} objetivos en 2 minutos</div></div>
+          <div class="ficha"><div class="v rojo">{{v1VecesAbajo}} veces</div>
+            <div class="k">fuimos abajo en oro: {{v1Abajo}}</div></div>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="illus real">Dato real · a nivel equipo y anonimizado: sin nombres ni campeones de otros jugadores</span>
+        <div>La pregunta: ¿mis derrotas se pierden en un minuto, o se van perdiendo?</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 2 · HIPÓTESIS -->
+    <section class="slide" id="f-hip" data-sec="2">
+      <div class="kicker">2 · Hipótesis</div>
+      <h2>Tres hipótesis: cómo empezaron y cómo terminaron
+        <span class="sub">Escritas antes de descargar mis partidas, con su trampa al lado. Cada
+          cambio tiene una razón de dato, y nada se agregó al ver los resultados.</span></h2>
+      <div class="body" style="justify-content:center">
+        <div class="hipo">
+          <div class="enc"></div><div class="enc">Primera entrega</div><div class="enc">Versión final</div><div class="enc">Resultado</div>
+          <div class="id">H1</div>
+          <div class="ini">Con la misma ventaja temprana, al perder mi equipo toma menos objetivos por minuto.</div>
+          <div class="fin"><b>A partir del minuto 15</b>, con ventaja real, al perder se toman menos objetivos por minuto.</div>
+          <div><span class="veredicto si">Se sostiene y se precisa</span></div>
+          <div class="id">H2</div>
+          <div class="ini">El minuto en que más cae la ventaja coincide con un objetivo del rival más que por azar.</div>
+          <div class="fin">El último minuto en que mi equipo <b>pasa a ir abajo</b> coincide con un monstruo del rival más que por azar.</div>
+          <div><span class="veredicto debil">No concluyente</span></div>
+          <div class="id">H3</div>
+          <div class="ini">Existe un minuto a partir del cual mis derrotas ya casi nunca se revierten.</div>
+          <div class="fin">Igual. <b>Desde el minuto {{hTresPunto}}</b> remonta menos de 1 de cada 20; antes, la probabilidad baja poco a poco.</div>
+          <div><span class="veredicto si">Se confirma</span></div>
+        </div>
+      </div>
+      <div class="footer">
+        <div>Tres y no seis a propósito: tres pruebas al 5 % dan 14 % de falso positivo; seis daban 26 %</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 3 · DATOS Y MÉTODO -->
+    <section class="slide" id="f-datos" data-sec="3">
+      <div class="kicker">3 · Bases de datos y filtrado</div>
+      <h2>{{nUnicas}} partidas de seis cuentas; {{nFinal}} después del filtro
+        <span class="sub">Una sola cuenta daba {{c1Derrotas}} derrotas, por debajo del mínimo que fijé.
+          Con las seis cuentas que juego, todas en LAN, hay {{nDerrotas}}.</span></h2>
+      <div class="body">
+        <div class="row grow">
+          <div class="col narrow" style="gap:18px">
+            <div class="srclist">
+              <div class="srcitem"><div class="n">Riot API · match-v5<small>registro + línea temporal: un cuadro por minuto y cada evento con su marca de tiempo</small></div><div class="v">915 MB</div></div>
+              <div class="srcitem"><div class="n">Cola 420<small>clasificatoria individual, pedida explícitamente</small></div><div class="v">{{nUnicas}}</div></div>
+              <div class="srcitem"><div class="n">Retención medida<small>líneas temporales desde {{mesInicio}}; ningún 404</small></div><div class="v">2 años</div></div>
+              <div class="srcitem"><div class="n">Parches<small>de {{mesInicio}} a {{mesFin}}</small></div><div class="v">{{nParches}}</div></div>
+            </div>
+            <div class="fichas">
+              <div class="ficha"><div class="v azul">{{nVictorias}}</div><div class="k">victorias: grupo de control, no se filtran</div></div>
+              <div class="ficha"><div class="v rojo">{{nDerrotas}}</div><div class="k">derrotas</div></div>
+            </div>
+          </div>
+          <div class="col wide">
+            <h3 style="margin:0">Embudo de filtrado</h3>
+            <div class="fig"><!--svg:embudo--></div>
+            <p class="nota-metodo">Rendición antes del minuto 10 = alguien abandonó: <strong>se excluye y se reporta</strong>.
+              Regla agregada al revisar la descarga, antes de calcular cualquier resultado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-prepro" data-sec="3">
+      <div class="kicker">3 · Preprocesamiento</div>
+      <h2>La diferencia de oro no existe en la API: se construye
+        <span class="sub">v(t) = (oro de mi equipo − oro del rival) ÷ oro de los diez, minuto a
+          minuto. Relativa a propósito: la misma ventaja pesa más al inicio que al final.</span></h2>
+      <div class="body" style="gap:22px">
+        <div class="pasos4">
+          <div class="panel"><h3>Anonimizar primero</h3><p>Nombres fuera, identificadores con HMAC.
+            Barrido de <span class="v">{{nPuuid}}</span> identificadores: <span class="v">{{nFugas}} fugas</span>.</p></div>
+          <div class="panel"><h3>Cuál de los diez soy yo</h3><p>Se decide antes de seudonimizar. En
+            <span class="v">{{nDuo}}</span> partidas jugué en dúo con otra de mis cuentas: yo soy la de BOTTOM.</p></div>
+          <div class="panel"><h3>Minutos por posición</h3><p>Nunca <code>timestamp // 60000</code>,
+            que junta dos minutos en una casilla.</p></div>
+          <div class="panel"><h3>Torres por quien las tira</h3><p><code>teamId</code> nombra al que
+            <em>pierde</em> la torre. Bien atribuidas, cuadran en <span class="v">{{nFinal}} de {{nFinal}}</span>.</p></div>
+        </div>
+        <div class="fig alto"><!--svg:v_mediana--></div>
+      </div>
+      <div class="footer">
+        <div>En la mediana, mis derrotas no van ganando y luego se caen: van abajo desde el principio</div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-e1" data-sec="3">
+      <div class="kicker">3 · Modelos y experimentos</div>
+      <h2>La primera definición del «minuto del quiebre» falló
+        <span class="sub">D1, la mayor caída de v, llega en el minuto {{dUnoMed}} igual al ganar que al
+          perder: mide el ruido del inicio. D2, el último minuto en que paso a ir abajo, ya estaba
+          registrada como control y pasa a ser la principal.</span></h2>
+      <div class="body" style="gap:20px">
+        <div class="fig alto"><!--svg:d1_hist--></div>
+        <div class="fichas">
+          <div class="ficha"><div class="v oro">{{eUnoPct}} %</div><div class="k">de las derrotas en que D1 y D2 difieren más de 2 minutos <span class="ic">(IC 95 %: {{eUnoLo}}–{{eUnoHi}})</span></div></div>
+          <div class="ficha"><div class="v">minuto {{dDosMed}}</div><div class="k">mediana del quiebre con D2</div></div>
+          <div class="ficha"><div class="v" style="font-size:24px; line-height:1.3">Wilson · bootstrap · permutación</div><div class="k">10,000 réplicas; remuestreo por partida, no por minuto</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 4 · RESULTADOS -->
+    <section class="slide" id="f-h1" data-sec="4">
+      <div class="kicker">4 · Resultados · H1</div>
+      <h2>Con la misma ventaja, al perder tomamos menos objetivos, pero solo después del minuto 15
+        <span class="sub">Objetivos propios por minuto mientras hay ventaja real (v ≥ 5 % y 1,500 de
+          oro). Se compara por fase, porque al ganar la ventaja es mayor y más tardía.</span></h2>
+      <div class="body" style="gap:24px; justify-content:center">
+        <div class="fig"><!--svg:h1_fases--></div>
+        <div class="fichas">
+          <div class="ficha"><div class="v">{{hUnoDerA}} <span style="color:var(--muted)">vs</span> {{hUnoVicA}}</div><div class="k">antes del minuto 15: no se distinguen</div></div>
+          <div class="ficha"><div class="v rojo">{{hUnoDerB}} <span style="color:var(--muted)">vs</span> {{hUnoVicB}}</div><div class="k">del minuto 15 al 25</div></div>
+          <div class="ficha"><div class="v rojo">{{hUnoDerC}} <span style="color:var(--muted)">vs</span> {{hUnoVicC}}</div><div class="k">minuto 25 o después</div></div>
+        </div>
+      </div>
+      <div class="footer">
+        <div>Asociación, no causa: tomar objetivos también produce oro</div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-h2" data-sec="4">
+      <div class="kicker">4 · Resultados · H2</div>
+      <h2>¿Un monstruo del rival marca el quiebre? No concluyente
+        <span class="sub">El {{hDosObs}} % de los quiebres (D2) cae a ±1 minuto de un monstruo épico del rival.
+          Si eso es «más que el azar» depende de la nula y de la definición del quiebre.</span></h2>
+      <div class="body" style="gap:22px; justify-content:center">
+        <div class="fig"><!--svg:h2_nulas--></div>
+        <p class="nota-metodo" style="font-size:18px"><strong>La nula registrada estaba mal planteada:</strong> ponía
+          objetivos antes del minuto 5, cuando no existen. Con la corregida, D2 apenas la supera
+          (p = {{hDosP}}, en el límite de α = 0,05/3); con la definición registrada (D1), no se distingue del azar
+          ({{hDosUnoObs}} % contra {{hDosUnoCor}} %, p = {{hDosUnoP}}). Y al ganar coincide más
+          ({{hDosObsVic}} % contra {{hDosCorVic}} %): describe el ritmo de cualquier partida.</p>
+      </div>
+      <div class="footer">
+        <div>Se reportan las cuatro combinaciones: D1 o D2, con la nula registrada o la corregida</div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-h3" data-sec="4">
+      <div class="kicker">4 · Resultados · H3</div>
+      <h2>Desde el minuto {{hTresPunto}} casi nadie remonta, y se llega ahí poco a poco
+        <span class="sub">De las partidas que van abajo (v ≤ −5 %), cuántas terminaron ganando,
+          según el minuto. Abajo, cuántas había en riesgo en cada minuto.</span></h2>
+      <div class="body" style="justify-content:center">
+        <div class="fig"><!--svg:h3_curva--></div>
+      </div>
+      <div class="footer">
+        <div>«Casi nunca» = menos del {{hTresUmbral}} % sostenido, fijado después de ver los datos: con 10 % sería el minuto {{hTresPuntoDiez}}</div>
+      </div>
+    </section>
+
+    <section class="slide" id="f-arq" data-sec="4">
+      <div class="kicker">4 · Resultados · arquetipos</div>
+      <h2>Cuatro formas de perder explican el {{pctClas}} %
+        <span class="sub">Reglas escritas antes de ver los datos y no ajustadas después. El resto
+          son, sobre todo, partidas parejas que se deciden tarde: un resultado, no un error.</span></h2>
+      <div class="body" style="gap:22px">
+        <div class="fig"><!--svg:curvas_arquetipo--></div>
+        <div class="fichas">
+          <div class="ficha"><div class="v azul">{{pctAUno}} %</div><div class="k">A1 · derrota desde línea</div></div>
+          <div class="ficha"><div class="v azul">{{pctACuatro}} %</div><div class="k">A4 · muy desigual</div></div>
+          <div class="ficha"><div class="v azul">{{pctADos}} %</div><div class="k">A2 · ventaja desperdiciada</div></div>
+          <div class="ficha"><div class="v azul">{{pctATres}} %</div><div class="k">A3 · decidida en un objetivo (inestable)</div></div>
+          <div class="ficha"><div class="v" style="color:var(--muted)">{{pctSinClas}} %</div><div class="k">sin clasificar: el {{exTranquilo}} % del tiempo con |v| &lt; 5 %</div></div>
+        </div>
+      </div>
+      <div class="footer">
+        <div>Robusto: igual por cuenta (p = {{eOchoP}}), igual solo en BOTTOM, igual en las dos mitades del tiempo</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════ 5 · CONCLUSIONES -->
+    <section class="slide" id="f-concl" data-sec="5">
+      <div class="kicker">5 · Conclusiones</div>
+      <h2>Mis partidas casi nunca se pierden en el último momento: se van perdiendo</h2>
+      <div class="body" style="justify-content:center; gap:30px">
+        <div class="concl">
+          <div><span><b>Hacia el minuto {{hTresPunto}} ya casi no hay regreso.</b> Remontar estando abajo pasa del
+            {{hTresCinco}} % en el minuto 5 al {{hTresQuince}} % en el 15, y desde el {{hTresPunto}} lo logra menos de 1 de cada 20.</span></div>
+          <div><span><b>Lo que separa mis derrotas es qué hago con la ventaja a mitad de partida.</b>
+            Antes del minuto 15 la diferencia no se distingue del ruido; después, {{hUnoDerB}} objetivos por minuto contra {{hUnoVicB}}.</span></div>
+          <div><span><b>Un monstruo del rival no explica el quiebre:</b> la coincidencia es débil, depende de cómo se mida y es mayor al ganar.</span></div>
+          <div><span><b>Las reglas explican menos de la mitad.</b> El resto son partidas parejas que se deciden tarde.</span></div>
+        </div>
+        <div class="panel" style="border-left:3px solid var(--red); padding:14px var(--s3)">
+          <p style="max-width:none; margin:0; font-size:17px"><strong>Lo que no se puede afirmar:</strong>
+            causas (el dato es observacional), mi aporte individual (el resultado es de equipo) ni que esto
+            valga para otros jugadores o roles.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════ cierre -->
+    <section class="slide bare" id="f-gracias">
+      <div style="margin:auto 0; display:flex; flex-direction:column; gap:34px">
+        <h1 style="font-size:132px; font-weight:900; line-height:.95; letter-spacing:-.04em;
+                   font-variation-settings:'wdth' 118; color:var(--parchment); margin:0">Gracias</h1>
+        <p class="closer" style="margin-top:0">
+          La partida del inicio se perdió en el minuto {{v1D2}}.<br>
+          Las mías, en general, no se pierden en <em class="hinge">un</em> minuto.
+        </p>
+        <p class="lead" style="color:var(--muted); max-width:48ch; font-size:22px; margin:0">Quedo atento a sus preguntas.</p>
+      </div>
+      <div class="footer">
+        <div style="max-width:70ch">Este proyecto no está avalado por Riot Games y no refleja las opiniones de Riot
+          Games ni de nadie involucrado oficialmente en la producción o administración de League of Legends.</div>
+        <div>Elaborada con la asistencia de Claude (Anthropic)</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div id="blank"></div>
+<div id="help">
+  <span><kbd>←</kbd><kbd>→</kbd> navegar</span>
+  <span><kbd>F</kbd> pantalla completa</span>
+  <span><kbd>B</kbd> negro</span>
+  <span><kbd>R</kbd> repetir</span>
+  <span><kbd>1</kbd>–<kbd>5</kbd> sección</span>
+</div>
+
+<script>
+<!--datos-->
+</script>
+<script src="assets/deck_final.js"></script>
+</body>
+</html>
