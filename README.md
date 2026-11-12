@@ -22,10 +22,53 @@ se mida y pasa más cuando gano.
 | Video de la presentación narrada | [`LoL_PresentacionHistoria/video/historia.mp4`](LoL_PresentacionHistoria/video/historia.mp4) |
 | Planteamiento del proyecto (el plan, registrado antes de ver los datos) | [`LoL_Planteamiento/planteamiento_proyecto_final.pdf`](LoL_Planteamiento/planteamiento_proyecto_final.pdf) |
 | Actividad de anonimización (sobre el piloto de 7 partidas públicas) | [`LoL_Anonimizacion/reporte_anonimizacion.pdf`](LoL_Anonimizacion/reporte_anonimizacion.pdf) |
+| Actividad de reducción de dimensionalidad (PCA, LDA, t-SNE, UMAP) | [`LoL_Dimensionalidad/reduccion_dimensionalidad.pdf`](LoL_Dimensionalidad/reduccion_dimensionalidad.pdf) (y su `.ipynb`) |
+| Análisis exploratorio posterior al proyecto | [`LoL_Exploratorio/analisis_exploratorio.pdf`](LoL_Exploratorio/analisis_exploratorio.pdf) (y su `.ipynb`) |
 
 Las presentaciones son HTML que funcionan sin internet. Para verlas, descarga el repositorio
 completo, porque cada una necesita su carpeta `assets/`. La política de privacidad aplicada al
 corpus real (y su riesgo residual) está en el reporte final, sección «Preprocesamiento».
+
+## Los dos notebooks
+
+Cada uno se entrega como `.ipynb` ya ejecutado (con todas sus salidas) y como PDF. Ninguno
+cambia las conclusiones del proyecto.
+
+### Reducción de dimensionalidad
+
+[`LoL_Dimensionalidad/`](LoL_Dimensionalidad/) es una actividad del curso: cada partida que
+llegó al minuto 20 (1,132) es un punto en 20 dimensiones, la ventaja de oro minuto a minuto. Se
+proyecta a 2D con PCA, LDA, t-SNE y UMAP, cada uno con su barrido de parámetros, y los mapas se
+comparan con confiabilidad y silueta.
+
+- **No hay grupos separados:** las victorias y las derrotas forman un continuo ordenado por la
+  ventaja de oro en los cuatro métodos.
+- **Con PCA basta:** dos componentes guardan el 83 % de la varianza, y la primera es la ventaja
+  promedio.
+- **El minuto 20 dice tanto como los 20 minutos:** decir «victoria» si se va arriba al minuto 20
+  acierta tanto como LDA con la curva completa (77 % contra 76 %).
+- **Las derrotas de «ventaja tirada» (A2) caen entre las victorias:** se perdieron después de la
+  ventana que ven los mapas.
+
+Usa solo las tablas públicas, así que se puede volver a ejecutar desde el repositorio.
+
+### Análisis exploratorio
+
+[`LoL_Exploratorio/`](LoL_Exploratorio/) hace cuatro preguntas que surgieron al cerrar el
+proyecto. **No estaban registradas antes de ver los datos**, así que sus resultados son pistas
+para una siguiente ronda, no confirmaciones.
+
+1. **¿Perdí yo?** Casi nunca en mi línea: en mis derrotas jugando BOTTOM, mi duelo aporta el 13 %
+   del déficit del equipo al minuto 15 y MIDDLE el 31 %.
+2. **¿Qué pasa en el quiebre?** Peleas perdidas, no objetivos: sobran las muertes de mi equipo,
+   los dragones y las torres aparecen lo normal, y solo el barón del rival destaca.
+3. **¿Importa el camino?** No: con la ventaja del minuto actual basta. Incluye una tabla de
+   probabilidad de ganar por minuto y ventaja («de cada 20 partidas…»).
+4. **¿Dónde muero?** En las derrotas muero más y, después del minuto 15, en mi propia mitad,
+   defendiendo.
+
+Este notebook lee las tablas por participante, que no se publican (ver «Privacidad»), así que
+**no se puede volver a ejecutar desde el repositorio**.
 
 ## Estructura
 
@@ -36,6 +79,8 @@ LoL_Datos/                 descarga desde la API de Riot (match-v5) y revisión 
 LoL_Anonimizacion/         actividad de anonimización (piloto): política, barrido de fugas, riesgo
 LoL_EDA/                   análisis exploratorio (piloto)
 LoL_Analisis/              experimentos E1–E8 y V1: scripts, resultados, figuras y pruebas
+LoL_Dimensionalidad/       notebook de reducción de dimensionalidad (actividad del curso)
+LoL_Exploratorio/          notebook de análisis exploratorio posterior al proyecto
 LoL_Reporte/               reporte final (LaTeX)
 LoL_Planteamiento/         planteamiento del proyecto (LaTeX)
 LoL_PresentacionFinal/     presentación final, la de la exposición
@@ -86,13 +131,24 @@ python LoL_PresentacionHistoria/scripts/teclado.py
 El video se graba con `LoL_PresentacionHistoria/scripts/video.py` (ver su
 [LEEME](LoL_PresentacionHistoria/LEEME.md); necesita un ffmpeg con H.264).
 
+**Los notebooks** (también necesitan playwright con Chromium, para el PDF). Cada script arma el
+`.ipynb`, lo ejecuta completo y lo exporta a PDF:
+
+```
+python LoL_Dimensionalidad/scripts/construir_notebook.py
+python LoL_Exploratorio/scripts/construir_notebook.py      # ~1.5 min; solo con los datos locales
+```
+
+El texto de las celdas vive en `scripts/celdas.py` de cada carpeta: se edita ahí, no en el
+`.ipynb`, que se sobrescribe.
+
 Ninguna cifra de los reportes ni de las presentaciones está escrita a mano: `cifras.py` y los
 `construir.py` las toman de `LoL_Analisis/resultados/` y de
 `LoL_Datos/anonimizado/resumen_descarga.json`. Este último guarda, ya contados, los pocos
 datos que solo existen en local (partidas por cuenta, dúos entre cuentas propias, eventos de
 la muestra y los campeones del autor). Lo que **no** corre sin los datos originales es la
-descarga, la anonimización, `resumen_publico.py` y el EDA piloto; sus salidas sí están
-incluidas.
+descarga, la anonimización, `resumen_publico.py`, el EDA piloto y el notebook exploratorio;
+sus salidas sí están incluidas.
 
 ## Privacidad
 
@@ -106,7 +162,13 @@ publicar sus datos. Por eso este repositorio **no contiene**:
 
 Solo se publican tablas **por equipo**, con la partida bajo un seudónimo, la fecha
 generalizada a mes y la cuenta propia como `C1`–`C6`. De los eventos solo van torres y
-monstruos épicos, sin posición en el mapa. Las partidas siguen siendo enlazables con el
+monstruos épicos, sin posición en el mapa.
+
+El notebook exploratorio sí usa las tablas por participante, pero solo en local. Publica
+únicamente **agregados**: tasas, curvas, tablas por rol y un mapa de densidad de las muertes del
+propio autor en celdas. Ninguna salida trae filas por partida. Su `construir_notebook.py` se
+detiene sin guardar si alguna salida contiene el seudónimo de una partida o de un jugador, o el
+campeón de otro jugador. Las partidas siguen siendo enlazables con el
 historial público del autor (mes, cuenta y duración casi siempre señalan una sola), pero eso no
 expone a los otros jugadores más allá de lo que ese historial ya muestra. Volver a descargar los
 datos requiere una llave propia de Riot (`LoL_Datos/scripts/descargar_partidas.py`). Los

@@ -8,3 +8,11 @@ pytest==9.0.3
 # Solo para revisar las presentaciones (shoot.py, teclado.py) y grabar el video (video.py).
 # Después de instalarlo: python -m playwright install chromium
 playwright==1.58.0
+# Solo para los notebooks (LoL_Dimensionalidad/, LoL_Exploratorio/): modelos, y ejecutarlos y
+# exportarlos desde construir_notebook.py (el PDF también usa playwright).
+scikit-learn==1.9.1
+umap-learn==0.5.12
+nbformat==5.11.1
+nbclient==0.11.0
+nbconvert==7.17.2
+ipykernel==7.4.0
