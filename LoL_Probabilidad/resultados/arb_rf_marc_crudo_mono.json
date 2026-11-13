@@ -1,0 +1,38 @@
+{
+ "nombre": "arb_rf_marc_crudo_mono",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "RandomForest monótono, 300 árboles, msl 300, max_features .5, max_samples .3",
+ "segundos": 4.2,
+ "perdida_log": 0.6131493260105372,
+ "brier": 0.2127302540539504,
+ "auc": 0.7358190070006215,
+ "ece": 0.07955684978861836,
+ "perdida_log_ee": 0.002805288446404948,
+ "por_tramo": {
+  "1-5": 0.6871651305459546,
+  "6-10": 0.6760114780893383,
+  "11-15": 0.6461986722308087,
+  "16-20": 0.5809333310900796,
+  "21-25": 0.5210223108570551,
+  "26-30": 0.5281273661586373,
+  "31-+": 0.6109383281556601
+ }
+}

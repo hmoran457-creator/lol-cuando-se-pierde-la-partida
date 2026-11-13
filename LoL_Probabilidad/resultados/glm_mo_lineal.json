@@ -1,0 +1,40 @@
+{
+ "nombre": "glm_mo_lineal",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "sin nudos: minuto, v, v x minuto, oro_dif y las 8 diferencias fijas; C = 0.1",
+ "segundos": 0.1,
+ "perdida_log": 0.5310424547680428,
+ "brier": 0.18019269102653535,
+ "auc": 0.8011158262997444,
+ "ece": 0.011109312655744063,
+ "perdida_log_ee": 0.009574690518922313,
+ "por_tramo": {
+  "1-5": 0.6780988310312882,
+  "6-10": 0.6157017186524517,
+  "11-15": 0.5526106510666382,
+  "16-20": 0.492883357092452,
+  "21-25": 0.41725558016911146,
+  "26-30": 0.4012510564485977,
+  "31-+": 0.4705283103899227
+ }
+}

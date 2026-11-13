@@ -1,0 +1,38 @@
+{
+ "nombre": "otr_m_peso",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "base_marcador_dif con peso 1/(filas de la partida)",
+ "segundos": 0.1,
+ "perdida_log": 0.5549211428652727,
+ "brier": 0.18900149967314953,
+ "auc": 0.7806536211274615,
+ "ece": 0.019661051845112396,
+ "perdida_log_ee": 0.012402464793154145,
+ "por_tramo": {
+  "1-5": 0.6809386352377339,
+  "6-10": 0.6369734067197014,
+  "11-15": 0.5773529108200787,
+  "16-20": 0.5136452725444217,
+  "21-25": 0.4378060095958754,
+  "26-30": 0.42598823895674554,
+  "31-+": 0.5513386230495069
+ }
+}

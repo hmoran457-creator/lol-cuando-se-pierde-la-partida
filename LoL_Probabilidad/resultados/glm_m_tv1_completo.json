@@ -1,0 +1,38 @@
+{
+ "nombre": "glm_m_tv1_completo",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "diferencias x B(t) grado 1, solo interacciones",
+ "segundos": 0.8,
+ "perdida_log": 0.5498404145364143,
+ "brier": 0.18747074109477962,
+ "auc": 0.7832264991064112,
+ "ece": 0.009807959520361904,
+ "perdida_log_ee": 0.010711689081214507,
+ "por_tramo": {
+  "1-5": 0.68038209849036,
+  "6-10": 0.6353285307201116,
+  "11-15": 0.5773014508702338,
+  "16-20": 0.5117765478734922,
+  "21-25": 0.4307674502092435,
+  "26-30": 0.41158444714305925,
+  "31-+": 0.5298730764825818
+ }
+}

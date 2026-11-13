@@ -1,0 +1,38 @@
+{
+ "nombre": "fin_m_sin_baron_hl",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "además sin heraldo ni larvas",
+ "segundos": 0.1,
+ "perdida_log": 0.5484165119692557,
+ "brier": 0.18709644165027317,
+ "auc": 0.7837051522913547,
+ "ece": 0.008058570445569086,
+ "perdida_log_ee": 0.011278535890389315,
+ "por_tramo": {
+  "1-5": 0.6805280236268435,
+  "6-10": 0.6360077101159749,
+  "11-15": 0.5766110050747258,
+  "16-20": 0.5092480223392336,
+  "21-25": 0.4324369225039112,
+  "26-30": 0.41207484689134505,
+  "31-+": 0.5135840289118525
+ }
+}

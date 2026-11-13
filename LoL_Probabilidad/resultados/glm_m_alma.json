@@ -1,0 +1,38 @@
+{
+ "nombre": "glm_m_alma",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "tv1 + indicadores 4+ y 3+ dragones (propio − rival)",
+ "segundos": 1.2,
+ "perdida_log": 0.5495901954146915,
+ "brier": 0.18736881137973949,
+ "auc": 0.7836382368574054,
+ "ece": 0.011948205213770997,
+ "perdida_log_ee": 0.01171007452191634,
+ "por_tramo": {
+  "1-5": 0.6803357218124286,
+  "6-10": 0.6352164711797059,
+  "11-15": 0.5772014796919347,
+  "16-20": 0.5115582973133496,
+  "21-25": 0.4288344081063444,
+  "26-30": 0.4113297062160103,
+  "31-+": 0.5315709465416966
+ }
+}

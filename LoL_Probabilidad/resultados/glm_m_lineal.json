@@ -1,0 +1,38 @@
+{
+ "nombre": "glm_m_lineal",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "diferencias con coeficiente fijo + base del minuto (grado 1)",
+ "segundos": 0.2,
+ "perdida_log": 0.5539144596097086,
+ "brier": 0.18906945839616254,
+ "auc": 0.7800825897346354,
+ "ece": 0.015225909712075842,
+ "perdida_log_ee": 0.011262107180285445,
+ "por_tramo": {
+  "1-5": 0.6814360998197408,
+  "6-10": 0.63999634740296,
+  "11-15": 0.5808539929284721,
+  "16-20": 0.5135765725566627,
+  "21-25": 0.4367008475382791,
+  "26-30": 0.4195145230814221,
+  "31-+": 0.5357962940828518
+ }
+}

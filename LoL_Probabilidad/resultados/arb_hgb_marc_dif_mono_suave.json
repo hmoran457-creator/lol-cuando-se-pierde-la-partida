@@ -1,0 +1,38 @@
+{
+ "nombre": "arb_hgb_marc_dif_mono_suave",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "HGB diferencias monótono, suave: lr .03, 200 it, 7 hojas, msl 600, l2 5",
+ "segundos": 1.6,
+ "perdida_log": 0.5558887754915124,
+ "brier": 0.18932142026107615,
+ "auc": 0.7779255456288986,
+ "ece": 0.010505208292887157,
+ "perdida_log_ee": 0.010108119511698646,
+ "por_tramo": {
+  "1-5": 0.6805866469673798,
+  "6-10": 0.6386581845008132,
+  "11-15": 0.5788432081587903,
+  "16-20": 0.5142969917934832,
+  "21-25": 0.44971098124139874,
+  "26-30": 0.4258914436470224,
+  "31-+": 0.5350339819142929
+ }
+}

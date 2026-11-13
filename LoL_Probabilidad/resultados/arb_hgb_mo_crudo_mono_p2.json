@@ -1,0 +1,40 @@
+{
+ "nombre": "arb_hgb_mo_crudo_mono_p2",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "HGB crudo + v + oro_dif, monótono, prof 2, 500 it",
+ "segundos": 3.3,
+ "perdida_log": 0.5369784475935262,
+ "brier": 0.1818199383526024,
+ "auc": 0.797869581657034,
+ "ece": 0.016328544718121302,
+ "perdida_log_ee": 0.008812001840627021,
+ "por_tramo": {
+  "1-5": 0.6789247781858841,
+  "6-10": 0.6184275867661213,
+  "11-15": 0.5554732596563742,
+  "16-20": 0.499754131750365,
+  "21-25": 0.4210079389230876,
+  "26-30": 0.40622949175897166,
+  "31-+": 0.5028614372532794
+ }
+}

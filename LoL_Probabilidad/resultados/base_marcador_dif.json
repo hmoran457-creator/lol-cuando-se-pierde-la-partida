@@ -1,0 +1,38 @@
+{
+ "nombre": "base_marcador_dif",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "logística sobre las diferencias del marcador y el minuto",
+ "segundos": 0.2,
+ "perdida_log": 0.5536747321712784,
+ "brier": 0.18902947253995972,
+ "auc": 0.7800242078886415,
+ "ece": 0.015863830696033913,
+ "perdida_log_ee": 0.011141390994220025,
+ "por_tramo": {
+  "1-5": 0.6814483134777725,
+  "6-10": 0.6399562915952406,
+  "11-15": 0.5807824552990795,
+  "16-20": 0.5134998930763802,
+  "21-25": 0.43663551325290256,
+  "26-30": 0.41920983009201296,
+  "31-+": 0.5337650124764222
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "nombre": "otr_m_porminuto",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "una logística sobre las diferencias por cada minuto 1..34, la última para 35+",
+ "segundos": 0.6,
+ "perdida_log": 0.5497928668771201,
+ "brier": 0.18744434238700636,
+ "auc": 0.7831399358427185,
+ "ece": 0.010575855300524154,
+ "perdida_log_ee": 0.010668325447679938,
+ "por_tramo": {
+  "1-5": 0.6809502661019887,
+  "6-10": 0.6374959204039687,
+  "11-15": 0.5772391950802831,
+  "16-20": 0.5117687077304984,
+  "21-25": 0.42973478795844217,
+  "26-30": 0.41065580709673,
+  "31-+": 0.5269936107698362
+ }
+}

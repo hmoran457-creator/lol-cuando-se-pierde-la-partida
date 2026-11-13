@@ -1,0 +1,40 @@
+{
+ "nombre": "arb_gbc_mo_dif_p2",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "GradientBoosting sobre diferencias + v + oro_dif, prof 2, 300 árboles",
+ "segundos": 20.5,
+ "perdida_log": 0.5366801916785571,
+ "brier": 0.18202858050652193,
+ "auc": 0.796723335597627,
+ "ece": 0.01138278383053705,
+ "perdida_log_ee": 0.008501885614197761,
+ "por_tramo": {
+  "1-5": 0.6777685135560618,
+  "6-10": 0.6172944646955374,
+  "11-15": 0.5547353922175438,
+  "16-20": 0.49918160571752157,
+  "21-25": 0.4292020045671504,
+  "26-30": 0.4045576808368199,
+  "31-+": 0.4941276923766796
+ }
+}

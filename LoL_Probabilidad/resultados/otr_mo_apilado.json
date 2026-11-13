@@ -1,0 +1,40 @@
+{
+ "nombre": "otr_mo_apilado",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "apilamiento: logística sobre los dos logits, sus productos con t, y t",
+ "segundos": 0.9,
+ "perdida_log": 0.5372594590073564,
+ "brier": 0.18272293229067332,
+ "auc": 0.7948970896741765,
+ "ece": 0.005639533920402099,
+ "perdida_log_ee": 0.008967558029224493,
+ "por_tramo": {
+  "1-5": 0.6776744358433652,
+  "6-10": 0.6207997530118801,
+  "11-15": 0.5589806047873295,
+  "16-20": 0.49890124061771207,
+  "21-25": 0.4241074519797759,
+  "26-30": 0.40551532327026873,
+  "31-+": 0.4940344440121017
+ }
+}

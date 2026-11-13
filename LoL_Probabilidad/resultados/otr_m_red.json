@@ -1,0 +1,38 @@
+{
+ "nombre": "otr_m_red",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "5 redes (8 ocultas, alpha 100) sobre diferencias y minuto",
+ "segundos": 11.0,
+ "perdida_log": 0.5490116114059808,
+ "brier": 0.18753479750436325,
+ "auc": 0.7826839856330498,
+ "ece": 0.00877957573158665,
+ "perdida_log_ee": 0.009904968853916566,
+ "por_tramo": {
+  "1-5": 0.6805458689861343,
+  "6-10": 0.6343920392971872,
+  "11-15": 0.5774424320931402,
+  "16-20": 0.5131256256211673,
+  "21-25": 0.4313173037487321,
+  "26-30": 0.41021694682286675,
+  "31-+": 0.5193517764369722
+ }
+}

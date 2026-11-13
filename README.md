@@ -24,6 +24,7 @@ se mida y pasa más cuando gano.
 | Actividad de anonimización (sobre el piloto de 7 partidas públicas) | [`LoL_Anonimizacion/reporte_anonimizacion.pdf`](LoL_Anonimizacion/reporte_anonimizacion.pdf) |
 | Actividad de reducción de dimensionalidad (PCA, LDA, t-SNE, UMAP) | [`LoL_Dimensionalidad/reduccion_dimensionalidad.pdf`](LoL_Dimensionalidad/reduccion_dimensionalidad.pdf) (y su `.ipynb`) |
 | Análisis exploratorio posterior al proyecto | [`LoL_Exploratorio/analisis_exploratorio.pdf`](LoL_Exploratorio/analisis_exploratorio.pdf) (y su `.ipynb`) |
+| **Herramienta: probabilidad de ganar** según el marcador (y el oro, si se conoce) | [`LoL_Probabilidad/probabilidad.html`](LoL_Probabilidad/probabilidad.html); cómo se eligió el modelo en su [LEEME](LoL_Probabilidad/LEEME.md) |
 
 Las presentaciones son HTML que funcionan sin internet. Para verlas, descarga el repositorio
 completo, porque cada una necesita su carpeta `assets/`. La política de privacidad aplicada al
@@ -81,6 +82,7 @@ LoL_EDA/                   análisis exploratorio (piloto)
 LoL_Analisis/              experimentos E1–E8 y V1: scripts, resultados, figuras y pruebas
 LoL_Dimensionalidad/       notebook de reducción de dimensionalidad (actividad del curso)
 LoL_Exploratorio/          notebook de análisis exploratorio posterior al proyecto
+LoL_Probabilidad/          herramienta de probabilidad de ganar: modelos comparados, elegido y página
 LoL_Reporte/               reporte final (LaTeX)
 LoL_Planteamiento/         planteamiento del proyecto (LaTeX)
 LoL_PresentacionFinal/     presentación final, la de la exposición
@@ -147,8 +149,9 @@ Ninguna cifra de los reportes ni de las presentaciones está escrita a mano: `ci
 `LoL_Datos/anonimizado/resumen_descarga.json`. Este último guarda, ya contados, los pocos
 datos que solo existen en local (partidas por cuenta, dúos entre cuentas propias, eventos de
 la muestra y los campeones del autor). Lo que **no** corre sin los datos originales es la
-descarga, la anonimización, `resumen_publico.py`, el EDA piloto y el notebook exploratorio;
-sus salidas sí están incluidas.
+descarga, la anonimización, `resumen_publico.py`, el EDA piloto, el notebook exploratorio y el
+entrenamiento del modelo de probabilidad; sus salidas sí están incluidas (la página de la
+herramienta se reconstruye con `python LoL_Probabilidad/scripts/construir.py`).
 
 ## Privacidad
 
@@ -166,7 +169,10 @@ monstruos épicos, sin posición en el mapa.
 
 El notebook exploratorio sí usa las tablas por participante, pero solo en local. Publica
 únicamente **agregados**: tasas, curvas, tablas por rol y un mapa de densidad de las muertes del
-propio autor en celdas. Ninguna salida trae filas por partida. Su `construir_notebook.py` se
+propio autor en celdas. Ninguna salida trae filas por partida. El modelo de probabilidad también
+se entrena en local; lo publicado son sus coeficientes, 200 juegos de coeficientes remuestreados
+y agregados por minuto. Su tabla de entrenamiento (`LoL_Probabilidad/datos/`) no se publica.
+El `construir_notebook.py` del notebook exploratorio se
 detiene sin guardar si alguna salida contiene el seudónimo de una partida o de un jugador, o el
 campeón de otro jugador. Las partidas siguen siendo enlazables con el
 historial público del autor (mes, cuenta y duración casi siempre señalan una sola), pero eso no

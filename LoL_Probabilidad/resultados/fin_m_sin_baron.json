@@ -1,0 +1,38 @@
+{
+ "nombre": "fin_m_sin_baron",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "glm_m_lineal_t sin el conteo de barones (el barón entra por su mejora activa)",
+ "segundos": 0.2,
+ "perdida_log": 0.5496538567185415,
+ "brier": 0.1876172158991435,
+ "auc": 0.7825523359744412,
+ "ece": 0.006950270480755854,
+ "perdida_log_ee": 0.010896449942468424,
+ "por_tramo": {
+  "1-5": 0.6805209961164566,
+  "6-10": 0.6362657261304742,
+  "11-15": 0.5773826573221148,
+  "16-20": 0.5118213992576416,
+  "21-25": 0.4345571970516515,
+  "26-30": 0.41335010720303234,
+  "31-+": 0.516045947600286
+ }
+}

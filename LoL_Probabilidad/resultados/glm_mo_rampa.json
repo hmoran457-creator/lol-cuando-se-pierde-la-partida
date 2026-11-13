@@ -1,0 +1,40 @@
+{
+ "nombre": "glm_mo_rampa",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "mo_vtv con rampas",
+ "segundos": 0.3,
+ "perdida_log": 0.5307350874012563,
+ "brier": 0.18006403424195414,
+ "auc": 0.801365781748363,
+ "ece": 0.009893406589531615,
+ "perdida_log_ee": 0.010031496239161788,
+ "por_tramo": {
+  "1-5": 0.6761966977110523,
+  "6-10": 0.6153130231756442,
+  "11-15": 0.5530200020413256,
+  "16-20": 0.4931804843087368,
+  "21-25": 0.4171591647652889,
+  "26-30": 0.401132646846154,
+  "31-+": 0.47036850784716583
+ }
+}

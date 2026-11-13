@@ -8,6 +8,8 @@ LoL_Presentacion/data/riot_examples/
 # Solo se publica lo que queda en las subcarpetas publico/ (nivel equipo).
 LoL_Datos/anonimizado/*.csv
 LoL_Anonimizacion/salida/*.csv
+# Tabla de entrenamiento del modelo de probabilidad: sale de esas tablas (asesinatos por minuto).
+LoL_Probabilidad/datos/
 
 # Material de trabajo del video (cuadros de revisión); el video final sí va
 LoL_PresentacionHistoria/video/muestras/

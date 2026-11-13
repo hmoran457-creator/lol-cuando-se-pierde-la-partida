@@ -1,0 +1,38 @@
+{
+ "nombre": "arb_rf_marc_crudo_cal",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r"
+ ],
+ "notas": "RandomForest libre msl 100 + calibración sigmoide (CalibratedClassifierCV cv=3 separa filas, no partidas: fuga leve)",
+ "segundos": 13.7,
+ "perdida_log": 0.5668060529520637,
+ "brier": 0.19401411072638558,
+ "auc": 0.7671381075777844,
+ "ece": 0.011759010016150359,
+ "perdida_log_ee": 0.009011979838671667,
+ "por_tramo": {
+  "1-5": 0.6807219982947826,
+  "6-10": 0.6406725082823188,
+  "11-15": 0.5848408591140125,
+  "16-20": 0.5253785916159598,
+  "21-25": 0.4681307487706709,
+  "26-30": 0.4604690985827193,
+  "31-+": 0.5500722406446
+ }
+}

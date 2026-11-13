@@ -1,0 +1,40 @@
+{
+ "nombre": "otr_mo_promedio",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "v",
+  "oro_dif"
+ ],
+ "notas": "promedio de logits de base_oro_interaccion y base_marcador_dif",
+ "segundos": 0.2,
+ "perdida_log": 0.5367336248868304,
+ "brier": 0.1824496305150207,
+ "auc": 0.7964793790797753,
+ "ece": 0.01788915587857939,
+ "perdida_log_ee": 0.008140101881303376,
+ "por_tramo": {
+  "1-5": 0.6775477313789864,
+  "6-10": 0.6242321468200379,
+  "11-15": 0.5606212882929815,
+  "16-20": 0.497231459169915,
+  "21-25": 0.42284509296646255,
+  "26-30": 0.40249111962289036,
+  "31-+": 0.4872303533068198
+ }
+}
