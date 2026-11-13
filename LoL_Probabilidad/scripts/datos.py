@@ -19,6 +19,9 @@ Columnas (sufijo _p = mi equipo, _r = el rival):
   placas (oro de placas de torre: tampoco está en el marcador)
   nivel, suma de los niveles de los cinco jugadores (se ve con la tecla Tab), y xp, la
     experiencia sumada (no se ve; sirve solo para medir cuánto se pierde por usar el nivel)
+  detalle de objetivos, del JSON crudo (se ve en el juego): torre, inhibidor, torre_nexo,
+    dragon_elem (dragones sin el ancestral), ancestral, alma, inhib_abiertos (inhibidores del
+    rival caídos ahora) y ancestral_activo (mejora del ancestral)
 
 Lee tablas por participante que no se publican; la salida va a LoL_Probabilidad/datos/, que
 está en .gitignore. Lo único que sale de esa carpeta son métricas y coeficientes agregados.
@@ -42,6 +45,62 @@ MONSTRUOS = {"DRAGON": "dragones", "HORDE": "larvas", "RIFTHERALD": "heraldos",
              "BARON_NASHOR": "barones", "ATAKHAN": "atakhan"}
 # Prueba temporal: las partidas de estos meses nunca se usan para elegir el modelo.
 MES_PRUEBA = "2026-05"
+
+
+CRUDO = RAIZ / "LoL_Datos" / "crudo"
+
+
+def huellas_anonimas(ev: pd.DataFrame) -> dict[tuple, str]:
+    """Huella de cada partida anonimizada: los milisegundos exactos de sus asesinatos."""
+    k = ev[ev["tipo"] == "CHAMPION_KILL"].sort_values("ms")
+    return {tuple(g["ms"].astype(int)): p for p, g in k.groupby("partida")}
+
+
+def detalle_objetivos(ev: pd.DataFrame, muestra: pd.DataFrame) -> pd.DataFrame:
+    """Detalle de objetivos que la anonimización no guardó, leído del JSON crudo (local).
+
+    La llave de los seudónimos fue efímera, así que cada línea de tiempo cruda se enlaza con su
+    partida anonimizada por la huella de sus asesinatos (los ms exactos). El enlace vive solo en
+    memoria: la salida va por seudónimo y no guarda ningún matchId.
+
+    Devuelve un evento por fila: partida, m (minuto del evento), equipo que se lo lleva (100/200)
+    y clase: torre, inhibidor, torre_nexo, dragon_elem, ancestral o alma.
+    """
+    import json
+
+    huellas = huellas_anonimas(ev)
+    filas, sin_par = [], 0
+    for f in sorted(CRUDO.glob("getTimeline_*.json")):
+        t = json.loads(f.read_text(encoding="utf-8"))
+        eventos = [e for fr in t["info"]["frames"] for e in fr.get("events", [])]
+        huella = tuple(sorted(int(e["timestamp"]) for e in eventos if e["type"] == "CHAMPION_KILL"))
+        partida = huellas.get(huella)
+        if partida is None:
+            sin_par += 1
+            continue
+        for e in eventos:
+            m = int(e["timestamp"]) // 60000
+            if e["type"] == "BUILDING_KILL" and e.get("teamId") in (100, 200):
+                quien = 300 - e["teamId"]                      # teamId es el equipo que perdió el edificio
+                if e.get("buildingType") == "INHIBITOR_BUILDING":
+                    filas.append((partida, m, quien, "inhibidor"))
+                else:
+                    filas.append((partida, m, quien, "torre"))
+                    if e.get("towerType") == "NEXUS_TURRET":
+                        filas.append((partida, m, quien, "torre_nexo"))
+            elif e["type"] == "ELITE_MONSTER_KILL" and e.get("monsterType") == "DRAGON" \
+                    and e.get("killerTeamId") in (100, 200):
+                clase = "ancestral" if e.get("monsterSubType") == "ELDER_DRAGON" else "dragon_elem"
+                filas.append((partida, m, e["killerTeamId"], clase))
+            elif e["type"] == "DRAGON_SOUL_GIVEN" and e.get("teamId") in (100, 200):
+                filas.append((partida, m, e["teamId"], "alma"))
+    out = pd.DataFrame(filas, columns=["partida", "m", "equipo", "clase"])
+    enlazadas = out["partida"].nunique() if len(out) else 0
+    print(f"detalle de objetivos: {enlazadas:,} partidas enlazadas por huella; {sin_par} líneas de "
+          f"tiempo sin pareja (fuera del embudo o sin asesinatos)")
+    faltan = set(muestra["partida"]) - set(out["partida"])
+    assert len(faltan) <= 5, f"{len(faltan)} partidas de la muestra sin detalle de objetivos"
+    return out[out["partida"].isin(muestra["partida"])]
 
 
 def construir() -> pd.DataFrame:
@@ -94,6 +153,31 @@ def construir() -> pd.DataFrame:
         estado[f"baron_activo_{q}"] = (activo > 0).astype(int)
 
     tabla = pd.concat([filas[["partida", "minuto"]].reset_index(drop=True), estado], axis=1)
+
+    # Detalle de objetivos (JSON crudo): conteos acumulados hasta el cuadro t, más dos estados que
+    # duran: inhibidores rivales caídos ahora (reaparecen a los 5 minutos) y la mejora del dragón
+    # ancestral (dura 2.5 minutos; con cuadros por minuto, los 2 minutos anteriores).
+    det = detalle_objetivos(ev, muestra)
+    det["quien"] = np.where(det["equipo"] == det["partida"].map(lado), "p", "r")
+    det["col"] = det["clase"] + "_" + det["quien"]
+    por_min_det = det.groupby(["partida", "m", "col"]).size().unstack(fill_value=0)
+    acum_det = por_min_det.reindex(completo.index, fill_value=0).groupby(level="partida").cumsum()
+    estado_det = acum_det.reindex(rejilla).fillna(0).astype(int).reset_index(drop=True)
+    for clase in ["torre", "inhibidor", "torre_nexo", "dragon_elem", "ancestral", "alma"]:
+        for q in ("p", "r"):
+            col = f"{clase}_{q}"
+            tabla[col] = estado_det[col].to_numpy() if col in estado_det else 0
+    for clase, nombre, minutos in [("inhibidor", "inhib_abiertos", 5), ("ancestral", "ancestral_activo", 2)]:
+        for q in ("p", "r"):
+            b = det[det["col"] == f"{clase}_{q}"].groupby(["partida", "m"]).size()
+            activo = np.zeros(len(filas), dtype=int)
+            for atras in range(1, minutos + 1):
+                idx = pd.MultiIndex.from_arrays([filas["partida"], filas["minuto"] - atras])
+                activo += b.reindex(idx).fillna(0).to_numpy(dtype=int)
+            tabla[f"{nombre}_{q}"] = np.minimum(activo, 3 if clase == "inhibidor" else 1)
+    # Comprobación: torres + inhibidores del crudo = estructuras de la tabla anonimizada.
+    dif = (tabla["torre_p"] + tabla["inhibidor_p"] - tabla["estructuras_p"]).abs()
+    print(f"torres + inhibidores = estructuras en el {(dif == 0).mean():.2%} de las filas")
     # Niveles y experiencia de cada equipo en el cuadro t (suma de sus cinco jugadores). El nivel
     # se ve en el marcador del juego (tecla Tab); la experiencia no.
     cu = pd.read_csv(PRIVADO / "cuadros.csv", usecols=["partida", "minuto", "teamId", "nivel", "xp"])

@@ -69,16 +69,34 @@ minuto, y el de un dragón y un nivel es fijo. Los asesinatos pesan poco porque 
 en los niveles; con el oro, los asesinatos y las torres casi dejan de pesar, pero los dragones no:
 sus mejoras no se ven ni en el oro ni en los niveles.
 
+## Tercera ronda: el detalle de los objetivos (no entró)
+
+La tabla anonimizada no distingue torres de inhibidores ni el dragón ancestral; el JSON crudo, que
+solo existe en local, sí. Como la llave de los seudónimos fue efímera, `datos.py` enlaza cada línea
+de tiempo cruda con su partida por la huella de sus asesinatos (los milisegundos exactos); el
+enlace vive solo en memoria y la salida no guarda ningún matchId. Las 1,195 partidas se enlazaron,
+y torres + inhibidores del crudo coinciden con las estructuras de la tabla en el 100 % de las filas.
+
+Con la misma regla (`finalistas.py objetivos`), ninguna variante mejoró al modelo con niveles:
+torres e inhibidores por separado, inhibidores caídos ahora, torres del nexo, dragones elementales
+con alma y ancestral, la mejora del ancestral, o todo junto. Todas quedaron a ±0.0005 con
+intervalos que incluyen el cero, y tampoco hubo ganancia al mirar aparte el final de las partidas
+ni las situaciones con alma, ancestral o un inhibidor caído (revisión hecha después, fuera de la
+regla). Algunos coeficientes son grandes (el alma, la mejora del ancestral), pero esas situaciones
+son raras (el ancestral aparece en el 8 % de las partidas) y, cuando ocurren, los niveles, las
+torres y los asesinatos ya dicen quién va ganando. La herramienta no cambió.
+
 ## Cómo se regenera
 
 ```
-python LoL_Probabilidad/scripts/datos.py        # tabla de entrenamiento (necesita los datos locales)
+python LoL_Probabilidad/scripts/datos.py        # tabla de entrenamiento (necesita los datos locales y el JSON crudo)
 python LoL_Probabilidad/modelos/base.py         # referencias
 python LoL_Probabilidad/modelos/glm.py          # familia logística
 python LoL_Probabilidad/modelos/arboles.py      # árboles
 python LoL_Probabilidad/modelos/otros.py        # otras familias
 python LoL_Probabilidad/modelos/finalistas.py variantes
 python LoL_Probabilidad/modelos/finalistas.py nivel
+python LoL_Probabilidad/modelos/finalistas.py objetivos
 python LoL_Probabilidad/modelos/finalistas.py prueba
 python LoL_Probabilidad/scripts/exportar.py     # herramienta/modelo.json
 python LoL_Probabilidad/scripts/construir.py    # probabilidad.html

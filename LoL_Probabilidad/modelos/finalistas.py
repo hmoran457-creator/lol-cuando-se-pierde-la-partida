@@ -22,7 +22,7 @@ import sys
 AQUI = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI.parent / "scripts"))
 sys.path.insert(0, str(AQUI))
-from evaluar import MARCADOR, MARCADOR_ORO, RESULTADOS, comparar, evaluar, prueba_final  # noqa: E402
+from evaluar import MARCADOR, MARCADOR_ORO, RESULTADOS, cargar, comparar, evaluar, prueba_final  # noqa: E402
 import arboles  # noqa: E402
 import base  # noqa: E402
 import glm  # noqa: E402
@@ -87,6 +87,51 @@ def nivel():
                  ("nv_mo_fijo", "nv2_mo"), ("fin_mo_sin_baron_hl", "nv2_mo")]:
         c = comparar(a, b)
         print(f"  {b} − {a}: {c['b_menos_a']:+.4f} [{c['ic95'][0]:+.4f}, {c['ic95'][1]:+.4f}]")
+
+
+# Tercera ronda: detalle de objetivos (del JSON crudo; todo se ve en el juego). Regla fijada antes
+# de correrla: una variante entra solo si mejora a nv2_m con un intervalo que excluye el cero; entre
+# las que pasen, la más simple dentro del intervalo de la mejor, sin coeficientes con el signo al revés.
+DET = [f"{c}_{q}" for c in ["torre", "inhibidor", "torre_nexo", "dragon_elem", "ancestral", "alma",
+                             "inhib_abiertos", "ancestral_activo"] for q in ("p", "r")]
+COLS_OBJ = MARCADOR + NIVEL + DET
+ASES = ["dif_asesinatos"]
+DRAG = ["dif_dragon_elem", "dif_alma", "dif_ancestral"]
+VARIANTES_OBJ = {
+    "ob_torre_inhib": (glm.glm(C=0.03, tv=ASES + ["dif_torre"], fijas=["dif_inhibidor", "dif_dragones", "dif_nivel"],
+                               forma="lineal"), COLS_OBJ, "torres e inhibidores por separado"),
+    "ob_inhib_abiertos": (glm.glm(C=0.03, tv=ASES + ["dif_torre"],
+                                  fijas=["dif_inhibidor", "dif_inhib_abiertos", "dif_dragones", "dif_nivel"],
+                                  forma="lineal"), COLS_OBJ, "torres, inhibidores e inhibidores caídos ahora"),
+    "ob_nexo": (glm.glm(C=0.03, tv=ASES + ["dif_estructuras"], fijas=["dif_torre_nexo", "dif_dragones", "dif_nivel"],
+                        forma="lineal"), COLS_OBJ, "estructuras + torres del nexo"),
+    "ob_dragones": (glm.glm(C=0.03, tv=ASES + ["dif_estructuras"], fijas=DRAG + ["dif_nivel"], forma="lineal"),
+                    COLS_OBJ, "dragones elementales, alma y ancestral por separado"),
+    "ob_dragones_activo": (glm.glm(C=0.03, tv=ASES + ["dif_estructuras"],
+                                   fijas=DRAG + ["dif_ancestral_activo", "dif_nivel"], forma="lineal"),
+                           COLS_OBJ, "dragones por separado + mejora del ancestral activa"),
+    "ob_todo": (glm.glm(C=0.03, tv=ASES + ["dif_torre"],
+                        fijas=["dif_inhibidor", "dif_inhib_abiertos", "dif_torre_nexo"] + DRAG
+                        + ["dif_ancestral_activo", "dif_nivel"], forma="lineal"),
+                COLS_OBJ, "todo el detalle de objetivos junto"),
+}
+VARIANTES.update(VARIANTES_OBJ)
+
+
+def objetivos():
+    for n, (f, cols, notas) in VARIANTES_OBJ.items():
+        evaluar(n, f, cols, notas)
+    for n in VARIANTES_OBJ:
+        c = comparar("nv2_m", n)
+        print(f"  {n} − nv2_m: {c['b_menos_a']:+.4f} [{c['ic95'][0]:+.4f}, {c['ic95'][1]:+.4f}]")
+    # Signos: el ajuste con todas las partidas de desarrollo, coeficiente de cada variable.
+    d, _ = cargar()
+    for n, (f, cols, _) in VARIANTES_OBJ.items():
+        m = f().fit(d[cols], d["gane"].to_numpy())
+        dis, lr = m[0], m[-1]
+        nombres = list(dis.tv) + list(dis.fijas)
+        coef = lr.coef_[0][-len(dis.fijas):] / [dis.escala_[k] for k in dis.fijas]
+        print(f"  {n}: " + ", ".join(f"{k} {c:+.3f}" for k, c in zip(dis.fijas, coef)))
 
 
 def fabrica(nombre):
@@ -155,4 +200,4 @@ def prueba():
 
 
 if __name__ == "__main__":
-    {"variantes": variantes, "nivel": nivel, "prueba": prueba}[sys.argv[1]]()
+    {"variantes": variantes, "nivel": nivel, "objetivos": objetivos, "prueba": prueba}[sys.argv[1]]()
