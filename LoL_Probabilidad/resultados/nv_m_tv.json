@@ -1,0 +1,40 @@
+{
+ "nombre": "nv_m_tv",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "nivel_p",
+  "nivel_r"
+ ],
+ "notas": "elegido sin oro + diferencia de niveles con efecto que cambia con el minuto",
+ "segundos": 0.4,
+ "perdida_log": 0.5351047112970889,
+ "brier": 0.18231245776583013,
+ "auc": 0.7942189780934251,
+ "ece": 0.004477718251032812,
+ "perdida_log_ee": 0.008268461513325305,
+ "por_tramo": {
+  "1-5": 0.67972530213268,
+  "6-10": 0.6281542207422918,
+  "11-15": 0.56471153141518,
+  "16-20": 0.4910811279993295,
+  "21-25": 0.4142311552926542,
+  "26-30": 0.394746083814253,
+  "31-+": 0.4846147105301335
+ }
+}

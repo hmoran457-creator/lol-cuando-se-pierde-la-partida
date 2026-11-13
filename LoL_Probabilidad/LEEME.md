@@ -1,8 +1,8 @@
 # ¿Cuánto vale esta partida? — probabilidad de ganar
 
 Doble clic en **`probabilidad.html`**: funciona sin internet y es un solo archivo. Escribe el
-marcador como lo ves arriba en la pantalla del juego (minuto, asesinatos, torres e inhibidores,
-dragones, Atakhan, mejora del barón) y la página dice cuántas de cada 20 partidas así gané, con
+marcador como lo ves en el juego (minuto, asesinatos, torres e inhibidores, dragones y la suma de
+niveles de cada equipo, que se ve con Tab) y la página dice cuántas de cada 20 partidas así gané, con
 el rango del modelo, qué la movería y cómo cambiaría si el marcador se quedara igual. Si conoces
 el oro de cada equipo (en una repetición o como espectador), agrégalo y la estimación mejora.
 
@@ -43,9 +43,31 @@ marcador del juego no las cuenta. Se corrigió `datos.py` y se volvió a correr 
 prueba temporal, que así se usó dos veces. La elección no cambió y las cifras se movieron en el
 cuarto decimal.
 
-El modelo elegido sin oro tiene 9 números: el efecto de un asesinato y de una torre baja con el
-minuto, y el de un dragón, Atakhan y la mejora del barón es fijo. Con el oro, los asesinatos y las
-torres casi dejan de pesar (su valor ya está en el oro), pero los dragones no.
+## Segunda ronda: el nivel
+
+Una curva de aprendizaje mostró que más partidas casi no ayudan (de 385 a 770 partidas de
+entrenamiento la pérdida baja 0.002): el límite era la información de las entradas, no el
+algoritmo ni la cantidad de datos. Se probó entonces la suma de niveles de cada equipo, que se ve
+en la partida con Tab, con la regla fijada antes: entra solo si mejora al elegido con un intervalo
+que excluye el cero (`finalistas.py nivel`).
+
+| Modo | Sin niveles | Con niveles | Diferencia [IC 95 %] |
+|---|---:|---:|---|
+| Marcador | 0.548 | **0.536** | −0.013 [−0.019, −0.007] |
+| Marcador + oro | 0.531 | **0.527** | −0.004 [−0.007, −0.0004] |
+
+Fue la mejora más grande de todo el proceso, mayor que cualquier cambio de algoritmo: el marcador
+con niveles ya predice mejor que el oro solo (0.545). La experiencia, que no se ve en la partida,
+no agrega nada sobre los niveles. Con los niveles, Atakhan y la mejora del barón quedaron con
+coeficientes negativos y sin significancia (su valor ya está en niveles y torres), así que se
+quitaron con la misma regla de legibilidad: la versión sin ellos empata con la completa. En la
+prueba temporal (que ya se había usado antes, así que es una medición más, no una prueba ciega)
+el modelo sin oro mejoró de 0.581 a 0.574 y el de oro quedó igual (0.562 contra 0.561).
+
+El modelo sin oro tiene ahora 8 números: el efecto de un asesinato y de una torre baja con el
+minuto, y el de un dragón y un nivel es fijo. Los asesinatos pesan poco porque su valor ya se nota
+en los niveles; con el oro, los asesinatos y las torres casi dejan de pesar, pero los dragones no:
+sus mejoras no se ven ni en el oro ni en los niveles.
 
 ## Cómo se regenera
 
@@ -56,6 +78,7 @@ python LoL_Probabilidad/modelos/glm.py          # familia logística
 python LoL_Probabilidad/modelos/arboles.py      # árboles
 python LoL_Probabilidad/modelos/otros.py        # otras familias
 python LoL_Probabilidad/modelos/finalistas.py variantes
+python LoL_Probabilidad/modelos/finalistas.py nivel
 python LoL_Probabilidad/modelos/finalistas.py prueba
 python LoL_Probabilidad/scripts/exportar.py     # herramienta/modelo.json
 python LoL_Probabilidad/scripts/construir.py    # probabilidad.html

@@ -17,6 +17,8 @@ import re
 
 BASE = pathlib.Path(__file__).resolve().parent.parent
 RAIZ = BASE.parent
+# Los elegidos de la primera ronda (sin niveles), que la nota muestra como referencia.
+ANTERIORES = {"marcador": "fin_m_sin_baron_hl", "marcador_oro": "fin_mo_sin_baron_hl"}
 HERR = BASE / "herramienta"
 SALIDA = BASE / "probabilidad.html"
 FUENTE = RAIZ / "LoL_PresentacionFinal" / "assets" / "fonts" / "archivo-2.woff2"
@@ -55,19 +57,21 @@ def nota(m: dict) -> str:
 <p><strong>Qué es.</strong> Dos regresiones logísticas entrenadas con mis {mil(meta['partidas'])}
 partidas clasificatorias (gané el {100 * meta['victorias']:.0f} %), una fila por partida y minuto.
 <em>Sin el oro</em>, el modelo usa el minuto y las diferencias del marcador: asesinatos, torres e
-inhibidores, dragones, Atakhan y la mejora del barón. El efecto de los asesinatos y de las torres
-cambia con el minuto; el de lo demás es fijo. <em>Con el oro</em>, el modelo usa además la
-diferencia de oro, en oro y en proporción del oro total; esa proporción es lo único cuyo efecto
-cambia con el minuto. Los asesinatos cuentan como en el marcador del juego: sin las ejecuciones
-(muertes ante una torre o los súbditos).</p>
+inhibidores, dragones y la suma de niveles de cada equipo. El efecto de los asesinatos y de las
+torres cambia con el minuto; el de los dragones y los niveles es fijo. <em>Con el oro</em>, el
+modelo usa además la diferencia de oro, en oro y en proporción del oro total; esa proporción es
+lo único cuyo efecto cambia con el minuto. Los asesinatos cuentan como en el marcador del juego:
+sin las ejecuciones (muertes ante una torre o los súbditos).</p>
 
 <p><strong>Qué pesa</strong> (puntos que mueve en una partida que va pareja):
-un asesinato, {pm(mc, 'dif_asesinatos', 5)} puntos al minuto 5 y {pm(mc, 'dif_asesinatos', 30)}
-al 30; una torre, {pm(mc, 'dif_estructuras', 5)} y {pm(mc, 'dif_estructuras', 30)}; un dragón,
-{pm(mc, 'dif_dragones', 15)} a cualquier minuto; la mejora del barón,
-{pm(mc, 'dif_baron_activo', 25)}. Cuando se conoce el oro, los asesinatos y las torres casi dejan
-de pesar (su valor ya está en el oro), pero los dragones no ({pm(mo, 'dif_dragones', 15)} puntos):
-sus mejoras no se ven en el oro.</p>
+un nivel de ventaja, {pm(mc, 'dif_nivel', 15)} puntos a cualquier minuto; un dragón,
+{pm(mc, 'dif_dragones', 15)}; una torre, {pm(mc, 'dif_estructuras', 5)} al minuto 5 y
+{pm(mc, 'dif_estructuras', 30)} al 30; un asesinato, {pm(mc, 'dif_asesinatos', 5)} y
+{pm(mc, 'dif_asesinatos', 30)}. Los asesinatos pesan poco porque su valor ya se nota en los
+niveles. Cuando se conoce el oro, los asesinatos y las torres casi dejan de pesar, pero los
+dragones no ({pm(mo, 'dif_dragones', 15)} puntos): sus mejoras no se ven en el oro ni en los
+niveles. El barón, Atakhan, el heraldo y las larvas no entran: con los niveles y las torres en el
+modelo, su efecto queda en cero o con el signo al revés, sin significancia.</p>
 
 <p><strong>Cómo se eligió.</strong> Se compararon tres familias de modelos con las mismas
 reglas: regresiones logísticas con efectos que cambian con el minuto, árboles de decisión
@@ -81,15 +85,20 @@ prueba. Se eligió el modelo más simple dentro del margen de error del mejor.</
 <tr><td>Logística simple sobre las diferencias</td><td>{ref['base_marcador_dif']:.3f}</td></tr>
 <tr><td>Mejor árbol combinado</td><td>{arb_m['perdida_log']:.3f}</td></tr>
 <tr><td>Mejor de las otras familias (red neuronal, un modelo por minuto…)</td><td>{fam['otros_marcador']['perdida_log']:.3f}</td></tr>
-<tr><td><strong>Elegido</strong> ({numeros(mc)} números)</td><td><strong>{met['marcador']['cv']['perdida_log']:.3f}</strong></td></tr>
+<tr><td>Logística elegida, sin los niveles</td><td>{ref[ANTERIORES['marcador']]:.3f}</td></tr>
+<tr><td><strong>Elegido, con los niveles</strong> ({numeros(mc)} números)</td><td><strong>{met['marcador']['cv']['perdida_log']:.3f}</strong></td></tr>
 <tr><th>Con el oro</th><th></th></tr>
 <tr><td>Solo el oro</td><td>{ref['base_oro_interaccion']:.3f}</td></tr>
 <tr><td>Mejor árbol combinado</td><td>{arb_o['perdida_log']:.3f}</td></tr>
 <tr><td>Mejor de las otras familias</td><td>{fam['otros_oro']['perdida_log']:.3f}</td></tr>
-<tr><td><strong>Elegido</strong> ({numeros(mo)} números)</td><td><strong>{met['marcador_oro']['cv']['perdida_log']:.3f}</strong></td></tr>
+<tr><td>Logística elegida, sin los niveles</td><td>{ref[ANTERIORES['marcador_oro']]:.3f}</td></tr>
+<tr><td><strong>Elegido, con los niveles</strong> ({numeros(mo)} números)</td><td><strong>{met['marcador_oro']['cv']['perdida_log']:.3f}</strong></td></tr>
 </table>
 <p>Ningún árbol ni red superó a la logística por más que el margen de error: con unas mil
-partidas no hay datos para aprender más que eso. Al final se midieron los finalistas con las
+partidas no hay datos para aprender más que eso. Lo que sí mejoró al modelo fue <em>información
+nueva</em>: agregar los niveles bajó la pérdida más que cualquier cambio de algoritmo. (La
+experiencia, que no se ve en la partida, no agrega nada sobre los niveles.) Al final se midieron
+los finalistas con las
 partidas de mayo de 2026 en adelante, que no se usaron para elegir. Ahí la pérdida subió para
 todos: el elegido marcó {met['marcador']['prueba']['perdida_log']:.3f} sin el oro y
 {met['marcador_oro']['prueba']['perdida_log']:.3f} con el oro; el mejor árbol,

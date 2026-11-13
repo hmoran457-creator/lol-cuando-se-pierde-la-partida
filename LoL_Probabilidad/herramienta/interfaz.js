@@ -5,18 +5,21 @@
   const M = window.MODELOS;
   const META = M.meta;
 
-  // Filas del marcador: clave de la variable, nombre, aclaración y tope. El heraldo, las larvas
-  // y los barones cuya mejora ya terminó no entran: no cambian la estimación (ver la nota).
+  // Filas del marcador: clave de la variable, nombre, aclaración, tope y mínimo. El barón,
+  // Atakhan, el heraldo y las larvas no entran: no cambian la estimación (ver la nota).
   const FILAS = [
-    ["asesinatos", "Asesinatos", "", 80],
-    ["estructuras", "Torres e inhibidores", "destruidos", 25],
-    ["dragones", "Dragones", "incluye el ancestral", 6],
-    ["atakhan", "Atakhan", "", 1],
+    ["asesinatos", "Asesinatos", "", 80, 0],
+    ["estructuras", "Torres e inhibidores", "destruidos", 25, 0],
+    ["dragones", "Dragones", "incluye el ancestral", 6, 0],
+    ["nivel", "Niveles", "suma de los cinco, con Tab", 90, 5],
   ];
+  // Los niveles arrancan en "automático" (null): la suma típica de un equipo en ese minuto, igual
+  // para los dos. Al tocarlos quedan fijos en lo que se escribió.
+  const tipico = (t) => META.nivel_mediana[Math.min(META.minuto_max, Math.max(0, t))];
   const INICIAL = () => {
     const e = { minuto: 15, usarOro: false, oro_p: null, oro_r: null };
     for (const [k] of FILAS) { e[k + "_p"] = 0; e[k + "_r"] = 0; }
-    e.baron_activo_p = 0; e.baron_activo_r = 0;
+    e.nivel_p = null; e.nivel_r = null;
     return e;
   };
   let estado = leerHash() || INICIAL();
@@ -26,7 +29,7 @@
   const reloj = (m) => m + ":00";
 
   // ---------- construir el marcador ----------
-  function stepper(lado, clave, tope) {
+  function stepper(lado, clave, tope, minimo) {
     const cont = document.createElement("div");
     cont.className = "contador";
     const menos = boton("−", `Quitar uno: ${clave} de ${lado === "p" ? "mi equipo" : "el rival"}`);
@@ -34,8 +37,8 @@
     const val = document.createElement("span");
     val.className = "valor";
     val.id = `v-${clave}_${lado}`;
-    menos.onclick = () => cambiar(`${clave}_${lado}`, -1, tope);
-    mas.onclick = () => cambiar(`${clave}_${lado}`, +1, tope);
+    menos.onclick = () => cambiar(`${clave}_${lado}`, -1, tope, minimo);
+    mas.onclick = () => cambiar(`${clave}_${lado}`, +1, tope, minimo);
     // Mi equipo: el número queda pegado al centro, como en el marcador del juego.
     if (lado === "p") cont.append(menos, mas, val); else cont.append(val, menos, mas);
     return cont;
@@ -46,48 +49,34 @@
     b.setAttribute("aria-label", etiqueta);
     return b;
   }
-  function interruptor(lado) {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "interruptor"; b.id = `baron-activo-${lado}`;
-    b.innerHTML = '<span class="punto"></span>Activa';
-    b.setAttribute("aria-label", `Mejora del barón activa para ${lado === "p" ? "mi equipo" : "el rival"}`);
-    b.onclick = () => {
-      const k = `baron_activo_${lado}`;
-      estado[k] = estado[k] ? 0 : 1;
-      pintar();
-    };
-    return b;
-  }
   function armar() {
     const raiz = $("filas");
-    for (const [clave, nombre, nota, tope] of FILAS) {
+    for (const [clave, nombre, nota, tope, minimo] of FILAS) {
       const fila = document.createElement("div");
       fila.className = "fila";
-      const p = document.createElement("div"); p.className = "lado p"; p.append(stepper("p", clave, tope));
+      const p = document.createElement("div"); p.className = "lado p"; p.append(stepper("p", clave, tope, minimo));
       const n = document.createElement("div"); n.className = "nombre";
       n.innerHTML = nombre + (nota ? `<small>${nota}</small>` : "");
-      const r = document.createElement("div"); r.className = "lado r"; r.append(stepper("r", clave, tope));
+      const r = document.createElement("div"); r.className = "lado r"; r.append(stepper("r", clave, tope, minimo));
       fila.append(p, n, r);
       raiz.append(fila);
     }
-    const fila = document.createElement("div");
-    fila.className = "fila";
-    const p = document.createElement("div"); p.className = "lado p"; p.append(interruptor("p"));
-    const n = document.createElement("div"); n.className = "nombre";
-    n.innerHTML = "Mejora del barón<small>los 3 minutos después de tomarlo</small>";
-    const r = document.createElement("div"); r.className = "lado r"; r.append(interruptor("r"));
-    fila.append(p, n, r);
-    raiz.append(fila);
   }
 
-  function cambiar(k, d, tope) {
-    estado[k] = Math.max(0, Math.min(tope, estado[k] + d));
+  // Valor que se muestra y que ve el modelo (los niveles en automático valen lo típico).
+  const valor = (e, k, t) => (e[k] == null ? tipico(t ?? e.minuto) : e[k]);
+
+  function cambiar(k, d, tope, minimo) {
+    estado[k] = Math.max(minimo, Math.min(tope, valor(estado, k) + d));
+    // Al fijar los niveles de un lado, el otro también deja el automático en su valor actual.
+    if (k.startsWith("nivel")) for (const l of ["p", "r"]) estado[`nivel_${l}`] = valor(estado, `nivel_${l}`);
     pintar();
   }
 
   // ---------- el estado que ve el modelo ----------
   function entrada(e, minuto) {
     const x = Object.assign({}, e, { minuto: minuto ?? e.minuto });
+    for (const l of ["p", "r"]) x[`nivel_${l}`] = valor(e, `nivel_${l}`, x.minuto);
     let modo = "marcador";
     if (e.usarOro && e.oro_p > 0 && e.oro_r > 0) {
       modo = "marcador_oro";
@@ -105,18 +94,18 @@
   function pintar() {
     $("minuto").value = estado.minuto;
     $("reloj-texto").textContent = reloj(estado.minuto);
-    for (const [clave, , , tope] of FILAS) {
+    for (const [clave, , , tope, minimo] of FILAS) {
       for (const lado of ["p", "r"]) {
         const k = `${clave}_${lado}`;
-        $(`v-${k}`).textContent = estado[k];
+        const n = valor(estado, k);
+        $(`v-${k}`).textContent = n;
+        $(`v-${k}`).classList.toggle("auto", estado[k] == null);
+        $(`v-${k}`).title = estado[k] == null ? "Valor típico en este minuto: cámbialo con − y +" : "";
         const caja = $(`v-${k}`).parentElement.querySelectorAll("button");
         caja.forEach((b) => {
-          b.disabled = b.textContent === "−" ? estado[k] === 0 : estado[k] >= tope;
+          b.disabled = b.textContent === "−" ? n <= minimo : n >= tope;
         });
       }
-    }
-    for (const lado of ["p", "r"]) {
-      $(`baron-activo-${lado}`).setAttribute("aria-pressed", estado[`baron_activo_${lado}`] ? "true" : "false");
     }
     $("oro").classList.toggle("activo", estado.usarOro);
     $("usar-oro").setAttribute("aria-pressed", estado.usarOro ? "true" : "false");
@@ -150,25 +139,24 @@
   }
 
   function pintarMueve(modo, x, p) {
-    // Cada caso suma uno a un conteo, o enciende la mejora del barón ("activar"). Con el oro
-    // escrito, un asesinato o una torre ya no se muestran: el oro que dan está en el oro escrito,
-    // y sumarlos con el oro fijo daría un engañoso "±0".
+    // Cada caso suma uno a un conteo. Con el oro escrito, un asesinato o una torre ya no se
+    // muestran: el oro que dan está en el oro escrito, y sumarlos con el oro fijo daría un
+    // engañoso "±0".
     const conOro = modo === "marcador_oro";
     const casos = [
       ["Un asesinato más de mi equipo", "asesinatos_p", 80, !conOro],
       ["Una torre más de mi equipo", "estructuras_p", 25, !conOro],
       ["Un dragón más de mi equipo", "dragones_p", 6, true],
-      ["Mi equipo toma el barón", "baron_activo_p", "activar", true],
+      ["Un nivel más en mi equipo", "nivel_p", 90, true],
       ["Un asesinato más del rival", "asesinatos_r", 80, !conOro],
       ["Una torre más del rival", "estructuras_r", 25, !conOro],
       ["Un dragón más del rival", "dragones_r", 6, true],
-      ["El rival toma el barón", "baron_activo_r", "activar", true],
+      ["Un nivel más en el rival", "nivel_r", 90, true],
     ];
-    const filas = casos.filter(([, clave, tope, ver]) => ver && (tope === "activar" || x[clave] < tope))
-      .map(([texto, clave, tope]) => {
-        if (tope === "activar" && x[clave]) texto += " (ya tiene la mejora)";
+    const filas = casos.filter(([, clave, tope, ver]) => ver && x[clave] < tope)
+      .map(([texto, clave]) => {
         const y = Object.assign({}, x);
-        y[clave] = tope === "activar" ? 1 : y[clave] + 1;
+        y[clave] = y[clave] + 1;
         return [texto, Motor.prob(M[modo], y) - p];
       });
     $("mueve-nota").textContent = conOro
@@ -238,8 +226,12 @@
         return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : def;
       };
       base.minuto = num(e.minuto, 1, META.minuto_max, 15);
-      for (const [k, , , tope] of FILAS) for (const l of ["p", "r"]) base[`${k}_${l}`] = num(e[`${k}_${l}`], 0, tope);
-      for (const l of ["p", "r"]) base[`baron_activo_${l}`] = num(e[`baron_activo_${l}`], 0, 1);
+      for (const [k, , , tope, minimo] of FILAS) {
+        for (const l of ["p", "r"]) {
+          const v = e[`${k}_${l}`];
+          base[`${k}_${l}`] = k === "nivel" && v == null ? null : num(v, minimo, tope);
+        }
+      }
       base.usarOro = e.usarOro === true;
       base.oro_p = e.oro_p == null ? null : num(e.oro_p, 0, 200000) || null;
       base.oro_r = e.oro_r == null ? null : num(e.oro_r, 0, 200000) || null;

@@ -1,0 +1,40 @@
+{
+ "nombre": "nv_m_xp_tv",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "xp_p",
+  "xp_r"
+ ],
+ "notas": "techo: diferencia de experiencia (no visible) con efecto que cambia con el minuto",
+ "segundos": 0.3,
+ "perdida_log": 0.5332943717596451,
+ "brier": 0.18160538246634095,
+ "auc": 0.7965028906276395,
+ "ece": 0.009014501044304613,
+ "perdida_log_ee": 0.006215919284842487,
+ "por_tramo": {
+  "1-5": 0.6781031398431262,
+  "6-10": 0.6247417177264487,
+  "11-15": 0.5611826172040212,
+  "16-20": 0.48966402077703763,
+  "21-25": 0.41177121335987404,
+  "26-30": 0.3954432199984844,
+  "31-+": 0.4861361231054809
+ }
+}

@@ -46,6 +46,49 @@ VARIANTES = {
 }
 
 
+# Segunda ronda: ¿agrega algo el nivel (visible con Tab)? Regla fijada antes de correrla: el
+# nivel entra a la herramienta solo si mejora al elegido con un intervalo que excluye el cero.
+# La experiencia (xp) no se ve en la partida: se prueba solo como techo de lo que se pierde.
+NIVEL = ["nivel_p", "nivel_r"]
+XP = ["xp_p", "xp_r"]
+TV_M, FIJAS_M = SIN_BARON_HL[:2], SIN_BARON_HL[2:]
+VARIANTES_NIVEL = {
+    "nv_m_fijo": (glm.glm(C=0.03, tv=TV_M, fijas=FIJAS_M + ["dif_nivel"], forma="lineal"), MARCADOR + NIVEL,
+                  "elegido sin oro + diferencia de niveles con efecto fijo"),
+    "nv_m_tv": (glm.glm(C=0.03, tv=TV_M + ["dif_nivel"], fijas=FIJAS_M, forma="lineal"), MARCADOR + NIVEL,
+                "elegido sin oro + diferencia de niveles con efecto que cambia con el minuto"),
+    "nv_m_xp_tv": (glm.glm(C=0.03, tv=TV_M + ["dif_xp"], fijas=FIJAS_M, forma="lineal"), MARCADOR + XP,
+                   "techo: diferencia de experiencia (no visible) con efecto que cambia con el minuto"),
+    "nv_mo_fijo": (glm.glm(C=0.1, tv=["v"], fijas=["oro_dif"] + SIN_BARON_HL + ["dif_nivel"], forma="lineal"),
+                   MARCADOR_ORO + NIVEL, "elegido con oro + diferencia de niveles con efecto fijo"),
+    "nv_mo_tv": (glm.glm(C=0.1, tv=["v", "dif_nivel"], fijas=["oro_dif"] + SIN_BARON_HL, forma="lineal"),
+                 MARCADOR_ORO + NIVEL, "elegido con oro + diferencia de niveles que cambia con el minuto"),
+}
+# Con el nivel, Atakhan y la mejora del barón quedan con coeficientes negativos (sin significancia):
+# su valor ya está en niveles y torres, y en la página "tomar Atakhan" bajaría la probabilidad.
+# Variante legible sin ellos; entra si no pierde contra la versión completa (intervalo con el 0).
+LEGIBLES = ["dif_dragones", "dif_nivel"]
+VARIANTES_NIVEL.update({
+    "nv2_m": (glm.glm(C=0.03, tv=TV_M, fijas=LEGIBLES, forma="lineal"), MARCADOR + NIVEL,
+              "nv_m_fijo sin Atakhan ni mejora del barón"),
+    "nv2_mo": (glm.glm(C=0.1, tv=["v"], fijas=["oro_dif"] + TV_M + LEGIBLES, forma="lineal"),
+               MARCADOR_ORO + NIVEL, "nv_mo_fijo sin Atakhan ni mejora del barón"),
+})
+VARIANTES.update(VARIANTES_NIVEL)
+
+
+def nivel():
+    for n, (f, cols, notas) in VARIANTES_NIVEL.items():
+        evaluar(n, f, cols, notas)
+    for a, b in [("fin_m_sin_baron_hl", "nv_m_fijo"), ("fin_m_sin_baron_hl", "nv_m_tv"),
+                 ("fin_m_sin_baron_hl", "nv_m_xp_tv"), ("nv_m_tv", "nv_m_xp_tv"),
+                 ("fin_mo_sin_baron_hl", "nv_mo_fijo"), ("fin_mo_sin_baron_hl", "nv_mo_tv"),
+                 ("nv_m_fijo", "nv2_m"), ("fin_m_sin_baron_hl", "nv2_m"),
+                 ("nv_mo_fijo", "nv2_mo"), ("fin_mo_sin_baron_hl", "nv2_mo")]:
+        c = comparar(a, b)
+        print(f"  {b} − {a}: {c['b_menos_a']:+.4f} [{c['ic95'][0]:+.4f}, {c['ic95'][1]:+.4f}]")
+
+
 def fabrica(nombre):
     """La fábrica y las columnas de cualquier modelo, venga del script que venga."""
     if nombre in VARIANTES:
@@ -78,7 +121,11 @@ def variantes():
 
 # Finalistas para la prueba temporal: el elegido de cada modo, las referencias y el mejor modelo
 # de cada familia en validación cruzada (se buscan en resultados/, no se escriben a mano).
-ELEGIDOS = {"marcador": "fin_m_sin_baron_hl", "marcador_oro": "fin_mo_sin_baron_hl"}
+# Elegidos tras la segunda ronda: con el nivel, y sin Atakhan ni la mejora del barón (variante
+# legible, empata con la completa). Los dos mejoran a los de la primera ronda con intervalos que
+# excluyen el cero; esos quedan como referencia en la prueba temporal y en la nota de la página.
+ELEGIDOS = {"marcador": "nv2_m", "marcador_oro": "nv2_mo"}
+ANTERIORES = {"marcador": "fin_m_sin_baron_hl", "marcador_oro": "fin_mo_sin_baron_hl"}
 
 
 def finalistas():
@@ -87,7 +134,7 @@ def finalistas():
     out = {}
     for modo, con_oro in [("marcador", False), ("marcador_oro", True)]:
         nombres = ["base_proporcion", "base_marcador_dif"] if not con_oro else []
-        nombres.append(ELEGIDOS[modo])
+        nombres += [ANTERIORES[modo], ELEGIDOS[modo]]
         for pre in ("glm_", "otr_", "arb_"):
             cands = [r for r in todos if r["nombre"].startswith(pre) and "asesinatos_p" in r["columnas"]
                      and ("v" in r["columnas"]) == con_oro]
@@ -108,4 +155,4 @@ def prueba():
 
 
 if __name__ == "__main__":
-    {"variantes": variantes, "prueba": prueba}[sys.argv[1]]()
+    {"variantes": variantes, "nivel": nivel, "prueba": prueba}[sys.argv[1]]()

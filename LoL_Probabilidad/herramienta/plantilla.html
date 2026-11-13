@@ -92,6 +92,7 @@ button { font: inherit; color: inherit; }
 }
 .lado.p .valor { color: var(--blue); }
 .lado.r .valor { color: var(--red); }
+.lado .valor.auto { color: var(--faint); }
 .paso {
   width: 32px; height: 32px; border-radius: 8px;
   border: 1px solid var(--line); background: var(--deep);
@@ -212,8 +213,9 @@ button { font: inherit; color: inherit; }
       <div class="equipo r">Rival</div>
     </div>
     <div id="filas"></div>
-    <p class="fuera">El heraldo, las larvas y un barón cuya mejora ya terminó no aparecen porque
-      no cambian la estimación: lo que valen ya se nota en las torres y el oro.</p>
+    <p class="fuera">Los niveles arrancan en lo típico para el minuto (en gris) hasta que los
+      cambias. El barón, Atakhan, el heraldo y las larvas no aparecen porque no cambian la
+      estimación: lo que valen ya se nota en los niveles, las torres y el oro.</p>
 
     <div class="oro" id="oro">
       <div class="cabeza-oro">

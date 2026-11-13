@@ -17,6 +17,8 @@ Columnas (sufijo _p = mi equipo, _r = el rival):
     oro_dif (oro propio − rival) y v (oro_dif / oro total × 100); oro_total no es variable de
     ningún modelo, solo sirve para la mediana del oro por minuto de la página
   placas (oro de placas de torre: tampoco está en el marcador)
+  nivel, suma de los niveles de los cinco jugadores (se ve con la tecla Tab), y xp, la
+    experiencia sumada (no se ve; sirve solo para medir cuánto se pierde por usar el nivel)
 
 Lee tablas por participante que no se publican; la salida va a LoL_Probabilidad/datos/, que
 está en .gitignore. Lo único que sale de esa carpeta son métricas y coeficientes agregados.
@@ -92,6 +94,18 @@ def construir() -> pd.DataFrame:
         estado[f"baron_activo_{q}"] = (activo > 0).astype(int)
 
     tabla = pd.concat([filas[["partida", "minuto"]].reset_index(drop=True), estado], axis=1)
+    # Niveles y experiencia de cada equipo en el cuadro t (suma de sus cinco jugadores). El nivel
+    # se ve en el marcador del juego (tecla Tab); la experiencia no.
+    cu = pd.read_csv(PRIVADO / "cuadros.csv", usecols=["partida", "minuto", "teamId", "nivel", "xp"])
+    cu = cu[cu["partida"].isin(muestra["partida"])]
+    cu["quien"] = np.where(cu["teamId"] == cu["partida"].map(lado), "p", "r")
+    suma = cu.groupby(["partida", "minuto", "quien"])[["nivel", "xp"]].sum().unstack("quien")
+    suma.columns = [f"{c}_{q}" for c, q in suma.columns]
+    suma = suma.reindex(pd.MultiIndex.from_frame(filas[["partida", "minuto"]]))
+    assert suma.notna().all().all(), "faltan niveles en algún cuadro"
+    for c in suma.columns:
+        tabla[c] = suma[c].astype(int).to_numpy()
+
     tabla["oro_dif"] = (v["oroPropio"] - v["oroRival"]).to_numpy()
     tabla["oro_total"] = (v["oroPropio"] + v["oroRival"]).to_numpy()     # solo para agregados
     tabla["v"] = (v["v"] * 100).to_numpy()

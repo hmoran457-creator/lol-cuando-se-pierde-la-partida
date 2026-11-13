@@ -1,0 +1,40 @@
+{
+ "nombre": "nv2_m",
+ "columnas": [
+  "minuto",
+  "asesinatos_p",
+  "asesinatos_r",
+  "estructuras_p",
+  "estructuras_r",
+  "dragones_p",
+  "dragones_r",
+  "larvas_p",
+  "larvas_r",
+  "heraldos_p",
+  "heraldos_r",
+  "barones_p",
+  "barones_r",
+  "baron_activo_p",
+  "baron_activo_r",
+  "atakhan_p",
+  "atakhan_r",
+  "nivel_p",
+  "nivel_r"
+ ],
+ "notas": "nv_m_fijo sin Atakhan ni mejora del barón",
+ "segundos": 0.2,
+ "perdida_log": 0.5355293914364525,
+ "brier": 0.18262979069750265,
+ "auc": 0.7935882890529448,
+ "ece": 0.005863049131470677,
+ "perdida_log_ee": 0.008200156133102775,
+ "por_tramo": {
+  "1-5": 0.6796281666549346,
+  "6-10": 0.6280709340281831,
+  "11-15": 0.5646644884808408,
+  "16-20": 0.4913008965813312,
+  "21-25": 0.41305160087403375,
+  "26-30": 0.394773983076962,
+  "31-+": 0.49186413578862614
+ }
+}

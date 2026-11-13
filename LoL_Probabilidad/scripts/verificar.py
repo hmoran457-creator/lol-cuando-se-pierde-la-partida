@@ -49,6 +49,7 @@ def estados(n, rng):
         for c, tope in [("asesinatos", 50), ("estructuras", 12), ("dragones", 5), ("atakhan", 1)]:
             e[f"{c}_p"], e[f"{c}_r"] = int(rng.integers(0, tope + 1)), int(rng.integers(0, tope + 1))
         e["baron_activo_p"], e["baron_activo_r"] = int(rng.integers(0, 2)), int(rng.integers(0, 2))
+        e["nivel_p"], e["nivel_r"] = int(rng.integers(5, 91)), int(rng.integers(5, 91))
         e["v"] = float(rng.normal(0, 8))
         e["oro_dif"] = float(rng.normal(0, 4000))
         out.append(e)
@@ -89,7 +90,7 @@ def main() -> int:
         # 2. Coherencia (monotonía) en los dos modelos
         malos = pag.evaluate("""(casos) => {
             let malos = 0;
-            const claves = ["asesinatos", "estructuras", "dragones", "atakhan", "baron_activo"];
+            const claves = ["asesinatos", "estructuras", "dragones", "atakhan", "baron_activo", "nivel"];
             for (const e of casos) for (const modo of ["marcador", "marcador_oro"]) {
                 const s = window.MODELOS[modo], p = window.Motor.prob(s, e);
                 for (const c of claves) {
@@ -120,6 +121,9 @@ def main() -> int:
         pag.wait_for_timeout(150)
         e = pag.evaluate("JSON.parse(decodeURIComponent(location.hash.slice(1)))")
         e.update({"v": 100 * (30500 - 28000) / 58500, "oro_dif": 2500})
+        for lado in ("p", "r"):          # niveles en automático: el típico del minuto, igual en ambos
+            if e[f"nivel_{lado}"] is None:
+                e[f"nivel_{lado}"] = modelo["meta"]["nivel_mediana"][e["minuto"]]
         esperado = round(100 * p_python(modelo["marcador_oro"], e)[0])
         visto = int(pag.inner_text("#prob-p").split()[0])
         print(f"interfaz con oro: muestra {visto} %, Python da {esperado} %")
@@ -134,8 +138,7 @@ def main() -> int:
             # Un estado de ejemplo: minuto 24, arriba en asesinatos y torres, el rival con barón.
             pag.evaluate("""() => {
                 const e = {minuto: 24, asesinatos_p: 18, asesinatos_r: 14, estructuras_p: 5, estructuras_r: 3,
-                           dragones_p: 2, dragones_r: 3, atakhan_p: 0, atakhan_r: 0,
-                           baron_activo_p: 0, baron_activo_r: 1, usarOro: false};
+                           dragones_p: 2, dragones_r: 3, nivel_p: 62, nivel_r: 59, usarOro: false};
                 location.hash = encodeURIComponent(JSON.stringify(e));
             }""")
             pag.reload()
