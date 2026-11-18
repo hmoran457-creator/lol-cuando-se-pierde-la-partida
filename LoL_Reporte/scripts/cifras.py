@@ -10,6 +10,10 @@ Fuentes, en el orden del flujo (todas van en el repositorio público):
     LoL_Datos/anonimizado/resultados.json         (barrido de fugas y riesgo)
     LoL_Datos/anonimizado/publico/partidas.csv
     LoL_Analisis/resultados/{e1,e2_e4,e5_e8,v1}.json
+    Trabajo complementario (sección del mismo nombre):
+    LoL_Dimensionalidad/reduccion_dimensionalidad.ipynb   (salidas del notebook ejecutado)
+    LoL_Exploratorio/analisis_exploratorio.ipynb          (ídem; sus salidas son agregados)
+    LoL_Probabilidad/herramienta/modelo.json y LoL_Probabilidad/resultados/*.json
 
 Uso:  python LoL_Reporte/scripts/cifras.py
 """
@@ -17,6 +21,8 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
+from html.parser import HTMLParser
 
 import pandas as pd
 
@@ -64,6 +70,164 @@ def tabla(nombre: str, titulo: str, etiqueta: str, columnas: str, encabezado: li
         f"\\begin{{tabular}}{{{columnas}}}\n\\toprule\n" + " & ".join(encabezado) + " \\\\\n"
         "\\midrule\n" + cuerpo + extra + "\\bottomrule\n\\end{tabular}\n\\end{table}\n",
         encoding="utf-8")
+
+
+class _Tablas(HTMLParser):
+    """Filas de las tablas HTML que pandas escribe en un notebook (celdas th y td, en orden)."""
+
+    def __init__(self):
+        super().__init__()
+        self.filas: list[list[str]] = []
+        self._fila: list[str] | None = None
+        self._celda: str | None = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "tr":
+            self._fila = []
+        elif tag in ("th", "td") and self._fila is not None:
+            self._celda = ""
+
+    def handle_endtag(self, tag):
+        if tag in ("th", "td") and self._celda is not None and self._fila is not None:
+            self._fila.append(self._celda.strip())
+            self._celda = None
+        elif tag == "tr" and self._fila is not None:
+            self.filas.append(self._fila)
+            self._fila = None
+
+    def handle_data(self, data):
+        if self._celda is not None:
+            self._celda += data
+
+
+def salidas(ruta: pathlib.Path) -> tuple[str, list[list[list[str]]]]:
+    """El texto impreso y las tablas de un notebook ya ejecutado.
+
+    En las tablas con índice de dos niveles, pandas no repite el primer nivel en las filas que
+    lo comparten; aquí se rellena con el de la fila anterior para que cada fila sea completa.
+    """
+    if not ruta.exists():
+        raise SystemExit(f"Falta {ruta.relative_to(RAIZ)}: ejecuta su construir_notebook.py.")
+    nb = json.loads(ruta.read_text(encoding="utf-8"))
+    texto, tablas = "", []
+    for celda in nb["cells"]:
+        for o in celda.get("outputs", []):
+            if o.get("output_type") == "stream":
+                texto += "".join(o["text"])
+            html = o.get("data", {}).get("text/html")
+            if html:
+                p = _Tablas()
+                p.feed("".join(html))
+                ancho = max(len(f) for f in p.filas)
+                filas, previa = [], []
+                for f in p.filas:
+                    if len(f) < ancho and previa:
+                        f = previa[:ancho - len(f)] + f
+                    filas.append(f)
+                    previa = f
+                tablas.append(filas)
+    return texto, tablas
+
+
+def buscar(tablas: list[list[list[str]]], encabezado: str) -> dict[tuple[str, ...], dict[str, str]]:
+    """La tabla cuyo encabezado contiene `encabezado`, como {índice: {columna: valor}}."""
+    for t in tablas:
+        if encabezado in t[0]:
+            cols = t[0]
+            n_ind = sum(1 for c in cols if c == "")
+            # La fila con los nombres del índice (p. ej. «minuto») no trae datos: se salta.
+            return {tuple(f[:n_ind]): dict(zip(cols[n_ind:], f[n_ind:])) for f in t[1:]
+                    if any(x != "" for x in f[n_ind:])}
+    raise SystemExit(f"No se encontró la tabla con «{encabezado}» en el notebook")
+
+
+def dato(texto: str, patron: str) -> float:
+    m = re.search(patron, texto)
+    if not m:
+        raise SystemExit(f"No se encontró «{patron}» en las salidas del notebook")
+    return float(m.group(1).replace(",", ""))
+
+
+def numero(celda: str) -> float:
+    """«13%», «40% [35%–47%]», «1.30» o «-1776» -> el primer número."""
+    m = re.match(r"\s*(-?[\d.]+)", celda)
+    if not m:
+        raise SystemExit(f"Celda sin número en el notebook: «{celda}»")
+    return float(m.group(1))
+
+
+def complementario(c: dict[str, str]) -> None:
+    """Cifras de la sección «Trabajo complementario», leídas de lo que cada trabajo generó."""
+    # Reducción de dimensionalidad
+    texto, tablas = salidas(RAIZ / "LoL_Dimensionalidad" / "reduccion_dimensionalidad.ipynb")
+    c["drN"] = es(int(dato(texto, r"Matriz de datos: ([\d,]+) partidas")))
+    c["drPcaDos"] = es(dato(texto, r"PC1\+PC2, el ([\d.]+)%"), 1)
+    c["drPcUnoCorr"] = es(dato(texto, r"ventaja promedio de los 20 minutos: ([\d.]+)"), 3)
+    c["drLda"] = es(dato(texto, r"5 pliegues\): ([\d.]+)%"), 1)
+    c["drVveinte"] = es(dato(texto, r"si v\(20\) > 0 acierta el ([\d.]+)%"), 1)
+    comp = buscar(tablas, "silueta victoria/derrota")
+    sil = [numero(f["silueta victoria/derrota"]) for f in comp.values()]
+    c["drSilMin"], c["drSilMax"] = es(min(sil), 2), es(max(sil), 2)
+
+    # Análisis exploratorio
+    texto, tablas = salidas(RAIZ / "LoL_Exploratorio" / "analisis_exploratorio.ipynb")
+    parte = buscar(tablas, "parte BOTTOM")
+    c["eaDefQuince"] = es(int(abs(numero(parte[("15", "Derrota")]["diferencia del equipo (oro)"]))))
+    c["eaBotDer"] = es(int(numero(parte[("15", "Derrota")]["parte BOTTOM"])))
+    c["eaMidDer"] = es(int(numero(parte[("15", "Derrota")]["parte MIDDLE"])))
+    c["eaBotVic"] = es(int(numero(parte[("15", "Victoria")]["parte BOTTOM"])))
+    antes = buscar(tablas, "va abajo")
+    c["eaAbajoN"] = es(int(dato(texto, r"en las (\d+) restantes")))
+    c["eaAbajoYo"] = es(int(numero(antes[("BOTTOM (yo)",)]["va abajo"])))
+    c["eaAbajoMid"] = es(int(numero(antes[("MIDDLE",)]["va abajo"])))
+    razon = buscar(tablas, "razón")
+    c["eaMuerteContra"] = es(numero(razon[("muerte|en contra",)]["razón"]), 2)
+    c["eaMuerteFavor"] = es(numero(razon[("muerte|a favor",)]["razón"]), 2)
+    c["eaMiMuerte"] = es(numero(razon[("mi muerte",)]["razón"]), 2)
+    c["eaBaronContra"] = es(numero(razon[("barón|en contra",)]["razón"]), 2)
+    camino = buscar(tablas, "M2 − M1")
+    c["eaCaminoMax"] = es(max(abs(numero(f["M2 − M1"])) for f in camino.values()), 3)
+    veinte = buscar(tablas, "minuto 15")
+    c["eaMenosCincoQuince"] = veinte[("v = −5 %",)]["minuto 15"].split()[0]
+    muertes = buscar(tablas, "en campo rival")
+    der, vic = muertes[("Derrota", "15 en adelante")], muertes[("Victoria", "15 en adelante")]
+    c["eaMuerteDer"], c["eaMuerteVic"] = es(numero(der["por cada 10 min"]), 2), es(numero(vic["por cada 10 min"]), 2)
+    c["eaCampoDer"], c["eaCampoVic"] = es(int(numero(der["en campo rival"]))), es(int(numero(vic["en campo rival"])))
+
+    # Modelo de probabilidad de ganar
+    base = RAIZ / "LoL_Probabilidad"
+    m = leer(base / "herramienta" / "modelo.json")
+    met, meta = m["meta"]["metricas"], m["meta"]
+    res = {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in (base / "resultados").glob("*.json")}
+    perd = lambda n: res[n]["perdida_log"]  # noqa: E731
+    elegido_m, elegido_o = m["marcador"]["nombre"], m["marcador_oro"]["nombre"]
+    antes_m, antes_o = "fin_m_sin_baron_hl", "fin_mo_sin_baron_hl"
+    numeros = lambda spec: sum(1 if abs(a - b) < 1e-12 else 2 for a, b in spec["param"])  # noqa: E731
+    c["pgPartidas"], c["pgPrueba"] = es(meta["partidas"]), es(meta["partidas_prueba"])
+    c["pgNumMarc"], c["pgNumOro"] = es(numeros(m["marcador"])), es(numeros(m["marcador_oro"]))
+    c["pgAntesMarc"], c["pgElegMarc"] = es(perd(antes_m), 3), es(perd(elegido_m), 3)
+    c["pgAntesOro"], c["pgElegOro"] = es(perd(antes_o), 3), es(perd(elegido_o), 3)
+    c["pgSoloOro"] = es(perd("base_oro_interaccion"), 3)
+    c["pgXpDif"] = es(abs(perd("nv_m_xp_tv") - perd("nv_m_tv")), 3)
+    ob = [perd(n) - perd(elegido_m) for n in res if n.startswith("ob_")]
+    c["pgObjDifMax"] = es(max(abs(x) for x in ob), 4)
+    cal = meta["calibracion"]["marcador"]
+    c["pgCalMax"] = es(int(round(100 * max(abs(a - b) for a, b in cal))))
+    pr = res["prueba_temporal"]
+    c["pgPruebaAntesMarc"], c["pgPruebaMarc"] = es(pr[antes_m]["perdida_log"], 3), es(pr[elegido_m]["perdida_log"], 3)
+    c["pgPruebaOro"] = es(pr[elegido_o]["perdida_log"], 3)
+    fam = met["familias"]
+    f3 = lambda x: es(x, 3)  # noqa: E731
+    tabla("probabilidad", "Modelo de probabilidad de ganar: pérdida logarítmica en validación cruzada "
+          "por partida (menor es mejor).", "probabilidad", "lrr",
+          ["Modelo", "Solo el marcador", "Marcador y oro"],
+          [["No saber nada (la proporción de victorias)", f3(perd("base_proporcion")), "—"],
+           ["Logística simple (con oro: solo el oro)", f3(perd("base_marcador_dif")), f3(perd("base_oro_interaccion"))],
+           ["Mejor árbol combinado", f3(fam["arboles_marcador"]["perdida_log"]), f3(fam["arboles_oro"]["perdida_log"])],
+           ["Mejor de las otras familias", f3(fam["otros_marcador"]["perdida_log"]), f3(fam["otros_oro"]["perdida_log"])],
+           ["Logística con efectos por minuto", f3(perd(antes_m)), f3(perd(antes_o))],
+           ["\\textbf{La misma, con los niveles (elegida)}", f"\\textbf{{{f3(perd(elegido_m))}}}",
+            f"\\textbf{{{f3(perd(elegido_o))}}}"]])
 
 
 def main() -> int:
@@ -264,6 +428,8 @@ def main() -> int:
     c["vUnoPerdido"] = pct(1 - v1["v_antes_del_remate_pct"] / v1["ventaja_max_pct"])
     c["vUnoFinal"] = es(v1["v_final_pct"], 1)
     c["vUnoObjPropios"], c["vUnoObjRival"] = es(v1["objetivos_propios"]), es(v1["objetivos_rival"])
+
+    complementario(c)
 
     (TAB / "cifras.tex").write_text("".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in c.items()),
                                     encoding="utf-8")

@@ -41,7 +41,12 @@ Ninguna cifra está escrita a mano: salen de los resultados del análisis
 python LoL_PresentacionFinal/scripts/figuras_deck.py   # figuras SVG con el tema del mazo
 python LoL_PresentacionFinal/scripts/construir.py      # plantilla.html -> presentacion_final.html
 python LoL_PresentacionFinal/scripts/shoot.py          # capturas + revisión de maquetación
+python LoL_PresentacionFinal/scripts/exportar_pdf.py   # presentacion_final.pdf, el respaldo
 ```
+
+`presentacion_final.pdf` es la misma presentación, una lámina por página y completa (sin
+animaciones), para cuando el HTML no se pueda abrir. Son capturas a doble resolución: el
+texto no se puede seleccionar.
 
 **Se edita `plantilla.html`, nunca `presentacion_final.html`**: este último se sobrescribe.
 `construir.py` falla si queda alguna `{{cifra}}` sin valor.

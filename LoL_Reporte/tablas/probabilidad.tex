@@ -1,0 +1,17 @@
+\begin{table}[H]
+\centering\small
+\caption{Modelo de probabilidad de ganar: pérdida logarítmica en validación cruzada por partida (menor es mejor).}
+\label{tab:probabilidad}
+\begin{tabular}{lrr}
+\toprule
+Modelo & Solo el marcador & Marcador y oro \\
+\midrule
+No saber nada (la proporción de victorias) & 0{,}689 & — \\
+Logística simple (con oro: solo el oro) & 0{,}554 & 0{,}545 \\
+Mejor árbol combinado & 0{,}554 & 0{,}537 \\
+Mejor de las otras familias & 0{,}549 & 0{,}531 \\
+Logística con efectos por minuto & 0{,}548 & 0{,}531 \\
+\textbf{La misma, con los niveles (elegida)} & \textbf{0{,}536} & \textbf{0{,}527} \\
+\bottomrule
+\end{tabular}
+\end{table}

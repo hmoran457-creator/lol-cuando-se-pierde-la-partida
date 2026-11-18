@@ -16,7 +16,7 @@ se mida y pasa más cuando gano.
 
 | Qué | Dónde |
 |---|---|
-| **Presentación de la exposición** (10 min, 13 láminas) | [`LoL_PresentacionFinal/`](LoL_PresentacionFinal/): abrir `presentacion_final.html` |
+| **Presentación de la exposición** (10 min, 13 láminas) | [`LoL_PresentacionFinal/`](LoL_PresentacionFinal/): abrir `presentacion_final.html`; en PDF, [`presentacion_final.pdf`](LoL_PresentacionFinal/presentacion_final.pdf) |
 | **Reporte final** (método, pruebas, código) | [`LoL_Reporte/reporte_final.pdf`](LoL_Reporte/reporte_final.pdf) |
 | Presentación narrada, para quien nunca ha jugado (complementaria) | [`LoL_PresentacionHistoria/`](LoL_PresentacionHistoria/): abrir `presentacion_historia.html` |
 | Video de la presentación narrada | [`LoL_PresentacionHistoria/video/historia.mp4`](LoL_PresentacionHistoria/video/historia.mp4) |

@@ -137,7 +137,11 @@ regreso, aunque se llega a él poco a poco: remontar estando abajo pasa del
 \hTresPunto{} lo logra menos de una de cada veinte partidas (H3). Las cuatro formas de
 perder que propuse explican el \pctClas\,\% de las derrotas; el \pctSinClas\,\% restante
 son, sobre todo, partidas parejas que se deciden tarde. Cada cambio respecto al plan
-registrado antes de ver los datos se declara, con las dos versiones del resultado.
+registrado antes de ver los datos se declara, con las dos versiones del resultado. Como
+trabajo complementario (sección~\ref{sec:complementario}), una reducción de dimensionalidad
+muestra que mis partidas forman un continuo y no grupos, un análisis exploratorio ubica de
+dónde sale el déficit de mis derrotas, y un modelo de probabilidad de ganar, elegido entre
+tres familias, se publica como una página que se usa con el marcador del juego.
 
 % ===========================================================================
 \section{Descripción del problema}
@@ -592,6 +596,101 @@ por partida lo mitiga, no lo resuelve); y la fecha está generalizada a mes por
 privacidad, así que E7 parte por mes y no por día.
 
 % ===========================================================================
+\section{Trabajo complementario}
+\label{sec:complementario}
+
+Después de cerrar las hipótesis se hicieron tres trabajos más, cada uno en su carpeta del
+repositorio, con su código y su documentación. No cambian ningún resultado anterior: H1--H3
+y los arquetipos se quedan como se reportaron. Sus cifras también las escribe
+\texttt{cifras.py}, leídas de lo que cada trabajo generó.
+
+\subsection{Reducción de dimensionalidad}
+\textbf{Carpeta \texttt{LoL\_Dimensionalidad}} (notebook ejecutado y su PDF). Cada partida que
+llegó al minuto 20 (\drN) se representó como un vector de 20 dimensiones,
+\((v(1), \dots, v(20))\), y se proyectó a dos dimensiones con cuatro algoritmos: PCA, LDA,
+t-SNE (con perplejidades de 5 a 150) y UMAP (con 5 a 200 vecinos). Los mapas se compararon
+con la confiabilidad (\emph{trustworthiness}, que mide si los vecinos en el mapa eran vecinos
+en las 20 dimensiones) y con la silueta por resultado.
+\begin{itemize}[leftmargin=1.4em,itemsep=.2em]
+  \item \textbf{No hay grupos separados.} En los cuatro métodos, victorias y derrotas forman
+        un solo continuo ordenado por la ventaja de oro; la silueta por resultado va de
+        \drSilMin{} a \drSilMax.
+  \item \textbf{PCA basta.} Dos componentes guardan el \drPcaDos\,\% de la varianza, y la
+        primera es la ventaja promedio de la partida (correlación \drPcUnoCorr).
+  \item \textbf{El camino no agrega información.} LDA con los 20 minutos acierta el resultado
+        en el \drLda\,\% de las partidas (validación cruzada), lo mismo que la regla «gana quien
+        va arriba en el minuto 20» (\drVveinte\,\%).
+  \item Las derrotas A2 («ventaja desperdiciada») caen entre las victorias en los cuatro
+        mapas: hasta el minuto 20 parecen ganadas.
+\end{itemize}
+
+\subsection{Análisis exploratorio}
+\textbf{Carpeta \texttt{LoL\_Exploratorio}.} Cuatro preguntas que no estaban registradas, así
+que sus resultados son pistas, no confirmaciones. Usa las tablas por participante, solo en
+local; publica agregados, y su script se detiene si alguna salida trae el identificador de
+una partida o de un jugador, o el campeón de otro jugador.
+\begin{enumerate}[leftmargin=1.6em,itemsep=.2em]
+  \item \textbf{¿Perdí yo?} En mis derrotas jugando BOTTOM, mi duelo de línea aporta el
+        \eaBotDer\,\% del déficit del equipo en el minuto 15 (\eaDefQuince{} de oro), y
+        MIDDLE el \eaMidDer\,\%; en las victorias, mi línea aporta el \eaBotVic\,\% de la
+        ventaja. Un minuto antes del quiebre (\eaAbajoN{} derrotas), mi duelo va abajo en
+        el \eaAbajoYo\,\% de los casos y el de MIDDLE en el \eaAbajoMid\,\%.
+  \item \textbf{¿Qué rodea al quiebre?} Peleas perdidas, no objetivos: hay
+        \eaMuerteContra{} veces las muertes esperadas de mi equipo y \eaMuerteFavor{} las del
+        rival; los dragones y las torres aparecen lo esperado, y solo destaca el barón del
+        rival (\eaBaronContra). Mis muertes suben como las del equipo (\eaMiMuerte).
+  \item \textbf{¿Importa el camino?} No: en ningún minuto la pérdida logarítmica cambia en más
+        de \eaCaminoMax{} al agregar a la ventaja actual su cambio en los últimos 3 minutos. Una tabla
+        da la probabilidad por minuto y ventaja (por ejemplo, ir \(-5\)\,\% en el minuto 15 es
+        ganar \eaMenosCincoQuince{} de cada 20).
+  \item \textbf{¿Dónde muero?} Desde el minuto 15, en las derrotas muero \eaMuerteDer{} veces
+        por cada 10 minutos (\eaMuerteVic{} en las victorias), y solo el \eaCampoDer\,\% de esas
+        muertes ocurre en campo rival (\eaCampoVic\,\% en las victorias): muero defendiendo.
+\end{enumerate}
+
+\subsection{Modelo de probabilidad de ganar}
+\textbf{Carpeta \texttt{LoL\_Probabilidad}.} Una página sin internet
+(\texttt{probabilidad.html}) donde se escribe el marcador como se ve en el juego (minuto,
+asesinatos, torres e inhibidores, dragones y la suma de niveles de cada equipo, visible con
+Tab), y opcionalmente el oro, y dice cuántas de cada 20 partidas así gané, con el rango del
+modelo.
+
+\noindent\textbf{Método.} Una fila por partida y minuto de las \pgPartidas{} partidas, y un
+banco de pruebas común con reglas fijadas antes de probar nada: validación cruzada de 5
+pliegues \emph{por partida} (los minutos de una partida nunca quedan repartidos entre
+entrenamiento y prueba), pérdida logarítmica como medida principal (también Brier, AUC y
+calibración), y una prueba temporal con las \pgPrueba{} partidas de mayo de 2026 en adelante.
+Regla de elección: el modelo más simple dentro del intervalo del mejor, con intervalos por
+\emph{bootstrap} remuestreando partidas. Se compararon tres familias, exploradas en paralelo:
+regresión logística con efectos que cambian con el minuto, árboles combinados
+(\emph{gradient boosting} y bosques aleatorios) y otras (redes neuronales pequeñas, un modelo
+por minuto, vecinos cercanos).
+
+\input{tablas/probabilidad.tex}
+
+\noindent\textbf{Resultados.} Ningún árbol ni red superó a la logística por más que el margen
+de error: con unas mil partidas no hay datos para aprender más. Una curva de aprendizaje
+confirmó que más partidas casi no ayudan; lo que mejoró al modelo fue información nueva. La
+suma de niveles bajó la pérdida de \pgAntesMarc{} a \pgElegMarc{} sin el oro (con él, de
+\pgAntesOro{} a \pgElegOro), la mejora más grande de todo el proceso: con los niveles, el
+marcador predice mejor que el oro solo (\pgSoloOro). La experiencia, que no se ve en la
+partida, no agrega nada sobre los niveles: la pérdida cambia apenas \pgXpDif, dentro del
+margen de error. El detalle de los objetivos (torres e
+inhibidores por separado, alma, dragón ancestral, inhibidores caídos), leído del JSON crudo,
+no mejoró nada: todas las variantes quedaron a menos de \pgObjDifMax{} del modelo elegido. El
+elegido tiene \pgNumMarc{} parámetros sin el oro y \pgNumOro{} con él. Entre lo que predice y
+lo que se observó hay, a lo más, \pgCalMax{}~pp de diferencia (diez grupos, fuera de muestra),
+y la página calcula exactamente lo mismo que Python (lo comprueba un script en cada
+construcción).
+
+\noindent\textbf{Límites.} En la prueba temporal la pérdida subió para todos los modelos:
+el elegido marcó \pgPruebaMarc{} sin el oro y \pgPruebaOro{} con él (el modelo sin niveles,
+\pgPruebaAntesMarc{} sin el oro). Esa prueba se volvió a usar después de corregir los datos (una
+revisión independiente encontró que las ejecuciones contaban como asesinatos) y de cada ronda,
+así que ya no es una prueba ciega. El modelo describe mis partidas, no las de cualquier jugador,
+y sus coeficientes son asociaciones.
+
+% ===========================================================================
 \section{Reproducibilidad}
 
 \noindent\textbf{Repositorio público:}
@@ -623,6 +722,19 @@ python LoL_Reporte/scripts/cifras.py
 latexmk -cd -lualatex LoL_Reporte/reporte_final.tex
 \end{Verbatim}
 
+\noindent \textbf{Trabajo complementario.} Necesita además scikit-learn, umap-learn, nbclient,
+nbconvert y pyarrow (versiones fijadas en el mismo \texttt{requirements.txt}). Desde el
+repositorio público corren el notebook de reducción de dimensionalidad y la construcción y
+revisión de la herramienta de probabilidad; el notebook exploratorio y el entrenamiento del
+modelo leen las tablas por participante, que no se publican, así que se incluyen ya
+ejecutados. Cada carpeta explica su orden de ejecución en su LEEME.
+
+\begin{Verbatim}[fontsize=\small, formatcom=\codigo, frame=lines]
+python LoL_Dimensionalidad/scripts/construir_notebook.py   # ejecuta el notebook y hace el PDF
+python LoL_Probabilidad/scripts/construir.py               # la página, desde modelo.json
+python LoL_Probabilidad/scripts/verificar.py               # paridad JS-Python y revisión
+\end{Verbatim}
+
 \noindent \textbf{Pruebas automáticas} (\texttt{python -m pytest} en
 \texttt{LoL\_Datos/tests}, \texttt{LoL\_Anonimizacion/tests} y
 \texttt{LoL\_Analisis/tests}): el descargador contra una API simulada, el barrido de
@@ -642,26 +754,49 @@ Claude (Anthropic).
 \section*{Referencias}
 \addcontentsline{toc}{section}{Referencias}
 \begin{itemize}[leftmargin=1.4em,itemsep=.3em,label={}]
+  \item Brier, G.~W. (1950). Verification of forecasts expressed in terms of probability.
+        \emph{Monthly Weather Review}, 78(1), 1--3.
   \item Efron, B., y Tibshirani, R.~J. (1993). \emph{An Introduction to the
         Bootstrap}. Chapman \& Hall.
+  \item Fisher, R.~A. (1936). The use of multiple measurements in taxonomic problems.
+        \emph{Annals of Eugenics}, 7(2), 179--188.
   \item Good, P. (2005). \emph{Permutation, Parametric and Bootstrap Tests of
         Hypotheses} (3.ª ed.). Springer.
   \item Harris, C.~R., et al. (2020). Array programming with NumPy. \emph{Nature},
         585, 357--362.
+  \item Hastie, T., Tibshirani, R., y Friedman, J. (2009). \emph{The Elements of
+        Statistical Learning} (2.ª ed.). Springer.
   \item Hunter, J.~D. (2007). Matplotlib: A 2D graphics environment. \emph{Computing
         in Science \& Engineering}, 9(3), 90--95.
+  \item Kluyver, T., et al. (2016). Jupyter Notebooks: a publishing format for
+        reproducible computational workflows. En \emph{Positioning and Power in Academic
+        Publishing}, 87--90. IOS Press.
+  \item McInnes, L., Healy, J., y Melville, J. (2018). UMAP: Uniform Manifold
+        Approximation and Projection for dimension reduction. \emph{arXiv:1802.03426}.
   \item McKinney, W. (2010). Data structures for statistical computing in Python.
         \emph{Proceedings of the 9th Python in Science Conference}, 56--61.
   \item MingweiSamuel. \emph{riotapi-schema} (ejemplos de respuestas de
         \texttt{match-v5}). \url{https://github.com/MingweiSamuel/riotapi-schema}
+  \item Pearson, K. (1901). On lines and planes of closest fit to systems of points in
+        space. \emph{Philosophical Magazine}, 2(11), 559--572.
+  \item Pedregosa, F., et al. (2011). Scikit-learn: Machine learning in Python.
+        \emph{Journal of Machine Learning Research}, 12, 2825--2830.
   \item Riot Games. \emph{Riot Developer Portal: APIs} y \emph{Data Dragon}.
         \url{https://developer.riotgames.com}
   \item Rocher, L., Hendrickx, J.~M., y de Montjoye, Y.-A. (2019). Estimating the
         success of re-identifications in incomplete datasets using generative models.
         \emph{Nature Communications}, 10, 3069.
+  \item Rousseeuw, P.~J. (1987). Silhouettes: a graphical aid to the interpretation and
+        validation of cluster analysis. \emph{Journal of Computational and Applied
+        Mathematics}, 20, 53--65.
   \item Sweeney, L. (2002). k-anonymity: A model for protecting privacy.
         \emph{International Journal of Uncertainty, Fuzziness and Knowledge-Based
         Systems}, 10(5), 557--570.
+  \item van der Maaten, L., y Hinton, G. (2008). Visualizing data using t-SNE.
+        \emph{Journal of Machine Learning Research}, 9, 2579--2605.
+  \item Venna, J., y Kaski, S. (2001). Neighborhood preservation in nonlinear projection
+        methods: an experimental study. En \emph{Artificial Neural Networks — ICANN 2001},
+        LNCS 2130, 485--491. Springer.
   \item Virtanen, P., et al. (2020). SciPy 1.0: Fundamental algorithms for scientific
         computing in Python. \emph{Nature Methods}, 17, 261--272.
   \item Wilson, E.~B. (1927). Probable inference, the law of succession, and
@@ -681,8 +816,9 @@ registradas de Riot Games,~Inc.}
 \section{Código}
 Los scripts completos del análisis y de este documento, en el orden en que se ejecutan.
 Se reproducen sin cambios. El código de las presentaciones y del video (los
-\texttt{construir.py}, \texttt{shoot.py} y \texttt{video.py}) está en el repositorio
-público.
+\texttt{construir.py}, \texttt{shoot.py} y \texttt{video.py}) y el del trabajo
+complementario (carpetas \texttt{LoL\_Dimensionalidad}, \texttt{LoL\_Exploratorio} y
+\texttt{LoL\_Probabilidad}) están en el repositorio público.
 
 \codigofuente{A.1 · Descarga: \texttt{descargar\_partidas.py}}{../LoL_Datos/scripts/descargar_partidas.py}
 \codigofuente{A.2 · Revisión y embudo: \texttt{revisar\_descarga.py}}{../LoL_Datos/scripts/revisar_descarga.py}
