@@ -16,9 +16,9 @@ se mida y pasa más cuando gano.
 
 | Qué | Dónde |
 |---|---|
-| **Presentación de la exposición** (10 min, 13 láminas) | [`LoL_PresentacionFinal/`](LoL_PresentacionFinal/): abrir `presentacion_final.html`; en PDF, [`presentacion_final.pdf`](LoL_PresentacionFinal/presentacion_final.pdf) |
+| **Presentación de la exposición**: narrada, para quien nunca ha jugado (unos 9 min, 17 láminas) | [`LoL_PresentacionHistoria/`](LoL_PresentacionHistoria/): abrir `presentacion_historia.html`; en PDF, [`presentacion_historia.pdf`](LoL_PresentacionHistoria/presentacion_historia.pdf) |
 | **Reporte final** (método, pruebas, código) | [`LoL_Reporte/reporte_final.pdf`](LoL_Reporte/reporte_final.pdf) |
-| Presentación narrada, para quien nunca ha jugado (complementaria) | [`LoL_PresentacionHistoria/`](LoL_PresentacionHistoria/): abrir `presentacion_historia.html` |
+| Presentación por puntos de la rúbrica, con el método completo (13 láminas; referencia y respaldo) | [`LoL_PresentacionFinal/`](LoL_PresentacionFinal/): abrir `presentacion_final.html`; en PDF, [`presentacion_final.pdf`](LoL_PresentacionFinal/presentacion_final.pdf) |
 | Video de la presentación narrada | [`LoL_PresentacionHistoria/video/historia.mp4`](LoL_PresentacionHistoria/video/historia.mp4) |
 | Planteamiento del proyecto (el plan, registrado antes de ver los datos) | [`LoL_Planteamiento/planteamiento_proyecto_final.pdf`](LoL_Planteamiento/planteamiento_proyecto_final.pdf) |
 | Actividad de anonimización (sobre el piloto de 7 partidas públicas) | [`LoL_Anonimizacion/reporte_anonimizacion.pdf`](LoL_Anonimizacion/reporte_anonimizacion.pdf) |
@@ -85,8 +85,8 @@ LoL_Exploratorio/          notebook de análisis exploratorio posterior al proye
 LoL_Probabilidad/          herramienta de probabilidad de ganar: modelos comparados, elegido y página
 LoL_Reporte/               reporte final (LaTeX)
 LoL_Planteamiento/         planteamiento del proyecto (LaTeX)
-LoL_PresentacionFinal/     presentación final, la de la exposición
-LoL_PresentacionHistoria/  presentación narrada con movimiento y su video
+LoL_PresentacionHistoria/  presentación narrada con movimiento y su video: la de la exposición
+LoL_PresentacionFinal/     presentación por puntos de la rúbrica (referencia y respaldo)
 LoL_Presentacion/          primera presentación (avance; histórica, no se mantiene)
 ```
 

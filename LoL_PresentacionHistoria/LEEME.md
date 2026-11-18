@@ -22,28 +22,35 @@ una lámina, traduce cada gráfica a una idea cotidiana (el oro como la posesió
 Al regresar a una lámina ya vista, aparece completa (no se repite la animación).
 Con «reducir movimiento» activado en el sistema, todo aparece sin animación.
 
-## Guion de tiempos (exposición en vivo, ~10 min)
+## Guion de tiempos (exposición en vivo, ~8 min 45 s)
+
+Es la presentación de la exposición oral. Cada lámina se arma por pasos (62 clics en total);
+se dice poco en cada paso y se deja ver cada gráfica un segundo antes de explicarla.
 
 | # | Lámina | Seg. | Idea que hay que dejar |
 |---|---|---:|---|
-| 1 | Portada | 15 | La pregunta. Dejar que la línea de fondo se dibuje |
-| 2 | DERROTA | 20 | Es todo lo que el juego te dice. ¿Último minuto o mucho antes? |
-| 3 | El juego en 60 s | 45 | Dos equipos, una base, torres y monstruos = objetivos |
-| 4 | El oro | 40 | El marcador que no se ve; la carrera hasta el minuto 16 |
-| 5 | Las partidas son mías | 25 | Mis datos, mis personajes, seis cuentas |
-| 6 | El caso | 75 | Callar mientras corre la línea (5.6 s). Arriba casi toda la partida; desde el 16 la ventaja se encoge; el remate |
-| 7 | Las tres pistas | 35 | Lo que quise averiguar; aquí nace «el quiebre» |
-| 8 | Los datos | 35 | Cada partida es una película de fotos; el embudo; las victorias como control |
-| 9 | La medida | 35 | 2,000 de oro no pesan igual: por eso, % del oro del mapa |
-| 10 | El tropiezo | 40 | La primera regla falló y se dice |
-| 11 | Pista 1 | 45 | Antes del 15 no se distingue; después, sí |
-| 12 | Pista 2 | 45 | No se puede afirmar: depende de cómo se mida, y pasa más cuando gano |
-| 13 | Pista 3 | 45 | 7 → 4 → 1 de cada 20: la puerta se cierra poco a poco, y desde el 27 casi no se abre |
-| 14 | Formas de perder | 40 | Cuatro formas y una mitad pareja que se va quedando atrás |
-| 15 | Veredicto | 30 | Se confirma, no concluyente, se confirma |
-| 16 | La respuesta | 40 | El rebobinado: perdimos el 64 % de la ventaja antes del remate. Y lo que no puedo afirmar |
+| 1 | Portada | 10 | La pregunta |
+| 2 | DERROTA | 15 | Es todo lo que el juego te dice. ¿Último minuto o mucho antes? |
+| 3 | El juego en 60 s | 35 | Dos equipos, una base, torres y monstruos = objetivos |
+| 4 | El oro | 30 | El marcador que no se ve; +3,500 en el minuto 16 |
+| 5 | Las partidas son mías | 20 | 1,195 partidas mías, de seis cuentas |
+| 6 | El caso | 60 | Callar mientras corre la línea (5.6 s). Arriba 31 de 34 minutos; desde el 16 la ventaja se encoge; el remate |
+| 7 | Las tres pistas | 35 | Las hipótesis, escritas antes de ver los datos; aquí nace «el quiebre» |
+| 8 | Los datos | 35 | La base de datos (API de Riot); el filtrado: de 1,241 a 1,195; las victorias como control |
+| 9 | La medida | 30 | Preprocesamiento: 2,000 de oro no pesan igual, por eso % del oro del mapa |
+| 10 | El tropiezo | 35 | La primera regla falló y se dice |
+| 11 | Pista 1 | 40 | Antes del 15 no se distingue; después, 9.5 contra 6.1 |
+| 12 | Pista 2 | 35 | No se puede afirmar: depende de cómo se mida, y pasa más cuando gano |
+| 13 | Pista 3 | 40 | 7 → 4 → 1 de cada 20: la puerta se cierra poco a poco, y desde el 27 casi no se abre |
+| 14 | Formas de perder | 35 | Cuatro formas y una mitad pareja que se va quedando atrás |
+| 15 | Veredicto | 25 | Se confirma, no concluyente, se confirma |
+| 16 | La respuesta | 35 | Se van perdiendo: el 64 % de la ventaja se fue antes del remate. Y lo que no puedo afirmar |
 | 17 | Gracias | 10 | «Pregúntate cuándo empezó» |
-| | **Total** | **620** | ≈ 10 min 20 s (recortar en 3, 8 o 9 si hace falta) |
+| | **Total** | **525** | ≈ 8 min 45 s (si hace falta, recortar en 3, 5 y 12) |
+
+`presentacion_historia.pdf` es la misma presentación, una lámina por página y completa (sin
+animaciones), por si el HTML no se puede abrir. Se regenera con
+`python LoL_PresentacionHistoria/scripts/exportar_pdf.py`.
 
 ## Auditoría hecha
 
