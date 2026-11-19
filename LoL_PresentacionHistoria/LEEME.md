@@ -50,7 +50,7 @@ se dice una idea por paso y se deja ver cada gráfica un segundo antes de explic
 Para no dar demasiada información de golpe se quitaron tres láminas: *El oro* (su idea quedó
 como el paso 4 del juego), *El tropiezo* (la regla que falló se dice en el pie de la pista 2 y
 completa en el reporte) y *Formas de perder* (está en el reporte). El texto en pantalla bajó de
-unas 1,470 palabras a unas 770.
+unas 1,470 palabras a unas 790.
 
 `presentacion_historia.pdf` es la misma presentación, una lámina por página y completa (sin
 animaciones), por si el HTML no se puede abrir. Se regenera con
@@ -61,6 +61,13 @@ animaciones), por si el HTML no se puede abrir. Se regenera con
 1. **Automática** (`shoot.py`): 0 problemas en las 14 láminas de la versión corta (y antes, en
    las 17 de la anterior).
 2. **Visual**: cada captura revisada a mano, y cuadros sueltos del video a mitad de animación.
+   En la versión corta se volvieron a revisar a mano las 14 capturas.
+
+Las rondas 3 y 4 se hicieron sobre la versión anterior, de 17 láminas, y **no se repitieron
+en la versión corta**. Lo que cambió al recortar está al final de `DISENO.md`; en particular,
+el quiebre ahora se nombra en la lámina 6 y su regla (y que la primera falló) va en el pie de
+la pista 2.
+
 3. **Redacción para quien no juega**: un revisor independiente leyó la presentación como
    alguien que nunca ha jugado y cotejó cada cifra con `LoL_Analisis/resultados/`. Lo que
    cambió por eso: el caso ahora cuenta lo que de verdad pasó (la ventaja se encogió del

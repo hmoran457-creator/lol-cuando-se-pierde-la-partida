@@ -85,7 +85,10 @@ entre los datos y los hallazgos se daba demasiada información de golpe.
    reporte. *Formas de perder*: está en el reporte y en las preguntas del guion. Los dibujos
    `oro`, `tropiezo` y `forma` siguen en `historia.js` sin usarse.
 9. **Una cifra por paso.** Se quitaron casi todos los subtítulos de dos líneas y los pies
-   largos; el texto en pantalla bajó de unas 1,470 a unas 770 palabras. El veredicto pone, en
-   cada tarjeta, la hipótesis inicial (pregunta) y la final (respuesta).
+   largos; el texto en pantalla bajó de unas 1,470 a unas 790 palabras. El veredicto pone, en
+   cada tarjeta, la hipótesis inicial (pregunta) y la final (respuesta). Se dejaron en
+   pantalla dos aclaraciones para quien no juega: el caso dice que la ventaja va «en % del oro
+   del mapa» (la medida se explica tres láminas después) y la pista 2 dice qué es la «pura
+   casualidad» (los mismos monstruos en minutos al azar).
 10. **La etiqueta del eje de la curva de remontadas** se movió a la izquierda: la marca del
     minuto 27 la cruzaba.
