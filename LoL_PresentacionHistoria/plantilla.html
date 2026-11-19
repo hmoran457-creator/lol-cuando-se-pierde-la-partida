@@ -23,8 +23,8 @@
                    font-variation-settings:'wdth' 115; color:var(--parchment); max-width:16ch; margin:0">
           ¿En qué minuto se perdió la partida?</h1>
         <p class="lead" style="color:var(--muted); max-width:50ch; font-size:26px">
-          Lo que <b class="oro" data-count="{{nFinalNum}}" data-delay="900" data-dur="1800">{{nFinal}}</b> partidas de un videojuego
-          dicen sobre cuándo se pierde: casi nunca en el último momento.</p>
+          Lo que <b class="oro" data-count="{{nFinalNum}}" data-delay="900" data-dur="1800">{{nFinal}}</b> partidas mías
+          dicen sobre cuándo se pierde.</p>
       </div>
       <div class="footer"><div>Héctor Manuel Morán Maldonado · Especialidad en Ciencia de Datos</div>
         <div>Visualización de datos y narración de historias</div></div>
@@ -42,43 +42,24 @@
     </section>
 
     <section class="slide" id="h-juego" data-sec="1" data-steps>
-      <div class="kicker">1 · El misterio · el juego en 60 segundos</div>
-      <h2>League of Legends, para quien nunca lo ha jugado</h2>
+      <div class="kicker">1 · El misterio · el juego en 30 segundos</div>
+      <h2>League of Legends en 30 segundos</h2>
       <div class="body">
         <div class="dos der-ancha">
           <div class="narra">
-            <div data-step="1"><span class="num">1</span><b>Dos equipos de 5 personas</b> (los puntos de colores), cada uno en una esquina del mapa.</div>
-            <div data-step="2"><span class="num">2</span><b>Gana quien destruye la base del otro</b> (el juego la llama <span class="glosa">Nexo</span>).</div>
-            <div data-step="3"><span class="num">3</span>Para llegar, hay que tumbar <b>torres</b> que defienden tres caminos.</div>
-            <div data-step="4"><span class="num">4</span>En medio hay <b>monstruos</b> (los más valiosos: los dragones y el Barón); vencerlos da una ventaja grande. Torres y monstruos son los <span class="glosa">objetivos</span>.</div>
+            <div data-step="1"><span class="num">1</span><b>Dos equipos de 5</b>, cada uno en una esquina.</div>
+            <div data-step="2"><span class="num">2</span><b>Gana quien destruye la base del otro.</b></div>
+            <div data-step="3"><span class="num">3</span>En el camino hay <b>torres</b> y <b>monstruos</b>: los <span class="glosa">objetivos</span>.</div>
+            <div data-step="4"><span class="num">4</span>Todo da <b class="oro">oro</b>, y quien tiene más suele ir ganando, como la <b>posesión del balón</b>.</div>
           </div>
           <div class="lienzo" data-dibujo="mapa"></div>
         </div>
       </div>
-      <div class="footer"><div>Una partida dura unos 30 minutos. Nadie gana por puntos: gana quien tumba la base.</div></div>
-    </section>
-
-    <section class="slide" id="h-oro" data-sec="1" data-steps>
-      <div class="kicker">1 · El misterio · el marcador oculto</div>
-      <h2>El oro: el marcador que no se ve</h2>
-      <div class="body">
-        <div class="dos">
-          <div class="narra">
-            <div data-step="1">Todo lo bueno que haces <b>da oro</b>: derrotar a un rival, tumbar una torre, vencer un monstruo.</div>
-            <div data-step="2">Con el oro compras equipo y te vuelves más fuerte. <b>El que tiene más oro suele ir ganando.</b></div>
-            <div data-step="3">Es como la <b>posesión del balón en el fútbol</b>: no es el marcador oficial, pero dice quién domina el partido.</div>
-          </div>
-          <div class="lienzo" data-dibujo="oro"></div>
-        </div>
-      </div>
-      <div class="footer"><div>Las barras son reales: el oro de los dos equipos en el minuto {{casoMaxMin}} de la partida que veremos</div></div>
     </section>
 
     <section class="slide" id="h-yo" data-sec="1" data-steps>
       <div class="kicker">1 · El misterio · quién cuenta esta historia</div>
-      <h2>Las partidas son mías
-        <span class="sub">Juego casi siempre de <span class="glosa">tirador</span>: el personaje que ataca desde lejos y
-          necesita oro para volverse decisivo. Mis dos personajes más usados:</span></h2>
+      <h2>Las partidas son mías</h2>
       <div class="body" style="gap:28px">
         <div class="tarjetas" data-step="1">
           <div class="tarjeta" style="--k:0"><img src="assets/img/{{campUno}}_splash.jpg" alt="Arte oficial de {{campUno}}">
@@ -87,9 +68,9 @@
             <div class="nombre">{{campDos}}<small><span data-count="{{campDosN}}" data-delay="900">{{campDosN}}</span> partidas</small></div></div>
         </div>
         <div class="fichas" data-step="2" style="display:flex; gap:40px">
-          <div class="stat"><div class="v gold" data-count="{{nFinalNum}}">{{nFinal}}</div><div class="k">partidas clasificatorias (las que cuentan para subir de nivel)</div></div>
-          <div class="stat"><div class="v gold" data-count="{{nCuentas}}" data-delay="200">{{nCuentas}}</div><div class="k">cuentas mías, en el mismo servidor</div></div>
-          <div class="stat"><div class="v gold"><span data-count="{{periodoAnios}}" data-delay="400">{{periodoAnios}}</span> años</div><div class="k">de partidas, {{periodoTexto}}</div></div>
+          <div class="stat"><div class="v gold" data-count="{{nFinalNum}}">{{nFinal}}</div><div class="k">partidas clasificatorias</div></div>
+          <div class="stat"><div class="v gold" data-count="{{nCuentas}}" data-delay="200">{{nCuentas}}</div><div class="k">cuentas</div></div>
+          <div class="stat"><div class="v gold"><span data-count="{{periodoAnios}}" data-delay="400">{{periodoAnios}}</span> años</div><div class="k">de partidas</div></div>
         </div>
       </div>
       <div class="footer"><div>Arte oficial de Riot Games (Data Dragon)</div></div>
@@ -97,9 +78,8 @@
 
     <section class="slide" id="h-caso" data-sec="1" data-steps>
       <div class="kicker">1 · El misterio · el caso</div>
-      <h2>Una derrota mía: íbamos ganando {{casoArriba}} de los {{casoDurMin}} minutos… y perdimos
-        <span class="sub">La línea es nuestra ventaja en oro (como parte de todo el oro del mapa; lo explico más
-          adelante). Arriba de la línea punteada vamos ganando; abajo, el rival.</span></h2>
+      <h2>Íbamos ganando {{casoArriba}} de los {{casoDurMin}} minutos… y perdimos
+        <span class="sub">La línea es nuestra ventaja de oro: arriba de la punteada, vamos ganando.</span></h2>
       <div class="body" style="gap:14px">
         <div class="lienzo" data-dibujo="caso"></div>
         <div class="narra" style="flex-direction:row; gap:40px; align-items:baseline">
@@ -109,152 +89,114 @@
             <b class="oro">+<span data-count="{{casoVantes}}" data-dec="1" data-delay="400">{{casoVantes}}</span> %</b> en el {{casoMinAntes}}; luego, el remate: {{casoRivRemate}} objetivos del rival en 2 minutos.</div>
         </div>
       </div>
-      <div class="footer"><div>Partida real, elegida por regla: la más típica de las «ventajas tiradas», 1 de cada {{casoDeCada}} derrotas (las veremos más adelante)</div></div>
+      <div class="footer"><div>Partida real, elegida por una regla y no a mano</div></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════ 2 · LAS PISTAS -->
     <section class="slide" id="h-pregunta" data-sec="2" data-steps>
-      <div class="kicker">2 · Las pistas · lo que quise averiguar</div>
+      <div class="kicker">2 · Las pistas · tres hipótesis</div>
       <h2>¿Las partidas se pierden en un momento, o se van perdiendo?</h2>
       <div class="body" style="justify-content:center">
         <div class="narra" style="gap:30px">
-          <div data-step="1" style="max-width:62ch"><span class="num">1</span><b>¿Aprovechamos la ventaja?</b> Cuando vamos ganando en oro, ¿tomamos menos objetivos en las partidas que al final perdemos?</div>
-          <div data-step="2" style="max-width:62ch"><span class="num">2</span><b>¿Un monstruo del rival decide la partida?</b> El momento en que la partida se voltea en nuestra contra —lo llamaré <span class="glosa">el quiebre</span>—, ¿coincide con un monstruo que tomó el rival?</div>
-          <div data-step="3" style="max-width:60ch"><span class="num">3</span><b>¿Hay un punto sin regreso?</b> ¿Existe un minuto a partir del cual ya casi nadie remonta?</div>
+          <div data-step="1" style="max-width:62ch"><span class="num">1</span><b>¿Al perder, aprovechamos menos la ventaja?</b></div>
+          <div data-step="2" style="max-width:none"><span class="num">2</span><b>¿Un monstruo del rival provoca <span class="glosa">el quiebre</span>?</b> El momento en que la partida se voltea.</div>
+          <div data-step="3" style="max-width:60ch"><span class="num">3</span><b>¿Hay un minuto sin regreso?</b></div>
         </div>
       </div>
-      <div class="footer"><div>Las tres hipótesis del proyecto, escritas antes de ver los datos</div><div>Compararé siempre contra mis victorias</div></div>
+      <div class="footer"><div>Escritas antes de ver los datos</div><div>Siempre comparo contra mis victorias</div></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════ 3 · LAS PRUEBAS -->
     <section class="slide" id="h-pruebas" data-sec="3" data-steps>
       <div class="kicker">3 · Las pruebas · los datos</div>
-      <h2>{{nFinal}} partidas, cada una como una película de fotos
-        <span class="sub">El servidor del juego guarda, de cada partida, una «foto» del oro de cada jugador por
-          minuto, y la hora exacta de cada torre y cada monstruo. Así se ve la partida del caso, foto por foto:</span></h2>
+      <h2>{{nFinal}} partidas, minuto a minuto
+        <span class="sub">De la API oficial de Riot: el oro de cada jugador por minuto y la hora de cada objetivo.</span></h2>
       <div class="body" style="gap:22px">
         <div class="tira" data-dibujo="tira" data-step="1"></div>
-        <div class="pie-nota" data-step="1" style="font-size:17px; color:var(--muted); margin-top:-8px">Cada foto: altura = tamaño
-          de la ventaja · <span class="azul">azul</span>, vamos ganando · <span class="rojo">rojo</span>, va ganando el rival</div>
+        <div class="pie-nota" data-step="1" style="font-size:17px; color:var(--muted); margin-top:-8px">La partida del caso ·
+          <span class="azul">azul</span>, vamos ganando · <span class="rojo">rojo</span>, el rival</div>
         <div class="narra" style="flex-direction:row; gap:56px">
-          <div data-step="2" style="max-width:40ch">Descargué {{nUnicas}} y quité <b><span data-count="{{nQuitadas}}">{{nQuitadas}}</span></b> que no se jugaron de verdad: alguien se desconectó o terminaron en los primeros minutos.</div>
-          <div data-step="3" style="max-width:40ch">Quedan <b class="rojo"><span data-count="{{nDerrotas}}">{{nDerrotas}}</span> derrotas</b> y <b class="azul"><span data-count="{{nVictorias}}">{{nVictorias}}</span> victorias</b>. Las victorias son el grupo de comparación.</div>
+          <div data-step="2" style="max-width:40ch">Descargué {{nUnicas}} y quité <b><span data-count="{{nQuitadas}}">{{nQuitadas}}</span></b> que no se jugaron de verdad.</div>
+          <div data-step="3" style="max-width:40ch">Quedan <b class="rojo"><span data-count="{{nDerrotas}}">{{nDerrotas}}</span> derrotas</b> y <b class="azul"><span data-count="{{nVictorias}}">{{nVictorias}}</span> victorias</b> para comparar.</div>
         </div>
       </div>
-      <div class="footer"><div>Fuente: la API oficial de Riot Games · los nombres de los otros jugadores se borraron antes de analizar</div></div>
+      <div class="footer"><div>Los nombres de los otros jugadores se borraron antes de analizar</div></div>
     </section>
 
     <section class="slide" id="h-medida" data-sec="3" data-steps>
-      <div class="kicker">3 · Las pruebas · cómo medir quién va ganando</div>
+      <div class="kicker">3 · Las pruebas · la medida</div>
       <h2>2,000 de oro no pesan igual en el minuto 5 que en el 30</h2>
       <div class="body">
         <div class="dos izq-ancha">
           <div class="lienzo" data-dibujo="medida"></div>
           <div class="narra">
-            <div data-step="1">Al inicio hay poco oro en el mapa: <b>2,000 de ventaja son el {{ejPct5}} %</b> de todo.</div>
-            <div data-step="2">En el minuto 30 hay mucho más: la misma ventaja es apenas <b>el {{ejPct30}} %</b>.</div>
-            <div data-step="3">Por eso mido la ventaja como <b class="oro">porcentaje del oro del mapa</b>, no en oro suelto.</div>
+            <div data-step="1">Minuto 5: son el <b>{{ejPct5}} %</b> del oro del mapa.</div>
+            <div data-step="2">Minuto 30: apenas el <b>{{ejPct30}} %</b>.</div>
+            <div data-step="3">Por eso mido la ventaja como <b class="oro">% del oro del mapa</b>.</div>
           </div>
         </div>
       </div>
-      <div class="footer"><div>Oro total del mapa: la mediana de mis partidas en cada minuto</div></div>
-    </section>
-
-    <section class="slide" id="h-tropiezo" data-sec="3" data-steps>
-      <div class="kicker">3 · Las pruebas · un tropiezo honesto</div>
-      <h2>Mi primera forma de encontrar «el minuto del quiebre» falló
-        <span class="sub">Primero definí el quiebre como el minuto en que más cae la ventaja. Cada barra: qué parte de las
-          partidas tuvo su mayor caída en ese minuto.</span></h2>
-      <div class="body" style="gap:20px">
-        <div class="lienzo" data-dibujo="tropiezo"></div>
-        <div class="narra">
-          <div data-step="3" style="max-width:80ch">Caía casi siempre <b>en los primeros minutos, igual al ganar que al perder</b>: al inicio una sola jugada mueve mucho la balanza. No medía el quiebre: medía jugadas sueltas del inicio.
-            Cambié a la regla que tenía de respaldo: <b class="oro">el quiebre es la última vez que mi equipo pasa a ir perdiendo</b>.</div>
-        </div>
-      </div>
-      <div class="footer"><div>El cambio se decidió después de ver este resultado, y así se reporta</div></div>
+      <div class="footer"><div>Oro del mapa: la mediana de mis partidas en cada minuto</div></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════ 4 · LO QUE ENCONTRÉ -->
     <section class="slide" id="h-pista1" data-sec="4" data-steps>
       <div class="kicker">4 · Lo que encontré · pista 1</div>
-      <h2>Con ventaja, al perder tomamos menos objetivos… pero solo después del minuto {{umbral}}
-        <span class="sub">Objetivos tomados por cada 10 minutos en que íbamos ganando con claridad (5 % o más
-          de todo el oro del mapa):</span></h2>
+      <h2>Al perder, usamos menos la ventaja… pero solo después del minuto {{umbral}}
+        <span class="sub">Objetivos por cada 10 minutos yendo ganando con claridad (5 % del oro del mapa o más):</span></h2>
       <div class="body" style="gap:16px">
         <div class="lienzo" data-dibujo="pista1"></div>
-        <div class="grande" data-step="4" style="font-size:30px; max-width:none">No es que no consigamos ventaja: <em>es que después del minuto {{umbral}} no la usamos para tomar objetivos</em>.</div>
+        <div class="grande" data-step="4" style="font-size:30px; max-width:none">Sí conseguimos ventaja: <em>después del minuto {{umbral}} no la usamos</em>.</div>
       </div>
-      <div class="footer"><div>Es una asociación, no una causa: tomar objetivos también da oro</div></div>
+      <div class="footer"><div>Asociación, no causa: tomar objetivos también da oro</div></div>
     </section>
 
     <section class="slide" id="h-pista2" data-sec="4" data-steps>
       <div class="kicker">4 · Lo que encontré · pista 2</div>
-      <h2>¿Un monstruo del rival decide el quiebre? No se puede afirmar
-        <span class="sub">¿Qué tan seguido el quiebre cae a un minuto o menos de un monstruo del rival? «Pura casualidad»
-          = los mismos monstruos puestos en minutos al azar. (Al ganar, el quiebre es la última vez que fuimos abajo.)</span></h2>
+      <h2>¿Un monstruo del rival provoca el quiebre? No se puede afirmar
+        <span class="sub">¿El quiebre cae junto a un monstruo del rival más seguido que por pura casualidad?</span></h2>
       <div class="body" style="gap:16px">
         <div class="lienzo" data-dibujo="pista2"></div>
-        <div class="grande" data-step="3" style="font-size:30px; max-width:none">Cuando pierdo, apenas supera al azar, y midiéndolo de otra forma ni eso.
-          Cuando gano, lo supera por más (+{{h2BrechaVic}} contra +{{h2BrechaDer}} puntos): <em>describe el ritmo de cualquier partida</em>, no por qué pierdo.</div>
+        <div class="grande" data-step="3" style="font-size:30px; max-width:none">Al perder, apenas supera al azar; <em>al ganar, lo supera más</em>.</div>
       </div>
-      <div class="footer"><div>La «pura casualidad»: mover los monstruos del rival a otros minutos al azar, {{replicas}} veces, y medir lo mismo</div></div>
+      <div class="footer"><div>Quiebre: la última vez que pasamos a ir perdiendo. Mi primera regla falló; la cambié tras ver los datos, y el reporte trae las dos</div></div>
     </section>
 
     <section class="slide" id="h-pista3" data-sec="4" data-steps>
       <div class="kicker">4 · Lo que encontré · pista 3</div>
-      <h2>La puerta se va cerrando poco a poco… y hacia el minuto {{hTresPunto}} ya casi no se abre
-        <span class="sub">De cada 20 partidas que van claramente perdiendo en ese minuto (5 % o más del oro del mapa
-          abajo), cuántas terminan ganando:</span></h2>
+      <h2>La puerta se va cerrando poco a poco… y desde el minuto {{hTresPunto}} casi no se abre
+        <span class="sub">De cada 20 partidas que van claramente perdiendo, cuántas remontan:</span></h2>
       <div class="body" style="gap:10px">
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:40px">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:14px">
           <div data-step="1"><div class="figuras-tit">En el minuto 5</div><div data-dibujo="figuras:{{fig5}}"></div>
-            <div class="figuras-res"><b><span data-count="{{h3Cinco}}" data-delay="300">{{h3Cinco}}</span> %</b> remonta: unas {{fig5}} de cada 20</div></div>
+            <div class="figuras-res">unas <b>{{fig5}} de cada 20</b></div></div>
           <div data-step="2"><div class="figuras-tit">En el minuto 15</div><div data-dibujo="figuras:{{fig15}}"></div>
-            <div class="figuras-res"><b><span data-count="{{h3Quince}}" data-delay="300">{{h3Quince}}</span> %</b> remonta: unas {{fig15}} de cada 20</div></div>
+            <div class="figuras-res">unas <b>{{fig15}} de cada 20</b></div></div>
           <div data-step="3"><div class="figuras-tit">En el minuto 30</div><div data-dibujo="figuras:{{fig30}}"></div>
-            <div class="figuras-res"><b><span data-count="{{h3Treinta}}" data-delay="300">{{h3Treinta}}</span> %</b> remonta: {{fig30}} de cada 20, o menos</div></div>
+            <div class="figuras-res"><b>{{fig30}} de cada 20</b>, o menos</div></div>
         </div>
         <div class="lienzo" data-dibujo="curva3" data-step="4"></div>
       </div>
-      <div class="footer"><div>La curva baja sin un salto. «Casi nadie» = menos de 1 de cada 20, umbral fijado después de ver los datos (con 2 de cada 20 sería el minuto {{hTresPuntoDiez}})</div></div>
-    </section>
-
-    <section class="slide" id="h-formas" data-sec="4" data-steps>
-      <div class="kicker">4 · Lo que encontré · las formas de perder</div>
-      <h2>Cuatro formas de perder… y una mitad pareja hasta el final</h2>
-      <div class="body" style="gap:24px">
-        <div class="formas">
-          <div class="forma-c" data-step="1" style="--k:0"><div class="figuras-tit">Desde el inicio</div><div data-dibujo="forma:A1" data-paso="1"></div><div class="figuras-res"><b><span data-count="{{pA1}}">{{pA1}}</span> %</b> abajo desde los primeros minutos</div></div>
-          <div class="forma-c" data-step="1" style="--k:1"><div class="figuras-tit">Aplastados</div><div data-dibujo="forma:A4" data-paso="1"></div><div class="figuras-res"><b><span data-count="{{pA4}}" data-delay="160">{{pA4}}</span> %</b> muy abajo, sin reacción</div></div>
-          <div class="forma-c" data-step="1" style="--k:2"><div class="figuras-tit">Ventaja tirada</div><div data-dibujo="forma:A2" data-paso="1"></div><div class="figuras-res"><b><span data-count="{{pA2}}" data-delay="320">{{pA2}}</span> %</b> íbamos ganando y la perdimos</div></div>
-          <div class="forma-c" data-step="1" style="--k:3"><div class="figuras-tit">Por un objetivo</div><div data-dibujo="forma:A3" data-paso="1"></div><div class="figuras-res"><b><span data-count="{{pA3}}" data-delay="480">{{pA3}}</span> %</b> parejas hasta un monstruo del rival</div></div>
-          <div class="forma-c resto" data-step="2"><div class="figuras-tit" style="color:var(--gold-lit)">Parejas hasta el final</div><div data-dibujo="forma:Sin clasificar" data-paso="2"></div><div class="figuras-res"><b><span data-count="{{pSin}}">{{pSin}}</span> %</b> no encajan en ninguna</div></div>
-        </div>
-        <div class="grande" data-step="3" style="font-size:30px; max-width:none">En la partida típica de esa mitad, nadie lleva una ventaja clara
-          el {{sinTranquilo}} % del tiempo… <em>y mi equipo se va quedando atrás poco a poco</em>.</div>
-      </div>
-      <div class="footer"><div>Cada línea es la partida típica de su grupo · reglas escritas antes de ver los datos, sin ajustarlas después</div></div>
+      <div class="footer"><div>«Casi nadie» = menos de 1 de cada 20, umbral fijado después de ver los datos</div></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════ 5 · LA RESPUESTA -->
     <section class="slide" id="h-veredicto" data-sec="5" data-steps>
-      <div class="kicker">5 · La respuesta · cómo terminaron las tres pistas</div>
+      <div class="kicker">5 · La respuesta · cómo terminaron las hipótesis</div>
       <h2>Lo que pensaba al inicio, y lo que encontré</h2>
       <div class="body" style="justify-content:center">
         <div class="veredictos">
-          <div class="veredicto-c" data-step="1"><div class="q">Pista 1 · la ventaja</div>
-            <div class="p">«Al perder aprovechamos menos la ventaja».</div>
+          <div class="veredicto-c" data-step="1"><div class="q">Hipótesis 1</div>
+            <div class="p">¿Al perder, aprovechamos menos la ventaja?</div>
             <div class="r">Sí, pero solo después del minuto {{umbral}}.</div><span class="sello si">Se confirma y se precisa</span></div>
-          <div class="veredicto-c" data-step="2"><div class="q">Pista 2 · el objetivo</div>
-            <div class="p">«Un monstruo del rival decide la partida».</div>
-            <div class="r">No se puede afirmar: depende de cómo se mida, y pasa más cuando gano.</div><span class="sello medio">No concluyente</span></div>
-          <div class="veredicto-c" data-step="3"><div class="q">Pista 3 · sin regreso</div>
-            <div class="p">«Hay un minuto a partir del cual ya casi nadie remonta».</div>
-            <div class="r">Sí: desde el minuto {{hTresPunto}} casi nadie remonta, pero se llega ahí poco a poco.</div><span class="sello si">Se confirma</span></div>
+          <div class="veredicto-c" data-step="2"><div class="q">Hipótesis 2</div>
+            <div class="p">¿Un monstruo del rival provoca el quiebre?</div>
+            <div class="r">Apenas supera al azar, y al ganar lo supera más.</div><span class="sello medio">No concluyente</span></div>
+          <div class="veredicto-c" data-step="3"><div class="q">Hipótesis 3</div>
+            <div class="p">¿Hay un minuto sin regreso?</div>
+            <div class="r">Sí: desde el minuto {{hTresPunto}}, pero se llega poco a poco.</div><span class="sello si">Se confirma</span></div>
         </div>
       </div>
-      <div class="footer"><div>Las tres hipótesis escritas antes de ver los datos, y su resultado</div></div>
     </section>
 
     <section class="slide" id="h-respuesta" data-sec="5" data-steps>
@@ -263,9 +205,8 @@
         <div class="cierre-grande" style="font-size:58px; max-width:24ch">Mis partidas casi nunca se pierden en el último momento. <em>Se van perdiendo.</em></div>
         <div class="lienzo" data-dibujo="cierre" style="max-height:330px"></div>
         <div class="narra" style="flex-direction:row; gap:48px">
-          <div data-step="1" style="max-width:none">En la partida del inicio pasamos a ir abajo en el minuto {{casoD2}}… <b class="oro">pero la ventaja
-            se venía encogiendo desde el {{casoMaxMin}}: perdimos el {{casoPctPerdido}} % de la ventaja antes del remate.</b></div>
-          <div data-step="2" style="max-width:52ch; font-size:18px; color:var(--muted)">Lo que no puedo afirmar: causas (solo veo asociaciones), cuánto pesé yo (el resultado es del equipo), ni que valga para otros jugadores.</div>
+          <div data-step="1" style="max-width:none">En la partida del inicio, <b class="oro">el {{casoPctPerdido}} % de la ventaja se fue antes del remate.</b></div>
+          <div data-step="2" style="max-width:52ch; font-size:18px; color:var(--muted)">No puedo afirmar causas, cuánto pesé yo, ni que valga para otros jugadores.</div>
         </div>
       </div>
     </section>

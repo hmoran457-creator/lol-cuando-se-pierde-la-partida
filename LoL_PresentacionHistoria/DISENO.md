@@ -73,3 +73,19 @@ aplicaron las reglas tal como se escribieron, y eso cambió el mensaje de dos l�
    106, en ese orden. Cada tarjeta toma el arte de su campeón por nombre.
 
 El 15 de la pista 1 ya no está escrito a mano: sale de `umbral` en `construir.py`.
+
+## Versión corta (noviembre de 2026)
+
+Para la exposición, la presentación pasó de 17 a 14 láminas y de unos 9 a unos 6 minutos:
+entre los datos y los hallazgos se daba demasiada información de golpe.
+
+8. **Se quitaron tres láminas.** *El oro*: su idea es ahora el paso 4 de «el juego en 30
+   segundos» (los monstruos se unieron al paso de las torres). *El tropiezo*: la regla del
+   quiebre y que la primera falló se dicen en el pie de la pista 2; el detalle está en el
+   reporte. *Formas de perder*: está en el reporte y en las preguntas del guion. Los dibujos
+   `oro`, `tropiezo` y `forma` siguen en `historia.js` sin usarse.
+9. **Una cifra por paso.** Se quitaron casi todos los subtítulos de dos líneas y los pies
+   largos; el texto en pantalla bajó de unas 1,470 a unas 770 palabras. El veredicto pone, en
+   cada tarjeta, la hipótesis inicial (pregunta) y la final (respuesta).
+10. **La etiqueta del eje de la curva de remontadas** se movió a la izquierda: la marca del
+    minuto 27 la cruzaba.

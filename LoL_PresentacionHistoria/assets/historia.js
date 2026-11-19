@@ -205,11 +205,11 @@
   // Al entrar basta con alcanzar el titular (sigue en pantalla toda la lamina); el tiempo
   // se lo llevan los pasos, y sobre todo el ULTIMO de cada lamina, que trae la conclusion.
   var MINIMO = {
-    "h-portada": [6200], "h-derrota": [4200, 3600, 4400], "h-juego": [2400, 4800, 3600, 3600, 5200],
-    "h-oro": [2200, 3400, 5400, 6200], "h-yo": [2400, 5000, 5200], "h-caso": [2200, 7000, 4800, 4800, 8600],
+    "h-portada": [6200], "h-derrota": [4200, 3600, 4400], "h-juego": [2400, 4800, 3600, 4400, 5600],
+    "h-yo": [2400, 5000, 5200], "h-caso": [2200, 7000, 4800, 4800, 8600],
     "h-pregunta": [2200, 4600, 5600, 4800], "h-pruebas": [2400, 6000, 4800, 5400], "h-medida": [2400, 4600, 4600, 5400],
-    "h-tropiezo": [2400, 3800, 3800, 8400], "h-pista1": [2400, 3600, 3600, 3600, 7800], "h-pista2": [2400, 4800, 5000, 9000],
-    "h-pista3": [2400, 4800, 4400, 4400, 8200], "h-formas": [2200, 7000, 4800, 7000], "h-veredicto": [2200, 5200, 5200, 6000],
+    "h-pista1": [2400, 3600, 3600, 3600, 7800], "h-pista2": [2400, 4800, 5000, 8000],
+    "h-pista3": [2400, 4800, 4400, 4400, 8200], "h-veredicto": [2200, 5200, 5200, 6000],
     "h-respuesta": [5400, 7000, 8000], "h-gracias": [9500]
   };
   function palabras(e) { return (e.textContent || "").trim().split(/\s+/).filter(Boolean).length; }
@@ -408,11 +408,11 @@
     });
     txt({ class: "etq", x: 104, y: 494 }, "base azul", bases);
     txt({ class: "etq", x: 340, y: 36 }, "base roja", bases);
-    // paso 4: los monstruos neutrales junto al rio
-    var m = el("g", { "data-step": 4 }, svg);
+    // paso 3 (con las torres): los monstruos neutrales junto al rio; el paso 4 es el oro, sin dibujo
+    var m = el("g", { "data-step": 3 }, svg);
     [[376, 358, 0, "dragones", 404, 392], [144, 162, 260, "el Barón", 52, 128]].forEach(function (q) {
-      el("circle", { class: "onda oro", cx: q[0], cy: q[1], r: 18, style: "animation-delay:" + (q[2] + 300) + "ms" }, m);
-      el("path", { class: "monstruo pop", "data-step": 4, style: "--delay:" + q[2] + "ms",
+      el("circle", { class: "onda oro", cx: q[0], cy: q[1], r: 18, style: "animation-delay:" + (q[2] + 1000) + "ms" }, m);
+      el("path", { class: "monstruo pop", "data-step": 3, style: "--delay:" + (q[2] + 700) + "ms",
         d: "M" + (q[0] - 18) + " " + q[1] + " l18 -18 l18 18 l-18 18 z" }, m);
       txt({ class: "etq oro", x: q[4], y: q[5] }, q[3], m);
     });
@@ -757,7 +757,8 @@
       txt({ class: "etq", x: 66, y: Y(p) + 5, "text-anchor": "end" }, p + " %", svg);
     });
     [5, 10, 15, 20, 25, 30, 35].forEach(function (m) { if (m <= maxM) txt({ class: "etq", x: X(m), y: 210, "text-anchor": "middle" }, "min " + m, svg); });
-    txt({ class: "etq oro", x: 1230, y: Y(48), "text-anchor": "end", style: "font-size:16px" },
+    // a la izquierda de la marca del punto sin regreso, para que la linea no lo cruce
+    txt({ class: "etq oro", x: X(8), y: Y(48), "text-anchor": "start", style: "font-size:16px" },
       "de las que van perdiendo en ese minuto, % que termina ganando", svg);
     var pts = c.map(function (p) { return [X(p.min), Y(p.p)]; });
     var linea = el("path", { class: "linea azul trazo-js", d: camino(pts) }, svg);

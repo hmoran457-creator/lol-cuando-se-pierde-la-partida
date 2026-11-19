@@ -6,7 +6,8 @@ otra computadora copia **la carpeta completa** (el HTML necesita `assets/`).
 
 Está pensada para un público que **nunca ha jugado** League of Legends: explica el juego en
 una lámina, traduce cada gráfica a una idea cotidiana (el oro como la posesión del balón,
-«de cada 20 partidas…») y cuenta el análisis como un misterio en cinco actos.
+«de cada 20 partidas…») y cuenta el análisis como un misterio en cinco actos, en 14 láminas
+y unos 6 minutos.
 
 | Tecla | Acción |
 |---|---|
@@ -22,31 +23,34 @@ una lámina, traduce cada gráfica a una idea cotidiana (el oro como la posesió
 Al regresar a una lámina ya vista, aparece completa (no se repite la animación).
 Con «reducir movimiento» activado en el sistema, todo aparece sin animación.
 
-## Guion de tiempos (exposición en vivo, ~8 min 45 s)
+## Guion de tiempos (exposición en vivo, ~6 min 10 s)
 
-Es la presentación de la exposición oral. Cada lámina se arma por pasos (62 clics en total);
-se dice poco en cada paso y se deja ver cada gráfica un segundo antes de explicarla.
+Es la presentación de la exposición oral. Cada lámina se arma por pasos (50 clics en total);
+se dice una idea por paso y se deja ver cada gráfica un segundo antes de explicarla.
 
 | # | Lámina | Seg. | Idea que hay que dejar |
 |---|---|---:|---|
 | 1 | Portada | 10 | La pregunta |
 | 2 | DERROTA | 15 | Es todo lo que el juego te dice. ¿Último minuto o mucho antes? |
-| 3 | El juego en 60 s | 35 | Dos equipos, una base, torres y monstruos = objetivos |
-| 4 | El oro | 30 | El marcador que no se ve; +3,500 en el minuto 16 |
-| 5 | Las partidas son mías | 20 | 1,195 partidas mías, de seis cuentas |
-| 6 | El caso | 60 | Callar mientras corre la línea (5.6 s). Arriba 31 de 34 minutos; desde el 16 la ventaja se encoge; el remate |
-| 7 | Las tres pistas | 35 | Las hipótesis, escritas antes de ver los datos; aquí nace «el quiebre» |
-| 8 | Los datos | 35 | La base de datos (API de Riot); el filtrado: de 1,241 a 1,195; las victorias como control |
-| 9 | La medida | 30 | Preprocesamiento: 2,000 de oro no pesan igual, por eso % del oro del mapa |
-| 10 | El tropiezo | 35 | La primera regla falló y se dice |
-| 11 | Pista 1 | 40 | Antes del 15 no se distingue; después, 9.5 contra 6.1 |
-| 12 | Pista 2 | 35 | No se puede afirmar: depende de cómo se mida, y pasa más cuando gano |
-| 13 | Pista 3 | 40 | 7 → 4 → 1 de cada 20: la puerta se cierra poco a poco, y desde el 27 casi no se abre |
-| 14 | Formas de perder | 35 | Cuatro formas y una mitad pareja que se va quedando atrás |
-| 15 | Veredicto | 25 | Se confirma, no concluyente, se confirma |
-| 16 | La respuesta | 35 | Se van perdiendo: el 64 % de la ventaja se fue antes del remate. Y lo que no puedo afirmar |
-| 17 | Gracias | 10 | «Pregúntate cuándo empezó» |
-| | **Total** | **525** | ≈ 8 min 45 s (si hace falta, recortar en 3, 5 y 12) |
+| 3 | El juego en 30 s | 35 | Dos equipos, una base, torres y monstruos = objetivos; todo da oro |
+| 4 | Las partidas son mías | 15 | 1,195 partidas mías, de seis cuentas |
+| 5 | El caso | 50 | Callar mientras corre la línea. Arriba 31 de 34 minutos; desde el 16 la ventaja se encoge; el remate |
+| 6 | Tres hipótesis | 30 | Escritas antes de ver los datos; aquí nace «el quiebre» |
+| 7 | Los datos | 30 | La base de datos (API de Riot); el filtrado: de 1,241 a 1,195; las victorias como control |
+| 8 | La medida | 25 | Preprocesamiento: 2,000 de oro no pesan igual, por eso % del oro del mapa |
+| 9 | Pista 1 | 35 | Antes del 15 no se distingue; después, 9.5 contra 6.1 |
+| 10 | Pista 2 | 25 | No se puede afirmar: apenas supera al azar, y al ganar lo supera más. El pie dice que la primera regla del quiebre falló |
+| 11 | Pista 3 | 35 | 7 → 4 → 1 de cada 20: la puerta se cierra poco a poco, y desde el 27 casi no se abre |
+| 12 | Veredicto | 25 | Se confirma, no concluyente, se confirma |
+| 13 | La respuesta | 30 | Se van perdiendo: el 64 % de la ventaja se fue antes del remate. Y lo que no puedo afirmar |
+| 14 | Gracias | 10 | «Pregúntate cuándo empezó» |
+| | **Total** | **370** | ≈ 6 min 10 s |
+
+**Versión corta (noviembre de 2026).** La versión anterior tenía 17 láminas y unos 9 minutos.
+Para no dar demasiada información de golpe se quitaron tres láminas: *El oro* (su idea quedó
+como el paso 4 del juego), *El tropiezo* (la regla que falló se dice en el pie de la pista 2 y
+completa en el reporte) y *Formas de perder* (está en el reporte). El texto en pantalla bajó de
+unas 1,470 palabras a unas 770.
 
 `presentacion_historia.pdf` es la misma presentación, una lámina por página y completa (sin
 animaciones), por si el HTML no se puede abrir. Se regenera con
@@ -54,7 +58,8 @@ animaciones), por si el HTML no se puede abrir. Se regenera con
 
 ## Auditoría hecha
 
-1. **Automática** (`shoot.py`): 0 problemas en las 17 láminas.
+1. **Automática** (`shoot.py`): 0 problemas en las 14 láminas de la versión corta (y antes, en
+   las 17 de la anterior).
 2. **Visual**: cada captura revisada a mano, y cuadros sueltos del video a mitad de animación.
 3. **Redacción para quien no juega**: un revisor independiente leyó la presentación como
    alguien que nunca ha jugado y cotejó cada cifra con `LoL_Analisis/resultados/`. Lo que
@@ -80,7 +85,9 @@ animaciones), por si el HTML no se puede abrir. Se regenera con
 
 **`video/historia.mp4`**: la presentación en modo cine, grabada cuadro por cuadro
 (1600×900, 30 cuadros por segundo, 6 min 38 s, H.264, 69 MB, sin audio, termina con un fundido a negro). Lo abre
-cualquier reproductor, PowerPoint, Teams o el celular.
+cualquier reproductor, PowerPoint, Teams o el celular. **Se grabó de la versión anterior, de
+17 láminas** (incluye *El oro*, *El tropiezo* y *Formas de perder*); no se ha vuelto a grabar
+con la versión corta.
 
 Para regenerarlo, desde la carpeta del proyecto:
 
@@ -130,7 +137,7 @@ python LoL_PresentacionHistoria/scripts/teclado.py     # recorrido con teclado (
 python LoL_PresentacionHistoria/scripts/video.py --ffmpeg RUTA\ffmpeg.exe --salida LoL_PresentacionHistoria/video/historia.mp4
 ```
 
-`teclado.py` recorre las 17 láminas paso a paso como en clase, con movimiento normal y con
+`teclado.py` recorre todas las láminas paso a paso como en clase, con movimiento normal y con
 «reducir movimiento», y revisa que cada lámina termine completa, que al regresar aparezca
 hecha, que `R` la repita y que `P` avance solo.
 

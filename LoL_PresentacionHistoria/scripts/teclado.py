@@ -3,7 +3,7 @@ r"""Recorre la presentacion con el teclado, como en clase, y revisa que nada se 
     python LoL_PresentacionHistoria/scripts/teclado.py
 
 Comprueba, con movimiento normal y con «reducir movimiento»:
-  * avanzar paso por paso por las 17 laminas sin errores de consola;
+  * avanzar paso por paso por todas las laminas sin errores de consola;
   * que al terminar cada lamina todos sus pasos esten a la vista y cada contador
     haya llegado a su cifra;
   * que al REGRESAR a una lamina ya vista aparezca completa;

@@ -16,10 +16,10 @@ se mida y pasa más cuando gano.
 
 | Qué | Dónde |
 |---|---|
-| **Presentación de la exposición**: narrada, para quien nunca ha jugado (unos 9 min, 17 láminas) | [`LoL_PresentacionHistoria/`](LoL_PresentacionHistoria/): abrir `presentacion_historia.html`; en PDF, [`presentacion_historia.pdf`](LoL_PresentacionHistoria/presentacion_historia.pdf) |
+| **Presentación de la exposición**: narrada, para quien nunca ha jugado (unos 6 min, 14 láminas) | [`LoL_PresentacionHistoria/`](LoL_PresentacionHistoria/): abrir `presentacion_historia.html`; en PDF, [`presentacion_historia.pdf`](LoL_PresentacionHistoria/presentacion_historia.pdf) |
 | **Reporte final** (método, pruebas, código) | [`LoL_Reporte/reporte_final.pdf`](LoL_Reporte/reporte_final.pdf) |
 | Presentación por puntos de la rúbrica, con el método completo (13 láminas; referencia y respaldo) | [`LoL_PresentacionFinal/`](LoL_PresentacionFinal/): abrir `presentacion_final.html`; en PDF, [`presentacion_final.pdf`](LoL_PresentacionFinal/presentacion_final.pdf) |
-| Video de la presentación narrada | [`LoL_PresentacionHistoria/video/historia.mp4`](LoL_PresentacionHistoria/video/historia.mp4) |
+| Video de la presentación narrada (de la versión anterior, de 17 láminas) | [`LoL_PresentacionHistoria/video/historia.mp4`](LoL_PresentacionHistoria/video/historia.mp4) |
 | Planteamiento del proyecto (el plan, registrado antes de ver los datos) | [`LoL_Planteamiento/planteamiento_proyecto_final.pdf`](LoL_Planteamiento/planteamiento_proyecto_final.pdf) |
 | Actividad de anonimización (sobre el piloto de 7 partidas públicas) | [`LoL_Anonimizacion/reporte_anonimizacion.pdf`](LoL_Anonimizacion/reporte_anonimizacion.pdf) |
 | Actividad de reducción de dimensionalidad (PCA, LDA, t-SNE, UMAP) | [`LoL_Dimensionalidad/reduccion_dimensionalidad.pdf`](LoL_Dimensionalidad/reduccion_dimensionalidad.pdf) (y su `.ipynb`) |
