@@ -92,3 +92,25 @@ entre los datos y los hallazgos se daba demasiada información de golpe.
    casualidad» (los mismos monstruos en minutos al azar).
 10. **La etiqueta del eje de la curva de remontadas** se movió a la izquierda: la marca del
     minuto 27 la cruzaba.
+
+## Tema claro (noviembre de 2026)
+
+11. **Abre en claro; `T` (o el botón del riel) cambia a oscuro** y la elección se recuerda.
+    Papel cálido `#FAF7F0`, tinta azul marino `#14253B`, los mismos tonos de equipo más
+    oscuros (azul `#0A7A8C`, rojo `#C22E5E`) y el oro partido en dos: `#B07D10` para marcas y
+    `#87590A` para letras. Contraste: texto ≥ 4.7:1, marcas ≥ 3:1. Daltonismo (Machado 2009,
+    OKLab): azul, rojo y oro separados ≥ 9.9 en protan, deutan y tritan; el rojo se movió hacia
+    el magenta porque el primer intento quedaba en 5.1 contra el oro en deutan.
+12. **Los colores fijos pasaron a fichas** (`assets/tema.css`): el mapa, las figuras grises,
+    los sellos, las tarjetas del veredicto, el rojo y el azul para letras y el texto sobre
+    barras. El nombre de los campeones va sobre la franja oscura de su imagen en los dos temas,
+    así que lleva colores claros fijos.
+13. **DERROTA se queda oscura** en los dos temas: es la pantalla del juego al perder, y en
+    claro se le devuelven sus fichas oscuras.
+14. **Con `?todo` (PDF y capturas) ya no aparece la ayuda de teclas** al abrir: en claro se
+    alcanzaba a ver en la esquina de las capturas.
+15. **La lámina de la medida**: la barra del oro total pasó a ser una pista con borde
+    (`--barra-total`), clara en claro y azul marino en oscuro. La etiqueta en oro encima
+    quedaba en 1.7:1 sobre el gris en claro (y 2.9:1 en oscuro); ahora 5.0:1 y 6.6:1.
+16. **La lámina que sale se desvanece en claro** en vez de oscurecerse: el `brightness(.45)`
+    del corte volvía gris lodoso las tarjetas blancas del veredicto a mitad de la transición.

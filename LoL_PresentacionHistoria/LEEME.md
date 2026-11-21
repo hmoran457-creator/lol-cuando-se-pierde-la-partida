@@ -17,11 +17,19 @@ y unos 6 minutos.
 | `B` o `.` | pantalla en negro |
 | `R` | repetir la animación de la lámina desde su primer paso |
 | `P` | **modo cine**: la presentación avanza sola; `P` otra vez lo detiene |
+| `T` (o el botón ◐ del riel) | **tema claro / oscuro**; se recuerda la próxima vez que se abra en ese navegador |
 | `A` | revelar todos los pasos de la lámina |
 | `1`–`5` | saltar a un acto |
 
 Al regresar a una lámina ya vista, aparece completa (no se repite la animación).
 Con «reducir movimiento» activado en el sistema, todo aparece sin animación.
+
+**Tema.** Abre en **claro** (papel cálido, tinta azul marino), pensado para proyectores en
+salón iluminado; `T` cambia a oscuro, el diseño original. `?tema=oscuro` o `?tema=claro` en la
+dirección lo fuerza sin guardarlo. La lámina DERROTA es oscura en los dos temas a propósito: es
+la pantalla del juego al perder. Los colores viven en `assets/tema.css`; la paleta clara se
+revisó con contraste WCAG (texto ≥ 4.7:1, marcas ≥ 3:1) y simulación de daltonismo
+(azul, rojo y oro separados en protan, deutan y tritan).
 
 ## Guion de tiempos (exposición en vivo, ~6 min 10 s)
 
@@ -151,7 +159,8 @@ hecha, que `R` la repita y que `P` avance solo.
 **Se edita `plantilla.html`, nunca `presentacion_historia.html`**: este último se
 sobrescribe. `construir.py` falla si queda alguna `{{cifra}}` sin valor.
 
-`shoot.py` revisa: errores de consola, contenido que se sale del escenario o se encima con
+`shoot.py` revisa el tema claro (capturas en `shots/`); `shoot.py --oscuro CARPETA` revisa el
+oscuro sin pisarlas. Revisa: errores de consola, contenido que se sale del escenario o se encima con
 el pie, que cada gráfica se haya dibujado, que cada línea animada quede completa, que cada
 contador llegue a su cifra, que las imágenes carguen, y que el escenario quepa en
 1024×768, 1280×720 y 1366×768 (proyectores).
@@ -161,6 +170,7 @@ contador llegue a su cifra, que las imágenes carguen, y que el escenario quepa 
 - `assets/historia.js` — motor: navegación, pasos, «efectos» por paso, gráficas, fondo
   vivo y modo cine.
 - `assets/historia.css` — todo el movimiento (sus reglas están al inicio del archivo).
+- `assets/tema.css` — los colores de los dos temas (claro, el predeterminado, y oscuro).
 - `assets/deck.css` y las fuentes — copias sin cambios del primer mazo.
 - `assets/img/` — arte oficial de Caitlyn y Smolder (Riot Games, Data Dragon).
 - `DISENO.md` — el diseño aprobado: actos, reglas y auditoría.

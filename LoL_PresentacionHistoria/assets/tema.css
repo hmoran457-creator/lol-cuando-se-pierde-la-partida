@@ -1,0 +1,121 @@
+/* =========================================================================
+   Tema claro y oscuro de la presentacion narrada.
+
+   * El oscuro es el original: sus fichas viven en deck.css (:root). Aqui se
+     agregan las fichas nuevas que antes eran colores fijos en historia.css.
+   * El claro se activa con <html data-theme="light"> (el predeterminado de la
+     plantilla). La tecla T y el boton del riel alternan; ?tema=oscuro|claro en
+     la direccion lo fuerza sin guardarlo.
+   * Paleta clara revisada con contraste WCAG y simulacion de daltonismo
+     (Machado 2009 + OKLab): texto >= 4.7:1 donde va, marcas >= 3:1,
+     azul/rojo/oro separados >= 9.9 en protan, deutan y tritan.
+   * La lamina DERROTA se queda oscura en los dos temas a proposito: es la
+     pantalla del juego al perder. Por eso aqui le devuelven sus fichas oscuras.
+   ========================================================================= */
+
+/* --- fichas nuevas, valores del tema oscuro (los de siempre) */
+:root {
+  --on-color:    #06101C;              /* texto sobre una barra de color */
+  --rojo-texto:  #F28FA2;              /* rojo para letras (el de relleno no da 4.5:1) */
+  --azul-texto:  #6FD3E2;
+  --gris-dato:   #5E7590;              /* barra de «pura casualidad», figuras que no remontan */
+  --barra-total: #22405E;              /* pista del oro total: la etiqueta en oro da 6.6:1 */
+  --mapa-fondo:  #0F2A1E;
+  --mapa-borde:  #1B3B2C;
+  --mapa-rio:    #1D4A66;
+  --mapa-carril: #3A5E4C;
+  --jugador-azul: #8FE3F0;
+  --jugador-rojo: #F7A6B6;
+  --tarjeta-fondo: rgba(23,51,77,.55);
+  --sombra:        rgba(0,0,0,.35);
+  --sombra-fuerte: rgba(0,0,0,.45);
+  --escaner:       rgba(240,230,210,.16);
+  --marcador:      rgba(188,139,44,.30);   /* subrayado tipo marcatextos */
+}
+
+/* --- tema claro: papel calido, tinta azul marino, mismos tonos de equipo */
+:root[data-theme="light"] {
+  --void:      #E8E1D3;
+  --deep:      #FAF7F0;
+  --rift:      #F0E9DC;
+  --raised:    #E6DCC8;
+  --line:      #D2C5AC;
+  --line-soft: #E2D8C6;
+
+  --parchment: #14253B;
+  --ink:       #24364B;
+  --muted:     #556678;
+  --faint:     #7B8796;
+
+  --blue:      #0A7A8C;
+  --red:       #C22E5E;
+  --gold:      #B07D10;   /* solo marcas (3.4:1); para letras, --gold-lit */
+  --gold-lit:  #87590A;
+  --neutral:   #98A4B2;
+
+  --on-color:    #FFFFFF;
+  --rojo-texto:  #AE2753;
+  --azul-texto:  #08697A;
+  --gris-dato:   #7A8B9E;
+  --barra-total: #F0E9DC;              /* etiqueta en oro encima: 5.0:1 */
+  --mapa-fondo:  #DCE8D9;
+  --mapa-borde:  #B5C9B1;
+  --mapa-rio:    #9EC3DA;
+  --mapa-carril: #A3BCA6;
+  --jugador-azul: #1497AB;
+  --jugador-rojo: #E0507A;
+  --tarjeta-fondo: #FFFFFF;
+  --sombra:        rgba(70,52,20,.10);
+  --sombra-fuerte: rgba(70,52,20,.16);
+  --escaner:       rgba(176,125,16,.14);
+  --marcador:      rgba(176,125,16,.22);
+}
+
+/* --- piezas de deck.css con color fijo */
+[data-theme="light"] #viewport { background: radial-gradient(ellipse 120% 90% at 50% 0%, #F3EDE1 0%, var(--void) 62%); }
+[data-theme="light"] #stage { box-shadow: 0 40px 120px rgba(70,52,20,.22); }
+[data-theme="light"] #rail { background: linear-gradient(to bottom, rgba(250,247,240,.96), rgba(250,247,240,0)); }
+[data-theme="light"] .kicker { color: var(--gold-lit); }
+[data-theme="light"] #help { background: rgba(250,247,240,.97); border-color: var(--line); color: var(--muted); }
+[data-theme="light"] #help kbd { border-color: var(--line); color: var(--ink); }
+
+/* --- piezas de historia.css con brillo pensado para fondo oscuro */
+[data-theme="light"] #barrido {
+  background: linear-gradient(transparent, var(--gold) 15%, #E8C87A 50%, var(--gold) 85%, transparent);
+  box-shadow: 0 0 22px 6px rgba(176,125,16,.28), 0 0 70px 24px rgba(176,125,16,.10);
+}
+[data-theme="light"] #progress { box-shadow: 0 0 10px rgba(176,125,16,.45); }
+/* La lamina que sale se oscurece (brightness .45) pensando en fondo oscuro; sobre papel claro
+   eso volvia gris lodoso las tarjetas blancas a mitad del corte. En claro se desvanece. */
+[data-theme="light"] .slide.sale      { animation-name: sale-claro; }
+[data-theme="light"] .slide.sale-back { animation-name: sale-atras-claro; }
+@keyframes sale-claro {
+  from { clip-path: polygon(0% 0, 100% 0, 100% 100%, -15% 100%); opacity: 1; }
+  to   { clip-path: polygon(115% 0, 100% 0, 100% 100%, 100% 100%); opacity: .5; }
+}
+@keyframes sale-atras-claro {
+  from { clip-path: polygon(0 0, 115% 0, 100% 100%, 0 100%); opacity: 1; }
+  to   { clip-path: polygon(0 0, 0% 0, -15% 100%, 0 100%); opacity: .5; }
+}
+[data-theme="light"] :is(.punta, .cabezal-punto) { fill: #FFFFFF; }
+[data-theme="light"] #h-pregunta .narra .num { box-shadow: 0 0 18px rgba(176,125,16,.22); }
+
+/* --- DERROTA: siempre oscura (fondo fijo en historia.css); se le devuelven sus fichas */
+[data-theme="light"] #h-derrota {
+  --parchment: #F0E6D2; --ink: #DCE6F0; --muted: #8FA6BE;
+  --gold: #BC8B2C; --gold-lit: #E8C87A; --deep: #0A1A2B; --line: #1E3A56;
+}
+
+/* --- boton de tema en el riel (la tecla T hace lo mismo) */
+.tema-btn {
+  align-self: center; margin-right: var(--s3);
+  width: 32px; height: 32px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 4px; background: transparent;
+  color: var(--muted); font: 600 16px/1 "Archivo", system-ui, sans-serif; cursor: pointer;
+  transition: color .3s var(--ease), border-color .3s var(--ease);
+}
+.tema-btn:hover, .tema-btn:focus-visible { color: var(--gold-lit); border-color: var(--gold); outline: none; }
+body.video .tema-btn, body.cine .tema-btn { display: none; }
+
+/* el cambio de tema no anima nada: solo cambia de color */
+@media (prefers-reduced-motion: reduce) { .tema-btn { transition: none; } }

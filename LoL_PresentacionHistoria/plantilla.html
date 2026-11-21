@@ -1,11 +1,22 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>¿En qué minuto se perdió la partida? — una historia con datos</title>
+<script>
+  /* Tema antes de pintar: ?tema=claro|oscuro manda (sin guardarse); si no, el de la vez
+     pasada (tecla T); si no, el claro. localStorage puede no existir: no pasa nada. */
+  (function () {
+    var t = null, m = /[?&]tema=(claro|oscuro)\b/.exec(location.search);
+    if (m) t = m[1] === "oscuro" ? "dark" : "light";
+    else { try { t = localStorage.getItem("lol-historia-tema"); } catch (e) { t = null; } }
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <link rel="stylesheet" href="assets/deck.css">
 <link rel="stylesheet" href="assets/historia.css">
+<link rel="stylesheet" href="assets/tema.css">
 </head>
 <!-- GENERADO por scripts/construir.py desde plantilla.html. Editar la plantilla, no la salida. -->
 <body class="animado">
@@ -233,7 +244,7 @@
 <div id="blank"></div>
 <div id="help">
   <span><kbd>→</kbd> avanzar</span><span><kbd>←</kbd> regresar</span><span><kbd>F</kbd> pantalla completa</span>
-  <span><kbd>R</kbd> repetir lámina</span><span><kbd>P</kbd> modo cine</span><span><kbd>1</kbd>–<kbd>5</kbd> acto</span>
+  <span><kbd>R</kbd> repetir lámina</span><span><kbd>P</kbd> modo cine</span><span><kbd>T</kbd> tema claro/oscuro</span><span><kbd>1</kbd>–<kbd>5</kbd> acto</span>
 </div>
 <script>
 <!--datos-->

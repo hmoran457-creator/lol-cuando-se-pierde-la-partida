@@ -120,7 +120,7 @@ body.video #viewport { background: #000; }
 .slide[data-steps] .narra > [data-step].mostrado { transform: none; filter: none; }
 /* y lo importante se subraya con marcador, despues de que se lee la frase */
 .narra b {
-  background-image: linear-gradient(rgba(188,139,44,.30), rgba(188,139,44,.30));
+  background-image: linear-gradient(var(--marcador), var(--marcador));
   background-repeat: no-repeat; background-position: 0 92%; background-size: 0% .38em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
   transition: background-size 900ms var(--ease) 520ms;
@@ -173,11 +173,11 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 .cero { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 5; }
 .etq { fill: var(--muted); font-size: 15px; font-family: "Archivo", sans-serif; }
 .etq.grande-num { font-size: 30px; font-weight: 800; fill: var(--parchment); }
-.etq.grande-num.dentro { fill: #06101C; }
+.etq.grande-num.dentro { fill: var(--on-color); }
 .etq.oro { fill: var(--gold-lit); font-weight: 700; }
-/* El rojo de relleno (#DE4361) da 4.25:1 como texto chico sobre el fondo: para letras se
-   usa el rojo claro de los sellos (7.7:1). Los rellenos siguen con --red. */
-.etq.azul { fill: var(--blue); font-weight: 700; } .etq.rojo { fill: #F28FA2; font-weight: 700; }
+/* El rojo de relleno (#DE4361) da 4.25:1 como texto chico sobre el fondo oscuro: para letras
+   se usa --rojo-texto (7.7:1 en oscuro, 6.1:1 en claro). Los rellenos siguen con --red. */
+.etq.azul { fill: var(--blue); font-weight: 700; } .etq.rojo { fill: var(--rojo-texto); font-weight: 700; }
 .etq.reloj { fill: var(--gold-lit); font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .linea { fill: none; stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
 .linea.azul { stroke: var(--blue); } .linea.rojo { stroke: var(--red); }
@@ -186,7 +186,9 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 .franja { fill: var(--gold); fill-opacity: .13; }
 .marca { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 4; }
 .barra.azul { fill: var(--blue); } .barra.rojo { fill: var(--red); }
-.barra.gris { fill: #5E7590; } .barra.oro { fill: var(--gold); }   /* gris ≥ 3:1 sobre el fondo */
+.barra.gris { fill: var(--gris-dato); } .barra.oro { fill: var(--gold); }   /* gris ≥ 3:1 sobre el fondo */
+/* pista del oro total (lamina de la medida): lleva encima una etiqueta en oro (≥ 5:1) */
+.barra.total { fill: var(--barra-total); stroke: var(--line); stroke-width: 1.5; }
 .pista-barra { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 3 5; }
 .icono.azul { fill: var(--blue); } .icono.rojo { fill: var(--red); }
 .icono { stroke: var(--deep); stroke-width: 2; }
@@ -245,22 +247,22 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 #h-portada .footer, #h-gracias .footer { z-index: 1; }
 
 /* --- el mapa */
-.mapa-fondo { fill: #0F2A1E; stroke: #1B3B2C; stroke-width: 2; }
-.mapa-rio { stroke: #1D4A66; stroke-width: 46; stroke-linecap: round; opacity: .55; }
-.mapa-carril { stroke: #3A5E4C; stroke-width: 16; fill: none; stroke-linecap: round; opacity: .9; }
+.mapa-fondo { fill: var(--mapa-fondo); stroke: var(--mapa-borde); stroke-width: 2; }
+.mapa-rio { stroke: var(--mapa-rio); stroke-width: 46; stroke-linecap: round; opacity: .55; }
+.mapa-carril { stroke: var(--mapa-carril); stroke-width: 16; fill: none; stroke-linecap: round; opacity: .9; }
 .base-azul { fill: var(--blue); } .base-roja { fill: var(--red); }
 .torre-azul { fill: var(--blue); stroke: var(--deep); stroke-width: 2; }
 .torre-roja { fill: var(--red); stroke: var(--deep); stroke-width: 2; }
 .monstruo { fill: var(--gold); stroke: var(--deep); stroke-width: 2; filter: drop-shadow(0 0 10px rgba(232,200,122,.7)); }
 .jugador { stroke: var(--deep); stroke-width: 2.5; opacity: 0; transition: opacity 300ms var(--ease); }
 .jugador.ve { opacity: 1; }
-.jugador-azul { fill: #8FE3F0; } .jugador-rojo { fill: #F7A6B6; }
+.jugador-azul { fill: var(--jugador-azul); } .jugador-rojo { fill: var(--jugador-rojo); }
 .onda { fill: none; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: onda 2.2s ease-out infinite; }
 .onda.azul { stroke: var(--blue); } .onda.roja { stroke: var(--red); } .onda.oro { stroke: var(--gold-lit); }
 @keyframes onda { from { transform: scale(1); opacity: .85; } to { transform: scale(2.7); opacity: 0; } }
 
 /* --- figuras «de cada 20»: se iluminan una por una y las que remontan brincan */
-.persona { fill: #5E7590; transition: fill 300ms var(--ease) calc(var(--i) * 70ms + 200ms);
+.persona { fill: var(--gris-dato); transition: fill 300ms var(--ease) calc(var(--i) * 70ms + 200ms);
            transform-box: fill-box; transform-origin: 50% 100%; }
 .mostrado .persona.gana { fill: var(--gold-lit); }
 .slide.active:not(.visto) .mostrado .persona.gana { animation: brinco 560ms cubic-bezier(.3,1.6,.5,1) calc(var(--i) * 70ms + 200ms) backwards; }
@@ -286,7 +288,7 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 .slide[data-steps] .tira[data-step].mostrado .foto,
 .slide[data-steps] .tira[data-step].mostrado .foto .b { opacity: 1; transform: none; }
 .tira::after { content: ""; position: absolute; inset: -4px 0; pointer-events: none; opacity: 0;
-  background: linear-gradient(100deg, transparent 0 42%, rgba(240,230,210,.16) 50%, transparent 58% 100%);
+  background: linear-gradient(100deg, transparent 0 42%, var(--escaner) 50%, transparent 58% 100%);
   background-size: 300% 100%; background-position: 100% 0; }
 .slide.active:not(.visto) .tira.mostrado::after { animation: escaner 1500ms ease-in-out 2300ms both; }
 @keyframes escaner { 0% { opacity: 1; background-position: 100% 0; } 100% { opacity: 1; background-position: 0 0; } }
@@ -294,14 +296,15 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 /* --- tarjetas con imagen (quien soy): giran al entrar y la imagen respira */
 .tarjetas { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); perspective: 1600px; }
 .tarjeta { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 10;
-           border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+           border: 1px solid var(--line); box-shadow: 0 24px 60px var(--sombra-fuerte); }
 .tarjeta img { width: 100%; height: 100%; object-fit: cover; object-position: 72% 30%; display: block; }
 .slide:is(.active, .sale, .sale-back) .tarjeta img { animation: respira 16s ease-in-out infinite alternate; }
 @keyframes respira { from { transform: scale(1.02); } to { transform: scale(1.13) translate(-1.5%, -1.5%); } }
 .tarjeta .nombre { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 18px 14px;
                    background: linear-gradient(transparent, rgba(6,16,28,.92));
-                   font-size: 22px; font-weight: 800; color: var(--parchment); }
-.tarjeta .nombre small { display: block; font-size: 15px; font-weight: 400; color: var(--muted); }
+                   font-size: 22px; font-weight: 800; color: #F0E6D2; }
+/* el nombre va sobre la franja oscura de la imagen en los dos temas: colores fijos claros */
+.tarjeta .nombre small { display: block; font-size: 15px; font-weight: 400; color: #8FA6BE; }
 .slide[data-steps] .tarjetas[data-step] { transform: none; }
 .slide[data-steps] .tarjetas[data-step] .tarjeta { opacity: 0; transform: rotateY(-38deg) translateY(36px) scale(.93);
   transition: opacity 700ms var(--ease) calc(var(--k) * 220ms), transform 1100ms cubic-bezier(.2,.8,.2,1) calc(var(--k) * 220ms); }
@@ -324,9 +327,9 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 
 /* --- tarjetas de veredicto: giran como cartas y les cae un sello */
 .veredictos { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); perspective: 1500px; }
-.veredicto-c { border-radius: 8px; border: 1px solid var(--line); background: rgba(23,51,77,.55);
+.veredicto-c { border-radius: 8px; border: 1px solid var(--line); background: var(--tarjeta-fondo);
                padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 12px;
-               box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+               box-shadow: 0 24px 60px var(--sombra); }
 .slide[data-steps] .veredicto-c[data-step] { transform: rotateY(-82deg) translateX(-40px); transform-origin: 0 50%;
   transition: opacity 500ms var(--ease), transform 1000ms cubic-bezier(.2,.85,.2,1); }
 .slide[data-steps] .veredicto-c[data-step].mostrado { transform: none; }
@@ -345,9 +348,9 @@ path.trazo:not(.medido), path.trazo-js:not(.medido) { visibility: hidden; }
 #h-veredicto .veredicto-c .p { font-size: 24px; }
 #h-veredicto .veredicto-c .r { font-size: 31px; flex: 1; }
 #h-veredicto .veredicto-c .sello { font-size: 16px; padding: 7px 12px; }
-.sello.si { background: rgba(14,158,180,.18); color: #6FD3E2; }
+.sello.si { background: rgba(14,158,180,.18); color: var(--azul-texto); }
 .sello.medio { background: rgba(188,139,44,.18); color: var(--gold-lit); }
-.sello.no { background: rgba(222,67,97,.18); color: #F28FA2; }
+.sello.no { background: rgba(222,67,97,.18); color: var(--rojo-texto); }
 
 /* --- las formas de perder */
 .formas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 18px; }

@@ -25,6 +25,26 @@
   var MENOS_MOV = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
   var quieto = function () { return TODO || MENOS_MOV.matches; };
 
+  /* ============================================================ tema claro / oscuro */
+  // El tema inicial lo pone un script en el <head> (antes de pintar): ?tema=claro|oscuro,
+  // si no lo que se eligio la vez pasada, y si no el claro de la plantilla. Aqui solo se
+  // alterna (tecla T o boton del riel) y se recuerda; localStorage puede fallar sin romper nada.
+  var TEMA_CLAVE = "lol-historia-tema";
+  function claro() { return document.documentElement.getAttribute("data-theme") !== "dark"; }
+  function etiquetaTema() {
+    var b = document.getElementById("tema-btn");
+    if (!b) return;
+    var txt = claro() ? "Cambiar a tema oscuro (T)" : "Cambiar a tema claro (T)";
+    b.setAttribute("aria-label", txt); b.title = txt;
+  }
+  function alternaTema() {
+    var t = claro() ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    try { localStorage.setItem(TEMA_CLAVE, t); } catch (e) { /* sin almacenamiento: solo esta vez */ }
+    etiquetaTema();
+    if (stage._repinta) stage._repinta();
+  }
+
   function fitStage() {
     var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
     stage.style.transform = "scale(" + s + ")";
@@ -109,8 +129,14 @@
         "</span><span>" + r.label + "</span></div>";
     });
     h += '<div class="rail-item spacer"></div><div class="counter"><span id="pageno">1</span> / ' +
-      '<span id="pagetot">1</span><span class="pasos" id="pasos"></span></div>';
+      '<span id="pagetot">1</span><span class="pasos" id="pasos"></span></div>' +
+      '<button type="button" id="tema-btn" class="tema-btn">&#9680;</button>';
     rail.innerHTML = h;
+    var b = document.getElementById("tema-btn");
+    // mousedown sin foco: si el boton se quedara con el foco, la barra espaciadora lo pulsaria
+    b.addEventListener("mousedown", function (e) { e.preventDefault(); });
+    b.addEventListener("click", function () { alternaTema(); });
+    etiquetaTema();
   }
   function updateRail() {
     var sec = parseInt(slides[idx].dataset.sec || "0", 10);
@@ -265,6 +291,7 @@
       if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
     }
     else if (k === "r" || k === "R") { e.preventDefault(); repite(); }
+    else if (k === "t" || k === "T") { e.preventDefault(); alternaTema(); }
     else if (k === "p" || k === "P") {
       e.preventDefault(); auto = !auto; document.body.classList.toggle("cine", auto); programa();
     }
@@ -278,7 +305,7 @@
   var dnX = 0, dnY = 0;
   document.addEventListener("mousedown", function (e) { dnX = e.clientX; dnY = e.clientY; });
   document.addEventListener("click", function (e) {
-    if (e.target.closest("a")) return;
+    if (e.target.closest("a, button")) return;   // el boton de tema no avanza la lamina
     if (Math.abs(e.clientX - dnX) > 5 || Math.abs(e.clientY - dnY) > 5) return;
     if (e.clientX < window.innerWidth * 0.22) prev(); else next();
   });
@@ -291,7 +318,8 @@
   var helpT;
   function flashHelp() {
     var h = document.getElementById("help");
-    if (!h || VIDEO) return;
+    // ?todo es para leer o exportar (PDF, capturas): la ayuda de teclas saldria en la imagen
+    if (!h || VIDEO || TODO) return;
     h.classList.add("show");
     clearTimeout(helpT);
     helpT = setTimeout(function () { h.classList.remove("show"); }, 2600);
@@ -460,7 +488,7 @@
     var X = function (v) { return X0 + (v / max) * AN; };
     var reloj = txt({ class: "etq reloj", x: X0, y: 40 }, "", svg);
     var barras = [["Mi equipo", "p", "azul", 76], ["Rival", "r", "rojo", 172]].map(function (f) {
-      txt({ class: "etq", x: 0, y: f[3] + 34, style: "font-size:21px;fill:#F0E6D2" }, f[0], svg);
+      txt({ class: "etq", x: 0, y: f[3] + 34, style: "font-size:21px;fill:var(--parchment)" }, f[0], svg);
       el("rect", { class: "pista-barra", x: X0, y: f[3], width: AN, height: 52, rx: 6 }, svg);
       return { r: el("rect", { class: "barra " + f[2], x: X0, y: f[3], width: 0, height: 52, rx: 6 }, svg),
                t: txt({ class: "etq grande-num", x: X0, y: f[3] + 37 }, "", svg), k: f[1] };
@@ -648,9 +676,11 @@
   function medida(host) {
     var e = H.ejemplo, W = 720, Hh = 320, svg = lienzo(host, W, Hh);
     [[5, e.total5, 1, 40], [30, e.total30, 2, 180]].forEach(function (f) {
-      txtCuenta({ class: "etq", x: 0, y: f[3], style: "font-size:20px;fill:#F0E6D2", "data-step": f[2] },
+      txtCuenta({ class: "etq", x: 0, y: f[3], style: "font-size:20px;fill:var(--parchment)", "data-step": f[2] },
         ["Minuto " + f[0] + ": en el mapa hay unos ", { n: Math.round(f[1] / 100) * 100 }, " de oro"], svg);
-      el("rect", { class: "barra gris crece", x: 0, y: f[3] + 16, width: 700, height: 46, rx: 6, "data-step": f[2] }, svg);
+      // la barra del oro total es una pista (no un dato): clara y con borde, para que la
+      // etiqueta en oro que va encima se lea en los dos temas
+      el("rect", { class: "barra total crece", x: 0, y: f[3] + 16, width: 700, height: 46, rx: 6, "data-step": f[2] }, svg);
       var w = 700 * e.ventaja / f[1];
       el("rect", { class: "barra oro crece", x: 0, y: f[3] + 16, width: w, height: 46, rx: 6, "data-step": f[2],
         style: "--delay:650ms" }, svg);
@@ -668,7 +698,7 @@
     var max = Math.max.apply(null, H.d1.derrotas.concat(H.d1.victorias));
     [["derrotas", "En mis derrotas", 0, 1, "rojo"], ["victorias", "En mis victorias", 680, 2, "azul"]].forEach(function (f) {
       var datos = H.d1[f[0]], x0 = f[2], bw = anchoPanel / datos.length;
-      txt({ class: "etq", x: x0, y: 24, style: "font-size:20px;fill:#F0E6D2", "data-step": f[3] }, f[1], svg);
+      txt({ class: "etq", x: x0, y: 24, style: "font-size:20px;fill:var(--parchment)", "data-step": f[3] }, f[1], svg);
       txt({ class: "etq", x: x0 + anchoPanel, y: 24, "text-anchor": "end", "data-step": f[3] }, "barra = % de partidas", svg);
       datos.forEach(function (v, m) {
         var h = (v / max) * 200;
@@ -698,7 +728,7 @@
     fases.forEach(function (f, i) {
       var y0 = 26 + i * 104, d = H.h1[f[0]], paso = i + 1, g = el("g", { class: "fase" }, svg);
       grupos.push(g);
-      txt({ class: "etq", x: 0, y: y0 + 42, style: "font-size:21px;fill:#F0E6D2", "data-step": paso }, f[1], g);
+      txt({ class: "etq", x: 0, y: y0 + 42, style: "font-size:21px;fill:var(--parchment)", "data-step": paso }, f[1], g);
       [["vic", "azul", 0, " en victorias"], ["der", "rojo", 40, " en derrotas"]].forEach(function (b, j) {
         el("rect", { class: "barra " + b[1] + " crece", x: 360, y: y0 + b[2], width: X(d[b[0]]) - 360, height: 32, rx: 5,
           "data-step": paso, style: "--delay:" + j * 260 + "ms" }, g);
@@ -723,7 +753,7 @@
     var X = function (v) { return 330 + (v / 50) * 700; };
     [["Cuando pierdo", h2.obsDer, h2.azarDer, 1, 20], ["Cuando gano", h2.obsVic, h2.azarVic, 2, 170]].forEach(function (f) {
       var y = f[4], obs = Math.round(f[1]), azar = Math.round(f[2]);
-      txt({ class: "etq", x: 0, y: y + 54, style: "font-size:22px;fill:#F0E6D2", "data-step": f[3] }, f[0], svg);
+      txt({ class: "etq", x: 0, y: y + 54, style: "font-size:22px;fill:var(--parchment)", "data-step": f[3] }, f[0], svg);
       el("rect", { class: "barra oro crece", x: 330, y: y + 10, width: X(f[1]) - 330, height: 34, rx: 5, "data-step": f[3] }, svg);
       txtCuenta({ class: "etq oro", x: X(f[1]) + 12, y: y + 34, "data-step": f[3], style: "font-size:19px" },
         [{ n: obs }, " %  cae junto a un monstruo del rival"], svg);
@@ -839,20 +869,24 @@
     for (var i = 0; i < 64; i++) motas.push({ x: azar() * 1600, y: azar() * 900, r: 0.7 + azar() * 1.9, v: 5 + azar() * 15, f: azar() * 6.28, a: 0.1 + azar() * 0.38 });
     var color = [188, 139, 44], meta = color.slice(), previo = null;
     stage._tono = function (rgb) { meta = rgb.slice(); if (quieto()) { color = rgb.slice(); cuadro(0, true); } };
+    // al cambiar de tema: si no hay animacion corriendo, el fondo se vuelve a pintar una vez
+    stage._repinta = function () { if (quieto()) cuadro(0, true); };
     function cuadro(ts, unaVez) {
       var dt = previo === null ? 16 : Math.min(64, ts - previo); previo = ts;
       for (var k = 0; k < 3; k++) color[k] += (meta[k] - color[k]) * Math.min(1, dt / 700);
       cx.clearRect(0, 0, 1600, 900);
+      // sobre papel claro el resplandor se baja y las motas pasan a oro oscuro
+      var esClaro = claro(), mota = esClaro ? "150,104,14," : "232,200,122,";
       var gx = 800 + Math.sin(ts / 9000) * 420, gy = 360 + Math.cos(ts / 12000) * 180;
       var g = cx.createRadialGradient(gx, gy, 0, gx, gy, 980);
-      g.addColorStop(0, "rgba(" + color.map(Math.round).join(",") + ",0.14)");
+      g.addColorStop(0, "rgba(" + color.map(Math.round).join(",") + (esClaro ? ",0.08)" : ",0.14)"));
       g.addColorStop(1, "rgba(10,26,43,0)");
       cx.fillStyle = g; cx.fillRect(0, 0, 1600, 900);
       motas.forEach(function (m) {
         if (!unaVez) { m.y -= m.v * dt / 1000; if (m.y < -10) { m.y = 910; m.x = azar() * 1600; } }
         var x = m.x + Math.sin(ts / 2600 + m.f) * 16, al = m.a * (0.55 + 0.45 * Math.sin(ts / 900 + m.f * 3));
         cx.beginPath(); cx.arc(x, m.y, m.r, 0, 6.283);
-        cx.fillStyle = "rgba(232,200,122," + al.toFixed(3) + ")"; cx.fill();
+        cx.fillStyle = "rgba(" + mota + (esClaro ? al * 0.7 : al).toFixed(3) + ")"; cx.fill();
       });
       if (!unaVez) requestAnimationFrame(cuadro);
     }

@@ -28,7 +28,13 @@ DECK = ROOT / "presentacion_historia.html"
 # ?todo revela todos los pasos: el arnes valida la lamina COMPLETA.
 URL = DECK.as_uri() + "?todo"
 SHOTS = ROOT / "shots"
-SHOTS.mkdir(exist_ok=True)
+# El tema claro es el predeterminado y sus capturas van a shots/. Para revisar tambien el
+# oscuro sin pisarlas:  python scripts/shoot.py --oscuro CARPETA
+if "--oscuro" in _args:
+    URL += "&tema=oscuro"
+    _i = _args.index("--oscuro")
+    SHOTS = pathlib.Path(_args[_i + 1]) if len(_args) > _i + 1 else ROOT / "shots_oscuro"
+SHOTS.mkdir(parents=True, exist_ok=True)
 
 # Deben cubrir retraso + duracion de la animacion mas lenta de cada lamina.
 # Con ?todo todos los pasos se revelan a la vez; las transiciones mas largas son la
